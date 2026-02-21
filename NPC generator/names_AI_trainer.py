@@ -31,12 +31,12 @@ def train_element_styles(element_styles):
         transition_data[style] = build_transitions(elements)
     return transition_data
 
-def save_to_json(data, filename=r"C:\Users\balea\Desktop\.py\NPC generator\names_transition.json"):
+def save_to_json(data, filename=r"NPC generator/npc_static_data/names_transition.json"):
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
 
 if __name__ == "__main__":
-    # Example: sample names per style
+    # name styles: sample names per style, the more the names hte better. it counts spaces and every other symbol except / and & wich are reserved logic (act as start or end of a name)
     name_styles = {
         "Human": [
             "Alaric", "Brianne", "Cedric", "Donna", "Elara", "Felix", "Gerald", "Helena", "Ismaele", "Jason", "Kevin",
@@ -106,6 +106,8 @@ if __name__ == "__main__":
             "Sirenna", "Morail", "Olivar", "Vaën", "Thèlune", "Muriel", "Loryn", "Nòvera",
             "Corvash", "Elarun", "Pelvra", "Othalen", "Sevrin", "Vaelith", "Thorian", "Luméra"]
     }
+
+    # i'm wondering if i should add a separate generation for surnames...
     # surname_styles = {
     #     "Human": ["Blackwood", "Hartfield", "Kingsley", "Montclair", "Redford", "Stormridge", "Whitlock", "Fairborne", "Ashvale",
     #               "Thornhill", "Rossi", "Bianchi", "Strappato", "Raucci", "Baleani", "McDonald", "Whashington", "Belaire", "Cogno",

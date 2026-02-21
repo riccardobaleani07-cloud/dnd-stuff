@@ -50,7 +50,7 @@ def simulate_lengths(transitions, samples):
     return probabilities
 
 # ---- Load data ----
-with open(r"C:\Users\balea\Desktop\.py\NPC generator\names_transition.json", "r", encoding="utf-8") as f:
+with open(r"NPC generator/npc_static_data/names_transition.json", "r", encoding="utf-8") as f:
     name_data = json.load(f)
 
 # Choose a flavour
