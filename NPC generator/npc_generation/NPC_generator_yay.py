@@ -49,10 +49,10 @@ class NPCGenerator:
         )
 
         optional_placeholders = {
-            "oath": list(data.oaths),
-            "fallen_city": list(data.fallen_cities),
-            "war_event": list(data.war_event),
-            "disaster": list(data.disasters),
+            "oath": data.oaths.copy(),
+            "fallen_city": data.fallen_cities.copy(),
+            "war_event": data.war_event.copy(),
+            "disaster": data.disasters.copy(),
         }
 
         for placeholder, choices in optional_placeholders.items():
