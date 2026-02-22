@@ -1107,11 +1107,11 @@ social_levels = [(SocialLevel.ROYAL, 0.01), (SocialLevel.NOBLE, 0.14), (SocialLe
 
 #wealth generation
 wealth_ranges = {
-SocialLevel.ROYAL: (3, 5),
-SocialLevel.NOBLE: (2, 5),
-SocialLevel.COMMONER: (1, 3),
-SocialLevel.PEASANT: (1, 3),
-SocialLevel.SLAVE: (1, 2),
+SocialLevel.ROYAL: (2, 4),
+SocialLevel.NOBLE: (1, 4),
+SocialLevel.COMMONER: (0, 3),
+SocialLevel.PEASANT: (0, 2),
+SocialLevel.SLAVE: (0, 1),
 }
 
 #personality traits list. do not touch it because it has following logic

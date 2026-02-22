@@ -49,10 +49,10 @@ class NPCGenerator:
         )
 
         optional_placeholders = {
-            "oath": data.oaths,
-            "fallen_city": data.fallen_cities,
-            "war_event": data.war_event,
-            "disaster": data.disasters,
+            "oath": list(data.oaths),
+            "fallen_city": list(data.fallen_cities),
+            "war_event": list(data.war_event),
+            "disaster": list(data.disasters),
         }
 
         for placeholder, choices in optional_placeholders.items():
@@ -85,7 +85,7 @@ class NPCGenerator:
                 total = sum(weights)
                 weights = [w/total for w in weights]
                 return random.choices(names, weights=weights, k=1)[0]
-            return None
+        return None
         
     def choose_gender(self, genders, race, species_gender_map):
         # Chooses a gender, crafting a pool based on race
