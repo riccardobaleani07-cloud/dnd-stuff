@@ -439,7 +439,7 @@ class NPCGenerator:
         offsprings = self.generate_num_descendants(age_category, partnership, data.distribution_settings)
         personality_traits = self.generate_personality_traits(self.personality_traits_count, data.default_traits)
         alignment = self.infer_alignment_from_personality(personality_traits, data.good_traits, data.evil_traits, data.lawful_traits, data.chaotic_traits)
-        reputation = self.infer_reputation_from_personality(personality_traits, data.reputation_types, data.trait_to_reputation)
+        reputation = self.infer_reputation_from_personality(personality_traits, data.reputation_types.copy(), data.trait_to_reputation) #reputation_types needs to be copied to avoid mutation
         backstory = self.generate_backstory(backstory_seed, name, age_category, race)
         subtype = self.conditional_choose_subtype(data.available_subtypes, race)
 
