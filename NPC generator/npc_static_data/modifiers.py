@@ -1,5 +1,11 @@
 
 # That's the map for modify the base attributes
+# standard format: {"op": "operation-type", "value": [{"value-type": "value-expression"}, {"op": "operation-type", "value": [{"value-type": "value-expression"}]}]}
+# value-type can be: "stat" (refers to a specific attribute of the npc; make sure it's coherent in operations), "const" (refers to a constant value, like a string or an integer), or "list" (refers to a list of items; the list will be affected as a single item for the operation, except for the "roll" operation)
+# operation-type can be: "add" (literally adds numbers or concatenates strings), "subtract" (literally subtracts numbers or removes substrings), "multiply" (literally multiplies numbers or adds multiple concatenations of strings), "divide" (literally divides numbers or repeatly removes substrings), "roll}" (only for lists; randomly selects one item from the list without replacement and adds them to the target list), "append" (only for lists; adds an element or an entire list to the target list), "remove" (only for lists; removes one element or all items in a list from the target list)
+# each operation can be done for multiple values, and can be feeded the result of another operation, allowing for complex modifications. For example, {"op": "add", "value": [{"stat": "strength"}, {"op": "multiply", "value": [{"const": 2}, {"stat": "constitution"}]}]} would add the strength score to twice the constitution score and add that to the target attribute (+=strenght*2*constitution_mod).
+# the operations will be performed from left to right, with consequential resolving of inner values.
+
 # Notes on things to post format: darkvision ?ft, breath hold ? min, armor (light <- medium ecc)
 # Notes on list for post format: random_weapon_list, plantfolk_vulnerability_list, random_tool/kit_list, random_damage_type_list, lycantrope_natural_weapons_list, aasimar_transformation_list, random_skill_list, giant_element_list, draconic_ancestory_list, musical_instrument_list, wizard_cantrip_list, druid_cantrip_list, martial_weapon_list, simple_weapon_list
 # When any list is mentioned, it means that it should be rolled from the items in that list, because the list name is a placeholder.
@@ -787,8 +793,8 @@ race = { # Common elf contains the complete template
     },
     "Pale Knight": {
         "core_combat": {
-            "ac": +constitution_mod,
-            "initiative": -dexterity_mod,
+            "ac": {"op": "add", "value": [{"stat": "constitution_mod"}]},
+            "initiative": {"op": "subtract", "value": [{"stat": "dexterity_mod"}]},
             "speed_bonus": {"walking": -10},  # 20 ft base
             "size": "small"
         },
@@ -1064,7 +1070,7 @@ race = { # Common elf contains the complete template
     },
     "Demonoid": {
         "core_combat": {
-            "initiative": +charisma_mod,
+            "initiative": {"op": "add", "value": [{"stat": "charisma_mod"}]},
             "speed_bonus": {"flying": 15}
         },
         "ability_scores": {
@@ -1107,7 +1113,8 @@ race = { # Common elf contains the complete template
     },
     "Demon": {
         "core_combat": {
-            "initiative": +charisma_mod,
+            "hp": {"op": "add", "value": [{"stat": "proficiency_bonus"}, {"op": "multiply", "value": [{"stat": "level"}]}]},
+            "initiative": {"op": "add", "value": [{"stat": "charisma_mod"}]},
             "speed_bonus": {"flying": 30}
         },
         "ability_scores": {
@@ -1161,7 +1168,7 @@ race = { # Common elf contains the complete template
     },
     "Oni": {
         "core_combat": {
-            "initiative": +dexterity_mod
+            "initiative": {"op": "add", "value": [{"stat": "dexterity_mod"}]}
         },
         "ability_scores": {
             "strength": +2,
@@ -1187,7 +1194,7 @@ race = { # Common elf contains the complete template
     },
     "Kijin": {
         "core_combat": {
-            "initiative": +dexterity_mod+2,
+            "initiative": {"op": "add", "value": [{"stat": "dexterity_mod"}, {"const": 2}]},
             "size": "medium"
         },
         "ability_scores": {
@@ -1214,8 +1221,8 @@ race = { # Common elf contains the complete template
     },
     "Majin": {
         "core_combat": {
-            "initiative": +dexterity_mod+5,
-            "ac": +constitution_mod
+            "initiative": {"op": "add", "value": [{"stat": "dexterity_mod"}, {"const": 5}]},
+            "ac": {"op": "add", "value": [{"stat": "constitution_mod"}]}
         },
         "ability_scores": {
             "strength": +2,
@@ -1266,7 +1273,7 @@ race = { # Common elf contains the complete template
     },
     "Nightmare": {
         "core_combat": {
-            "hp": -proficiency_bonus,
+            "hp": {"op": "subtract", "value": [{"stat": "proficiency_bonus"}]},
         },
         "ability_scores": {
             "strength": -1,
@@ -1297,7 +1304,7 @@ race = { # Common elf contains the complete template
     },
     "Celestial": {
         "core_combat": {
-            "initiative": +wisdom_mod,
+            "initiative": {"op": "add", "value": [{"stat": "wisdom_mod"}]},
             "speed_bonus": {"flying": 15}
         },
         "ability_scores": {
@@ -1325,8 +1332,8 @@ race = { # Common elf contains the complete template
     },
     "Angel": {
         "core_combat": {
-            "hp": +proficiency_bonus*level,
-            "ac": +proficiency_bonus,
+            "hp": {"op": "add", "value": [{"stat": "proficiency_bonus"}, {"op": "multiply", "value": [{"stat": "level"}]}]},
+            "ac": {"op": "add", "value": [{"stat": "proficiency_bonus"}]},
             "speed_bonus": {"flying": 30}
         },
         "ability_scores": {
@@ -1582,8 +1589,8 @@ race = { # Common elf contains the complete template
     },
     "Starborn": {
         "core_combat": {
-            "hp": -proficiency_bonus,
-            "initiative": +proficiency_bonus,
+            "hp": {"op": "subtract", "value": [{"stat": "proficiency_bonus"}]},
+            "initiative": {"op": "add", "value": [{"stat": "proficiency_bonus"}]},
             "speed_bonus": {"walking": 10, "flying": 20},
         },
         "ability_scores": {
@@ -1677,9 +1684,9 @@ race = { # Common elf contains the complete template
     },
     "True Vampire": {
         "core_combat": {
-            "hp": +constitution_mod,
-            "ac": +1,
-            "initiative": +charisma_mod,
+            "hp": {"op": "add", "value": [{"stat": "constitution_mod"}, {"const": 2}]},
+            "ac": {"op": "add", "value": [{"const": 1}]},
+            "initiative": {"op": "add", "value": [{"stat": "charisma_mod"}]},
             "speed_bonus": {
                 "walking": +5,
                 "flying": 30
@@ -1717,7 +1724,7 @@ race = { # Common elf contains the complete template
     },
     "Spectre": {
         "core_combat": {
-            "hp": -proficiency_bonus,
+            "hp": {"op": "subtract", "value": [{"stat": "proficiency_bonus"}]},
             "speed_bonus": {"flying": 30}
         },
         "ability_scores": {
@@ -1805,8 +1812,8 @@ race = { # Common elf contains the complete template
     },
     "Turtoid": {
         "core_combat": {
-            "ac": +1,
-            "initiative": -dexterity_mod,
+            "ac": {"op": "add", "value": [{"const": 1}]},
+            "initiative": {"op": "subtract", "value": [{"stat": "dexterity_mod"}]},
             "speed_bonus": {"walking": -5, "swimming": 15}
         },
         "ability_scores": {
@@ -1923,8 +1930,8 @@ subtype = {
         },
         "Ghost": {
             "core_combat": {
-                "hp": -proficiency_bonus,
-                "initiative": +proficiency_bonus,
+                "hp": {"op": "subtract", "value": [{"stat": "proficiency_bonus"}]},
+                "initiative": {"op": "add", "value": [{"stat": "proficiency_bonus"}]},
                 "speed_bonus": {"flying": 30}
             },
             "ability_scores": {
@@ -1961,8 +1968,8 @@ subtype = {
         },
         "Zombie": {
             "core_combat": {
-                "hp": +constitution_mod,
-                "initiative": -dexterity_mod,
+                "hp": {"op": "add", "value": [{"stat": "constitution_mod"}]},
+                "initiative": {"op": "subtract", "value": [{"stat": "dexterity_mod"}]},
                 "speed_bonus": {"walking": -5}
             },
             "ability_scores": {
@@ -2046,7 +2053,7 @@ subtype = {
                 "charisma": +1
             },
             "core_combat": {
-                "ac": +constitution_mod
+                "ac": {"op": "add", "value": [{"stat": "constitution_mod"}, {"const": 2}]}
             },
             "proficiencies": {
                 "skills": ["intimidation"]
@@ -2213,7 +2220,7 @@ subtype = {
         },
         "Antsyote": {
             "core_combat": {
-                "ac": +constitution_mod
+                "ac": {"op": "add", "value": [{"stat": "constitution_mod"}, {"const": 2}]}
             },
             "ability_scores": {
                 "strength": +2
