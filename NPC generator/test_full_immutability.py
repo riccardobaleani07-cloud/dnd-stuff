@@ -35,8 +35,8 @@ def snapshot_json(path):
 
 
 #--------------------------------------------
-matrix_path = "npc_static_data/languages_matrix.csv"
-json_path = "npc_static_data/names_transition.json"
+matrix_path = "NPC generator/npc_static_data/languages_matrix.csv"
+json_path = "NPC generator/npc_static_data/names_transition.json"
 
 print("Taking snapshots...")
 # Take initial snapshots
