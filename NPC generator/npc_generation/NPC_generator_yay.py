@@ -270,7 +270,7 @@ class NPCGenerator:
     # Word assembler
     def generate_name(self, transitions, min_len, max_len):
         start_symbol = "/"
-        end_symbol = "$"
+        end_symbol = "$" # It is encoded in the json file as a possible next character
         vowels = set("aeiouyáéíóúýàèìòùäëû")
         
         current = start_symbol
@@ -278,6 +278,15 @@ class NPCGenerator:
         consonant_streak = 0
 
         while True:
+            if current not in transitions:
+                if len(name) >= min_len:
+                    break
+                else:
+                    name += random.choice(["'", "-", " "])
+                    current = start_symbol
+                    consonant_streak = 0
+                    continue
+
             # Get next transition
             rand = random.random()
             cumulative = 0
@@ -301,7 +310,7 @@ class NPCGenerator:
             # If we've had too many consonants, force a vowel
             if consonant_streak >= 2:
                 available_next = {n for n, _ in transitions[current]}
-                possible_vowels = list(vowels & available_next)
+                possible_vowels = [v for v in vowels if v in transitions]
                 if possible_vowels:
                     next_char = random.choice(possible_vowels)
                 else:
@@ -324,7 +333,7 @@ class NPCGenerator:
             if len(name) >= max_len:
                 break
 
-        return name.capitalize()
+        return name.title() # good capitalizations for fantasy names
 
     # Actual name generating function
     def generate_npc_name(self, race, with_surname=True):
