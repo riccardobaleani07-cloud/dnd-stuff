@@ -1,54 +1,77 @@
+from enums import Size, SocialLevel, Wealth, MagicSource, ArmorType
+
 
 # That's the map for modify the base attributes
-# standard format: {"op": "operation-type", "value": [{"value-type": "value-expression"}, {"op": "operation-type", "value": [{"value-type": "value-expression"}]}]}
-# value-type can be: "stat" (refers to a specific attribute of the npc; make sure it's coherent in operations), "const" (refers to a constant value, like a string or an integer), or "list" (refers to a list of items; the list will be affected as a single item for the operation, except for the "roll" operation)
-# operation-type can be: "add" (literally adds numbers or concatenates strings), "subtract" (literally subtracts numbers or removes substrings), "multiply" (literally multiplies numbers or adds multiple concatenations of strings), "divide" (literally divides numbers or repeatly removes substrings), "roll}" (only for lists; randomly selects one item from the list without replacement and adds them to the target list), "append" (only for lists; adds an element or an entire list to the target list), "remove" (only for lists; removes one element or all items in a list from the target list)
-# each operation can be done for multiple values, and can be feeded the result of another operation, allowing for complex modifications. For example, {"op": "add", "value": [{"stat": "strength"}, {"op": "multiply", "value": [{"const": 2}, {"stat": "constitution"}]}]} would add the strength score to twice the constitution score and add that to the target attribute (+=strenght*2*constitution_mod).
-# the operations will be performed from left to right, with consequential resolving of inner values.
+# This file defines stat modifiers using a two-layer system: application mode and expression evaluation.
+'''
+Each modifier has an "apply" field and an "expr" field.
+The "expr" field is a pure expression tree. It does not mutate any values. It evaluates recursively from the innermost operations outward and returns a single result. Expressions may contain:
 
+"const" — a constant value
+"stat" — a reference to a stat (including "old_stat" for the current value before modification)
+"op" — an operation applied to a list of values
+
+Supported expression operations include "add", "subtract", "multiply", "divide" and "rd_choice". Each operation applies only to its listed values and returns the computed result. Operations do not implicitly reference previous results or external state.
+The "apply" field defines how the evaluated expression result is applied to the target stat:
+
+"add" → old_stat += result
+"multiply" → old_stat *= result
+"subtract" → old_stat -= result
+"divide" → old_stat /= result
+"replace" → old_stat = result
+
+Evaluation rules:
+Expressions are resolved inside → outside.
+There is no implicit inclusion of "old_stat" in expressions. It must be referenced explicitly if needed.
+Modifier application order is deterministic and follows the order defined in the data.
+
+This separation ensures that expressions remain pure calculations, while the "apply" mode controls how their results affect the stat.
+'''
 # Notes on things to post format: darkvision ?ft, breath hold ? min, armor (light <- medium ecc)
 # Notes on list for post format: random_weapon_list, plantfolk_vulnerability_list, random_tool/kit_list, random_damage_type_list, lycantrope_natural_weapons_list, aasimar_transformation_list, random_skill_list, giant_element_list, draconic_ancestory_list, musical_instrument_list, wizard_cantrip_list, druid_cantrip_list, martial_weapon_list, simple_weapon_list
 # When any list is mentioned, it means that it should be rolled from the items in that list, because the list name is a placeholder.
 
+wizard_cantrip_list = ["light", "mage hand", "minor illusion", "prestidigitation", "ray of frost", "shocking grasp", "true strike", "chill touch", "dancing lights", "fire bolt", "poison spray", "resistance", "sacred flame", "thorn whip", "vicious mockery"]
 
 race = { # Common elf contains the complete template
     "Common Elf": {
         "core_combat": {
-            "hp": 0,
-            "ac": 0,
-            "initiative": 0,
-            "speed_bonus": {"walking": 0}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
-            "size": "" #basic is medium
+            "hp": {"apply": "add", "expr": [{"const": 0}]},
+            "ac": {"apply": "add", "expr": [{"const": 0}]},
+            "initiative": {"apply": "add", "expr": [{"const": 0}]},
+            "speed_bonus": {"walking": {"apply": "add", "expr": [{"const": 0}]}}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
+            "size": {"apply": "replace", "expr": [{"const": "medium"}]} #basic is medium
         },
         "ability_scores": {
-            "strength": 0,
-            "dexterity": 2,
-            "constitution": 0,
-            "intelligence": 1,
-            "wisdom": 0,
-            "charisma": 0
+            "strength": {"apply": "add", "expr": [{"const": 0}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "constitution": {"apply": "add", "expr": [{"const": 0}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 0}]},
+            "charisma": {"apply": "add", "expr": [{"const": 0}]}
         },
         "proficiencies": {
-            "weapons": ["longsword","shortsword","longbow","shortbow"],
-            "armors": [],
-            "tools": [],
-            "skills": ["perception"],
-            "saving_throws": []
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}]},
+            "armors": {"apply": "add", "expr": [{"const": [ArmorType.UNARMORED]}]},
+            "tools": {"apply": "add", "expr": [{"const": []}]},
+            "skills": {"apply": "add", "expr": [{"const": ["perception"]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": []}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "spellcasting_ability": "",
-            "spell_slots": {1: 0, 2: 0},
-            "known_spells": [],
-            "known_cantrips": ["wizard_cantrip_list"]
+            "magic_source": {"apply": "add", "expr": [{"const": MagicSource.INNATE}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["wisdom", "intelligence", "charisma"]}]},
+            "spell_slots": {1: {"apply": "add", "expr": [{"const": 0}]},
+                            2: {"apply": "add", "expr": [{"const": 0}]}},
+            "known_spells": {"apply": "add", "expr": [{"const": []}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
         },
         "other_info": {
-            "resistances": [],
-            "immunities": ["charmed (magic-induced sleep)"],
-            "vulnerabilities": [],
-            "add_advantage_on": [],
-            "add_disadvantage_on": [],
-            "other_physical_features": ["darkvision 60ft"]
+            "resistances": {"apply": "add", "expr": [{"const": []}]},
+            "immunities": {"apply": "add", "expr": [{"const": ["charmed (magic-induced sleep)"]}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": []}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": []}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [{"darkvision", 60, "ft"}]}]}
         }
     },
     "Polar Human": {
@@ -793,8 +816,8 @@ race = { # Common elf contains the complete template
     },
     "Pale Knight": {
         "core_combat": {
-            "ac": {"op": "add", "value": [{"stat": "constitution_mod"}]},
-            "initiative": {"op": "subtract", "value": [{"stat": "dexterity_mod"}]},
+            "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}]},
+            "initiative": {"apply": "subtract", "expr": [{"stat": "dexterity_mod"}]},
             "speed_bonus": {"walking": -10},  # 20 ft base
             "size": "small"
         },
@@ -1070,7 +1093,7 @@ race = { # Common elf contains the complete template
     },
     "Demonoid": {
         "core_combat": {
-            "initiative": {"op": "add", "value": [{"stat": "charisma_mod"}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
             "speed_bonus": {"flying": 15}
         },
         "ability_scores": {
@@ -1113,8 +1136,8 @@ race = { # Common elf contains the complete template
     },
     "Demon": {
         "core_combat": {
-            "hp": {"op": "add", "value": [{"stat": "proficiency_bonus"}, {"op": "multiply", "value": [{"stat": "level"}]}]},
-            "initiative": {"op": "add", "value": [{"stat": "charisma_mod"}]},
+            "hp": {"apply": "add", "expr": [{"op": "multiply", "value": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
             "speed_bonus": {"flying": 30}
         },
         "ability_scores": {
@@ -1168,7 +1191,7 @@ race = { # Common elf contains the complete template
     },
     "Oni": {
         "core_combat": {
-            "initiative": {"op": "add", "value": [{"stat": "dexterity_mod"}]}
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}]}
         },
         "ability_scores": {
             "strength": +2,
@@ -1194,7 +1217,7 @@ race = { # Common elf contains the complete template
     },
     "Kijin": {
         "core_combat": {
-            "initiative": {"op": "add", "value": [{"stat": "dexterity_mod"}, {"const": 2}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}, {"const": 2}]},
             "size": "medium"
         },
         "ability_scores": {
@@ -1221,8 +1244,8 @@ race = { # Common elf contains the complete template
     },
     "Majin": {
         "core_combat": {
-            "initiative": {"op": "add", "value": [{"stat": "dexterity_mod"}, {"const": 5}]},
-            "ac": {"op": "add", "value": [{"stat": "constitution_mod"}]}
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}, {"const": 5}]},
+            "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}]}
         },
         "ability_scores": {
             "strength": +2,
@@ -1273,7 +1296,7 @@ race = { # Common elf contains the complete template
     },
     "Nightmare": {
         "core_combat": {
-            "hp": {"op": "subtract", "value": [{"stat": "proficiency_bonus"}]},
+            "hp": {"apply": "subtract", "expr": [{"stat": "proficiency_bonus"}]},
         },
         "ability_scores": {
             "strength": -1,
@@ -1304,7 +1327,7 @@ race = { # Common elf contains the complete template
     },
     "Celestial": {
         "core_combat": {
-            "initiative": {"op": "add", "value": [{"stat": "wisdom_mod"}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "wisdom_mod"}]},
             "speed_bonus": {"flying": 15}
         },
         "ability_scores": {
@@ -1332,8 +1355,8 @@ race = { # Common elf contains the complete template
     },
     "Angel": {
         "core_combat": {
-            "hp": {"op": "add", "value": [{"stat": "proficiency_bonus"}, {"op": "multiply", "value": [{"stat": "level"}]}]},
-            "ac": {"op": "add", "value": [{"stat": "proficiency_bonus"}]},
+            "hp": {"apply": "add", "expr": [{"op": "multiply", "value": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
+            "ac": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
             "speed_bonus": {"flying": 30}
         },
         "ability_scores": {
@@ -1589,8 +1612,8 @@ race = { # Common elf contains the complete template
     },
     "Starborn": {
         "core_combat": {
-            "hp": {"op": "subtract", "value": [{"stat": "proficiency_bonus"}]},
-            "initiative": {"op": "add", "value": [{"stat": "proficiency_bonus"}]},
+            "hp": {"apply": "subtract", "expr": [{"stat": "proficiency_bonus"}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
             "speed_bonus": {"walking": 10, "flying": 20},
         },
         "ability_scores": {
@@ -1684,9 +1707,9 @@ race = { # Common elf contains the complete template
     },
     "True Vampire": {
         "core_combat": {
-            "hp": {"op": "add", "value": [{"stat": "constitution_mod"}, {"const": 2}]},
-            "ac": {"op": "add", "value": [{"const": 1}]},
-            "initiative": {"op": "add", "value": [{"stat": "charisma_mod"}]},
+            "hp": {"apply": "add", "expr": [{"stat": "constitution_mod"}, {"const": 2}]},
+            "ac": {"apply": "add", "expr": [{"const": 1}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
             "speed_bonus": {
                 "walking": +5,
                 "flying": 30
@@ -1724,7 +1747,7 @@ race = { # Common elf contains the complete template
     },
     "Spectre": {
         "core_combat": {
-            "hp": {"op": "subtract", "value": [{"stat": "proficiency_bonus"}]},
+            "hp": {"apply": "subtract", "expr": [{"stat": "proficiency_bonus"}]},
             "speed_bonus": {"flying": 30}
         },
         "ability_scores": {
@@ -1812,8 +1835,8 @@ race = { # Common elf contains the complete template
     },
     "Turtoid": {
         "core_combat": {
-            "ac": {"op": "add", "value": [{"const": 1}]},
-            "initiative": {"op": "subtract", "value": [{"stat": "dexterity_mod"}]},
+            "ac": {"apply": "add", "expr": [{"const": 1}]},
+            "initiative": {"apply": "subtract", "expr": [{"stat": "dexterity_mod"}]},
             "speed_bonus": {"walking": -5, "swimming": 15}
         },
         "ability_scores": {
@@ -1930,8 +1953,8 @@ subtype = {
         },
         "Ghost": {
             "core_combat": {
-                "hp": {"op": "subtract", "value": [{"stat": "proficiency_bonus"}]},
-                "initiative": {"op": "add", "value": [{"stat": "proficiency_bonus"}]},
+                "hp": {"apply": "subtract", "expr": [{"stat": "proficiency_bonus"}]},
+                "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
                 "speed_bonus": {"flying": 30}
             },
             "ability_scores": {
@@ -1968,8 +1991,8 @@ subtype = {
         },
         "Zombie": {
             "core_combat": {
-                "hp": {"op": "add", "value": [{"stat": "constitution_mod"}]},
-                "initiative": {"op": "subtract", "value": [{"stat": "dexterity_mod"}]},
+                "hp": {"apply": "add", "expr": [{"stat": "constitution_mod"}]},
+                "initiative": {"apply": "subtract", "expr": [{"stat": "dexterity_mod"}]},
                 "speed_bonus": {"walking": -5}
             },
             "ability_scores": {
@@ -2053,7 +2076,7 @@ subtype = {
                 "charisma": +1
             },
             "core_combat": {
-                "ac": {"op": "add", "value": [{"stat": "constitution_mod"}, {"const": 2}]}
+                "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}, {"const": 2}]}
             },
             "proficiencies": {
                 "skills": ["intimidation"]
@@ -2220,7 +2243,7 @@ subtype = {
         },
         "Antsyote": {
             "core_combat": {
-                "ac": {"op": "add", "value": [{"stat": "constitution_mod"}, {"const": 2}]}
+                "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}, {"const": 2}]}
             },
             "ability_scores": {
                 "strength": +2

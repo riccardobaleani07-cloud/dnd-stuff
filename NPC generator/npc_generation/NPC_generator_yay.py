@@ -4,7 +4,7 @@
 import random
 import json
 import pandas as pd
-from npc_static_data.enums import Size, SocialLevel, Wealth
+from npc_static_data.enums import Size, SocialLevel, Wealth, MagicSource, ArmorType
 from npc_static_data import data
 from npc_static_data import models
 
@@ -379,7 +379,7 @@ class NPCGenerator:
             "swimming": 0,
             "climbing": 0}    # race-based primarily, possibly age-based
     level = 1                 # influences proficiency and class-like features
-    size = "medium"           # depends on race and age category
+    size = Size.MEDIUM        # depends on race and age category
 
     proficiency_bonus = 2     # directly derived from level
 
@@ -399,13 +399,13 @@ class NPCGenerator:
 
     # --- Proficiencies ---
     weapons = []              # race, background, occupation
-    armors = []               # race, background, occupation
+    armors = [ArmorType.UNARMORED]# race, background, occupation
     tools = []                # race, background, occupation
     skills = []               # race, background, occupation
     saving_throws = []        # race, background, occupation
 
     # --- Magic ---
-    magic_source = None       # race, background, occupation (can be none, innate (spellcasting ability not required) or learned; those three parameters have power on each other in that order)
+    magic_source = MagicSource.NONE       # race, background, occupation (can be none, innate (spellcasting ability not required) or learned; those three parameters have power on each other in that order)
     spellcasting_ability = random.choice(["wisdom", "intelligence", "charisma"]) # race, background, occupation
     spell_save_dc = 0         # = 8 + prof_bonus + spellcasting ability mod
     spell_attack_bonus = 0    # = prof_bonus + spellcasting ability mod

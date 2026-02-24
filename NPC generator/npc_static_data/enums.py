@@ -28,7 +28,8 @@ class MagicSource(IntEnum):
     LEARNED = 2
 
 class ArmorType(IntEnum):
-    LIGHT = 0
-    MEDIUM = 1
-    HEAVY = 2
+    UNARMORED = 0
+    LIGHT = 1
+    MEDIUM = 2
+    HEAVY = 3
 
