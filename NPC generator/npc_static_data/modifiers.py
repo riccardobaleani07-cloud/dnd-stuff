@@ -52,13 +52,13 @@ race = { # Common elf contains the complete template
         },
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}]},
-            "armors": {"apply": "add", "expr": [{"const": [ArmorType.UNARMORED]}]},
+            "armors": {"apply": "replace", "expr": [{"const": [ArmorType.UNARMORED]}]},
             "tools": {"apply": "add", "expr": [{"const": []}]},
             "skills": {"apply": "add", "expr": [{"const": ["perception"]}]},
             "saving_throws": {"apply": "add", "expr": [{"const": []}]}
         },
         "magic": {
-            "magic_source": {"apply": "add", "expr": [{"const": MagicSource.INNATE}]},
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.INNATE}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["wisdom", "intelligence", "charisma"]}]},
             "spell_slots": {1: {"apply": "add", "expr": [{"const": 0}]},
                             2: {"apply": "add", "expr": [{"const": 0}]}},
@@ -67,74 +67,74 @@ race = { # Common elf contains the complete template
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": []}]},
-            "immunities": {"apply": "add", "expr": [{"const": ["charmed (magic-induced sleep)"]}]},
+            "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": []}]},
             "add_advantage_on": {"apply": "add", "expr": [{"const": []}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": [{"darkvision", 60, "ft"}]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": {"darkvision", 60, "ft"}}]}
         }
     },
     "Polar Human": {
         "ability_scores": {
-            "strength": 1,
-            "constitution": 1,
-            "wisdom": 1
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
         },
         "proficiencies": {
-            "weapons": ["shortsword","spear","harpoon","shortbow"],
-            "armors": ["light armors"],
-            "tools": ["ice fishing tools"],
-            "skills": ["survival","athletics"]
+            "weapons": {"apply": "add", "expr": [{"const": ["shortsword","spear","harpoon","shortbow"]}]},
+            "armors": {"apply": "replace", "expr": [{"const": ArmorType.LIGHT}]},
+            "tools": {"apply": "add", "expr": [{"const": ["ice fishing tools"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["survival","athletics"]}]},
         },
         "other_info": {
-            "resistances": ["cold"]
+            "resistances": {"apply": "add", "expr": [{"const": "cold"}]}
         }
     },
     "Quarryan Human": {
         "ability_scores": {
-            "dexterity": 1,
-            "intelligence": 1,
-            "charisma": 1
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["shortsword","light crossbow","flintlock pistol","spear"],
-            "tools": ["navigation tools"],
-            "skills": ["deception","persuasion"]
+            "weapons": {"apply": "add", "expr": [{"const": ["shortsword","light crossbow","flintlock pistol","spear"]}]},
+            "tools": {"apply": "add", "expr": [{"const": ["navigation tools"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["deception","persuasion"]}]},
         }
     },
     "South Herian Human": {
         "ability_scores": {
-            "dexterity": 1,
-            "wisdom": 1,
-            "charisma": 1
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["longsword","shortsword","longbow","shortbow","rapier"],
-            "armors": ["light armors"],
-            "skills": ["persuasion","insight"]
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow","rapier"]}]},
+            "armors": {"apply": "replace", "expr": [{"const": ArmorType.LIGHT}]},
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion","insight"]}]},
         }
     },
     "North Herian Human": {
         "ability_scores": {
-            "dexterity": 1,
-            "constitution": 1,
-            "intelligence": 1
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
         },
         "proficiencies": {
-            "weapons": ["longsword","shortsword","light crossbow","shortbow","hand crossbow"],
-            "tools": ["mason's tools"],
-            "skills": ["history"]
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","light crossbow","shortbow","hand crossbow"]}]},
+            "tools": {"apply": "add", "expr": [{"const": "mason's tools"}]},
+            "skills": {"apply": "add", "expr": [{"const": "history"}]}
         }
     },
     "Plains Dorojan Human": {
         "ability_scores": {
-            "strength": 1,
-            "constitution": 1,
-            "wisdom": 1
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["longsword","shortsword","longbow","shortbow"],
-            "skills": ["animal handling","survival"]
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["animal handling","survival"]}]}
         }
     },
     "Mountains Dorojan Human": {
