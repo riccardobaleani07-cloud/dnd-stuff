@@ -399,7 +399,7 @@ class NPCGenerator:
 
     # --- Proficiencies ---
     weapons = []              # race, background, occupation
-    armors = [ArmorType.UNARMORED]# race, background, occupation
+    armors = ArmorType.UNARMORED# race, background, occupation
     tools = []                # race, background, occupation
     skills = []               # race, background, occupation
     saving_throws = []        # race, background, occupation

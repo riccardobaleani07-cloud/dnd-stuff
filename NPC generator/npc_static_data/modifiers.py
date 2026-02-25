@@ -1,4 +1,4 @@
-from enums import Size, SocialLevel, Wealth, MagicSource, ArmorType
+from enums import Size, MagicSource, ArmorType
 
 
 # That's the map for modify the base attributes
@@ -9,9 +9,9 @@ The "expr" field is a pure expression tree. It does not mutate any values. It ev
 
 "const" — a constant value
 "stat" — a reference to a stat (including "old_stat" for the current value before modification)
-"op" — an operation applied to a list of values
+"op?" — an operation applied to a list of values (you write the operation name as the key, and the value can be  asingle value or a list of values, which can themselves be expressions)
 
-Supported expression operations include "add", "subtract", "multiply", "divide" and "rd_choice". Each operation applies only to its listed values and returns the computed result. Operations do not implicitly reference previous results or external state.
+Supported expression operations include "add", "inverse" (is like add, but adds the inverse of the value, value*-1), "multiply", "divide", "rd_choice", "max" and "min". Each operation applies only to its listed values (skipping invalid ones) and returns the computed result. Operations do not implicitly reference previous results or external state.
 The "apply" field defines how the evaluated expression result is applied to the target stat:
 
 "add" → old_stat += result
@@ -27,11 +27,44 @@ Modifier application order is deterministic and follows the order defined in the
 
 This separation ensures that expressions remain pure calculations, while the "apply" mode controls how their results affect the stat.
 '''
+# Example usage:
+# {"apply": "replace", "expr": [{"max": [{"const": ArmorType.UNARMORED}, {"stat": "armors"}]}]}
+#
+# Constants may be numbers, strings, enums, lists, or tuples.
+# Tuples are treated as atomic values (single constants), even if they contain multiple components.
+# They are mainly used to represent perks with structured data, such as:
+#   ("darkvision", 60, "ft")
+#   ("hold breath", 15, "minutes")
+#
+# When multiple tuples with the same perk name (first element) appear in a list,
+# they are automatically reduced to the one with the highest numeric value.
+# For example:
+#   ("darkvision", 60, "ft")
+#   ("darkvision", 120, "ft")
+# will resolve to:
+#   ("darkvision", 120, "ft")
+#
+# Tuples with different names are treated as distinct perks, even if they are conceptually related:
+#   ("darkvision", 60, "ft")
+#   ("darkvision (underground only)", 180, "ft")
+# These will NOT be merged.
+# WARNING: the measurement unit (third element) is NEVER considered in operations, it is mandatory to keep it consistent for the same perk type to ensure coherence. For now, distances are in ft and times are in minutes.
+
 # Notes on things to post format: darkvision ?ft, breath hold ? min, armor (light <- medium ecc)
 # Notes on list for post format: random_weapon_list, plantfolk_vulnerability_list, random_tool/kit_list, random_damage_type_list, lycantrope_natural_weapons_list, aasimar_transformation_list, random_skill_list, giant_element_list, draconic_ancestory_list, musical_instrument_list, wizard_cantrip_list, druid_cantrip_list, martial_weapon_list, simple_weapon_list
 # When any list is mentioned, it means that it should be rolled from the items in that list, because the list name is a placeholder.
 
+# ToDo: check the list placeholders
 wizard_cantrip_list = ["light", "mage hand", "minor illusion", "prestidigitation", "ray of frost", "shocking grasp", "true strike", "chill touch", "dancing lights", "fire bolt", "poison spray", "resistance", "sacred flame", "thorn whip", "vicious mockery"]
+martial_weapon_list = []
+druid_cantrip_list = []
+simple_weapon_list = []
+random_skill_list = []
+exotic_weapon_list = []
+random_weapon_list = [martial_weapon_list, simple_weapon_list, exotic_weapon_list]
+random_toolkit_list = []
+random_damage_type_list = []
+
 
 race = { # Common elf contains the complete template
     "Common Elf": {
@@ -40,7 +73,7 @@ race = { # Common elf contains the complete template
             "ac": {"apply": "add", "expr": [{"const": 0}]},
             "initiative": {"apply": "add", "expr": [{"const": 0}]},
             "speed_bonus": {"walking": {"apply": "add", "expr": [{"const": 0}]}}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
-            "size": {"apply": "replace", "expr": [{"const": "medium"}]} #basic is medium
+            "size": {"apply": "replace", "expr": [{"const": Size.MEDIUM}]} #basic is medium
         },
         "ability_scores": {
             "strength": {"apply": "add", "expr": [{"const": 0}]},
@@ -52,13 +85,13 @@ race = { # Common elf contains the complete template
         },
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}]},
-            "armors": {"apply": "replace", "expr": [{"const": [ArmorType.UNARMORED]}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.UNARMORED}, {"stat": "armors"}]}]},
             "tools": {"apply": "add", "expr": [{"const": []}]},
             "skills": {"apply": "add", "expr": [{"const": ["perception"]}]},
             "saving_throws": {"apply": "add", "expr": [{"const": []}]}
         },
         "magic": {
-            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.INNATE}]},
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["wisdom", "intelligence", "charisma"]}]},
             "spell_slots": {1: {"apply": "add", "expr": [{"const": 0}]},
                             2: {"apply": "add", "expr": [{"const": 0}]}},
@@ -71,7 +104,7 @@ race = { # Common elf contains the complete template
             "vulnerabilities": {"apply": "add", "expr": [{"const": []}]},
             "add_advantage_on": {"apply": "add", "expr": [{"const": []}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": {"darkvision", 60, "ft"}}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]}
         }
     },
     "Polar Human": {
@@ -82,7 +115,7 @@ race = { # Common elf contains the complete template
         },
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"const": ["shortsword","spear","harpoon","shortbow"]}]},
-            "armors": {"apply": "replace", "expr": [{"const": ArmorType.LIGHT}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
             "tools": {"apply": "add", "expr": [{"const": ["ice fishing tools"]}]},
             "skills": {"apply": "add", "expr": [{"const": ["survival","athletics"]}]},
         },
@@ -110,7 +143,7 @@ race = { # Common elf contains the complete template
         },
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow","rapier"]}]},
-            "armors": {"apply": "replace", "expr": [{"const": ArmorType.LIGHT}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
             "skills": {"apply": "add", "expr": [{"const": ["persuasion","insight"]}]},
         }
     },
@@ -139,302 +172,311 @@ race = { # Common elf contains the complete template
     },
     "Mountains Dorojan Human": {
         "ability_scores": {
-            "strength": 1,
-            "constitution": 1,
-            "wisdom": 1
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["shortsword","shortbow"],
-            "skills": ["athletics","acrobatics"]
+            "weapons": {"apply": "add", "expr": [{"const": ["shortsword","shortbow"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["athletics","acrobatics"]}]}
         },
         "other_info": {
-            "resistances": ["cold"]
+            "resistances": {"apply": "add", "expr": [{"const": "cold"}]}
         }
     },
     "Half-Elf": {
         "ability_scores": {
-            "strength": 1,
-            "dexterity": 1,
-            "charisma": 2
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
         },
         "proficiencies": {
-            "weapons": ["martial_weapon_list","martial_weapon_list"],
-            "armors": ["light armors"],
-            "skills": ["perception", "random_skill_list"]
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}, {"rd_choice": martial_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["perception", "random_skill_list"]}]}
         },
         "other_info": {
-            "immunities": ["charmed (magic-induced sleep)"],
-            "other_physical_features": ["darkvision 60ft"]
+            "immunities": {"apply": "add", "expr": [{"const": ["charmed (magic-induced sleep)"]}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]}
         }
     },
     "Plasmoid": {
         "ability_scores": {
-            "constitution": 2,
-            "intelligence": 1
+            "constitution": {"apply": "add", "expr": [{"const": 2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
         },
         "other_info": {
-            "resistances": ["acid"],
-            "immunities": ["poisoned"],
-            "other_physical_features": ["darkvision 60ft", "breath hold 60 min",
-                                        "amorphous form (can squeeze through 1-inch gaps)",
-                                        "fatural pseudopods (can manipulate objects without hands)"]
+            "resistances": {"apply": "add", "expr": [{"const": "acid"}]},
+            "immunities": {"apply": "add", "expr": [{"const": "poisoned"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 60, "ft"), ("hold breath", 15, "minutes"),
+                "amorphous form (can squeeze through 1-inch gaps)",
+                "fatural pseudopods (can manipulate objects without hands)"]}]}
         }
     },
     "Spirit": {
         "ability_scores": {
-            "strength": -1,
-            "dexterity": 1,
-            "wisdom": 2
+            "strength": {"apply": "add", "expr": [{"const": -1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 2}]}
         },
         "proficiencies": {
-            "weapons": ["scyter","dagger","quarterstaff"],
-            "skills": ["insight","perception"],
-            "saving_throws": ["wisdom"]
+            "weapons": {"apply": "add", "expr": [{"const": ["scyter","dagger","quarterstaff"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["insight","perception"]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": "wisdom"}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "spellcasting_ability": "wisdom",
-            "known_cantrips": ["druid_cantrip_list"]
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "spellcasting_ability": {"apply": "add", "expr": [{"const": "wisdom"}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": druid_cantrip_list}]}
         },
+
         "other_info": {
-            "resistances": ["necrotic"],
-            "vulnerabilities": ["radiant"],
-            "other_physical_features": ["darkvision 60ft, breath hold 10 min",
-                                        "incorporeal movement (can move through creatures and objcts as if they're difficult terrain)",
-                                        "ethereal sight 60ft",
-                                        "spectral sense (sense living creatures within 15ft)"]
+            "resistances": {"apply": "add", "expr": [{"const": "necrotic"}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": "radiant"}]},
+            "other_physical_features": [
+                ("darkvision", 60, "ft"),
+                ("hold breath", 10, "minutes"),
+                "incorporeal movement (can move through creatures and objcts as if they're difficult terrain)",
+                ("truesight", 15, "ft"),
+                ("spectral sense (sense living creatures)", 60, "ft")
+            ]
         }
     },
     "Lopunnie": {
         "core_combat": {
-            "initiative": 5,
-            "speed_bonus": {"walking": 5}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
+            "initiative": {"apply": "add", "expr": [{"const": 5}]},
+            "speed_bonus": {"walking": 
+                                {"apply": "add", "expr": [{"const": 5}]}
+                            }, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
         },
         "ability_scores": {
-            "dexterity": 2,
-            "wisdom": 1
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["simple_weapon_list","simple_weapon_list"],
-            "skills": ["acrobatics"]
+            "weapons": {"apply": "add", "expr": [{"rd_choice": simple_weapon_list}, {"rd_choice": simple_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": "acrobatics"}]}
         },
         "other_info": {
-            "other_physical_features": ["darkvision 60ft",
-                                        "keen hearing",
-                                        "keen smell"]
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 60, "ft"),
+                "keen hearing",
+                "keen smell"]}]}
         }
     },
     "Common Birdling": {
         "core_combat": {
-            "speed_bonus": {"walking": 5, "flying": 30} #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
+            "speed_bonus": {"walking": {"apply": "add", "expr": [{"const": 5}]},
+                            "flying": {"apply": "replace", "expr": [{"const": 30}]}}
         },
         "ability_scores": {
-            "strength": -1,
-            "dexterity": 2,
-            "wisdom": 1
+            "strength": {"apply": "add", "expr": [{"const": -1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["simple_weapon_list","simple_weapon_list"],
-            "armors": ["light armors"],
-            "skills": ["perception"]
+            "weapons": {"apply": "add", "expr": [{"rd_choice": simple_weapon_list}, {"rd_choice": simple_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "skills": {"apply": "add", "expr": [{"const": "perception"}]}
         },
         "other_info": {
-            "other_physical_features": ["keen sight"]
+            "other_physical_features": {"apply": "add", "expr": [{"const": "keen sight"}]}
         }
     },
     "Hybrid": {
         "ability_scores": {
-            "strength": +1,
-            "dexterity": +1,
-            "constitution": +1,
-            "intelligence": +1,
-            "wisdom": +1,
-            "charisma": +1
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "skills": ["random_skill_list", "random_skill_list"]
+            "skills": {"apply": "add", "expr": [{"rd_choice": random_skill_list}, {"rd_choice": random_skill_list}]}
         },
         "other_info": {
-            "other_physical_features": [
-                "adaptive physiology (once per long rest, gain advantage on one saving throw of choice for the day)"
-            ]
+            "other_physical_features": {"apply": "add", "expr": [{"const": 
+                "adaptive physiology (once per long rest, gain advantage on one saving throw of choice for the day)"}]}
+            
         }
     },
     "Other": {
         "ability_scores": {
-            "constitution": +1,
-            "intelligence": +1
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["random_weapon_list"],
-            "skills": ["random_skill_list", "random_skill_list"],
-            "tools": ["random_tool/kit_list"]
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"rd_choice": random_skill_list}, {"rd_choice": random_skill_list}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}]}
         },
         "other_info": {
-            "resistances": ["random_damage_type_list"]
+            "resistances": {"apply": "add", "expr": [{"rd_choice": random_damage_type_list}]}
         }
     },
     "Dark Elf": {
         "ability_scores": {
-            "dexterity": 2,
-            "charisma": 1
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["longsword","shortsword","longbow","shortbow"],
-            "skills": ["perception"]
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}, {"rd_choice": simple_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": "perception"}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "known_spells": ["Dancing Lights", "Faerie Fire", "Darkness"]
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["Dancing Lights", "Faerie Fire", "Darkness"]}]}
         },
         "other_info": {
-            "immunities": ["charmed (magic-induced sleep)"],
-            "vulnerabilities": ["sunlight sensitivity"],
-            "other_physical_features": ["darkvision 120ft"]
+            "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": "sunlight sensitivity"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 120, "ft")}]},
         }
     },
     "Wood Elf": {
         "core_combat": {
-            "speed_bonus": {"walking": 5}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
+            "speed_bonus": {"walking": {"apply": "add", "expr": [{"const": 5}]}}
         },
         "ability_scores": {
-            "dexterity": 2,
-            "wisdom": 1
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["longsword","shortsword","longbow","shortbow"],
-            "skills": ["perception"]
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}, {"rd_choice": simple_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": "perception"}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "known_cantrips": ["wizard_cantrip_list", "Mask of the Wild"]
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}, {"const": "Mask of the Wild"}]}
         },
         "other_info": {
-            "immunities": ["charmed (magic-induced sleep)"],
-            "other_physical_features": ["darkvision 60ft"]
+            "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
         }
     },
     "Deep Elf": {
         "ability_scores": {
-            "dexterity": 2,
-            "constitution": 1
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["light crossbow","spiked ball and chain"],
-            "skills": ["perception"]
+            "weapons": {"apply": "add", "expr": [{"const": ["light crossbow","spiked ball and chain"]}]},
+            "skills": {"apply": "add", "expr": [{"const": "perception"}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "known_cantrips": ["wizard_cantrip_list"]
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
         },
         "other_info": {
-            "immunities": ["charmed (magic-induced sleep)"],
-            "vulnerabilities": ["sunlight sensitivity"],
-            "other_physical_features": ["darkvision 120ft"]
+            "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": "perception(sight) checks done in direct sunlight"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 120, "ft")}]},
         }
     },
     "Moonskin Elf": {
         "core_combat": {
-            "speed_bonus": {"walking": 5}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
+            "speed_bonus": {"walking": {"apply": "add", "expr": [{"const": 5}]}}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
         },
         "ability_scores": {
-            "dexterity": 1,
-            "intelligence": 1
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["spear","javelin","longbow","shortbow"],
-            "skills": ["perception"]
+            "weapons": {"apply": "add", "expr": [{"const": ["spear","javelin","longbow","shortbow"]}]},
+            "skills": {"apply": "add", "expr": [{"const": "perception"}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "known_cantrips": ["druid_cantrip_list"]
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": druid_cantrip_list}]}
         },
         "other_info": {
-            "resistances": ["suffocation"],
-            "immunities": ["charmed (magic-induced sleep)"],
-            "other_physical_features": ["darkvision 60ft", "breath hold 10 min"]
+            "resistances": {"apply": "add", "expr": [{"const": "suffocation (it makes you drop to half your hp first, then to 0 hp as normal)"}]},
+            "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}, {"const": ("hold breath", 10, "minutes")}]},
         }
     },
     "Pixie": {
         "core_combat": {
-            "hp": -4,
-            "speed_bonus": {"flying": 30}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
-            "size": "tiny" #basic is medium
+            "hp": {"apply": "subtract", "expr": [{"multiply": [{"const": 2}, {"stat": "level"}]}]},
+            "speed_bonus": {"flying": {"apply": "replace", "expr": [{"const": 30}]}},
+            "size": {"apply": "replace", "expr": [{"const": Size.TINY}]} #basic is medium
         },
         "ability_scores": {
-            "strength": -4,
-            "dexterity": 3,
-            "wisdom": 1,
-            "charisma": 2
+            "strength": {"apply": "add", "expr": [{"const": -4}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 3}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
         },
         "proficiencies": {
-            "weapons": ["shortsword", "shortbow"],
-            "skills": ["perception", "stealth"]
+            "weapons": {"apply": "add", "expr": [{"const": ["shortsword", "shortbow"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["perception", "stealth"]}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "spellcasting_ability": "charisma",
-            "known_spells": ["invisibility (free 1/day)"],
-            "known_cantrips": ["druidcraft"]
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "charisma"}]},
+            "known_spells": {"apply": "add", "expr": [{"const": "invisibility (free 1/day)"}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "druidcraft"}]}
         }
     },
     "Fairy": {
         "core_combat": {
-            "speed_bonus": {"walking": 0}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
-            "size": "small", #basic is medium
+            "speed_bonus": {"flying": {"apply": "replace", "expr": [{"add": [{"const": 10}, {"stat": "walking"}]}]}}, #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
+            "size": {"apply": "replace", "expr": [{"const": Size.SMALL}]}, #basic is medium
         },
         "ability_scores": {
-            "strength": -1,
-            "dexterity": 2,
-            "charisma": 2
+            "strength": {"apply": "add", "expr": [{"const": -1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
         },
         "proficiencies": {
-            "weapons": ["shortsword","shield","shortbow"],
-            "skills": ["persuasion"]
+            "weapons": {"apply": "add", "expr": [{"const": ["shortsword","shield","shortbow"]}]},
+            "skills": {"apply": "add", "expr": [{"const": "persuasion"}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "spellcasting_ability": "charisma",
-            "known_spells": ["faerie fire (free 1/day)"],
-            "known_cantrips": ["light"]
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "charisma"}]},
+            "known_spells": {"apply": "add", "expr": [{"const": "faerie fire (free 1/day)"}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "light"}]}
         },
         "other_info": {
-            "add_advantage_on": ["charmed (magic-induced sleep)"]
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]}
         }
     },
     "Firbolg": {
         "core_combat": {
-            "hp": 4
+            "hp": {"apply": "add", "expr": [{"multiply": [{"const": 2}, {"stat": "level"}]}]}
         },
         "ability_scores": {
-            "strength": 1,
-            "constitution": 2,
-            "wisdom": 1
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": ["simple_weapon_list","simple_weapon_list","shield"],
-            "skills": ["animal handling"]
+            "weapons": {"apply": "add", "expr": [{"rd_choice": simple_weapon_list}, {"rd_choice": simple_weapon_list}, "shield"]},
+            "skills": {"apply": "add", "expr": [{"const": "animal handling"}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "spellcasting_ability": "wisdom",
-            "known_spells": ["detect magic (free 1/day)", "disguise self (free 1/day)"]
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "spellcasting_ability": {"apply": "replaace", "expr": [{"const": "wisdom"}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["detect magic (free 1/day)", "disguise self (free 1/day)"]}]}
         },
         "other_info": {
-            "immunities": ["charmed (magic-induced sleep)"],
-            "other_physical_features": ["hidden step (free invisibility 1/rest)", "darkvision 60ft"]
+            "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["hidden step (free invisibility 1/rest)", ("darkvision", 60, "ft")]}]}
         }
     },
     "Elementalfolk": {
         "ability_scores": {
-            "constitution": +2
+            "constitution": {"apply": "add", "expr": [{"const": 2}]}
         },
         "magic": {
-            "magic_source": "Innate",
-            "known_spells": ["mage armor (free 1/day)"]
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": "mage armor (free 1/day)"}]}
         }
     },
-    "Sylph": {
+    "Sylph": { #todo from here: fix the rest
         "core_combat": {
             "speed_bonus": {"walking": 5} #it's going to be added to the base speed (walking is 30ft others are 0) of the specified type
         },
@@ -495,7 +537,7 @@ race = { # Common elf contains the complete template
         },
         "other_info": {
             "immunities": ["charmed (magic-induced sleep)"],
-            "other_physical_features": ["darkvision 60ft"]
+            "other_physical_features": [("darkvision", 60, "ft")]
         }
     },
     "Dwarf": {
@@ -513,7 +555,7 @@ race = { # Common elf contains the complete template
         },
         "other_info": {
             "resistances": ["poison"],
-            "other_physical_features": ["darkvision 60ft"]
+            "other_physical_features": [("darkvision", 60, "ft")]
         }
     },
     "Tabaxi": {
@@ -530,7 +572,7 @@ race = { # Common elf contains the complete template
         },
         "other_info": {
             "immunities": ["charmed (magic-induced sleep)"],
-            "other_physical_features": ["feline agility (free dash 1/rest)", "darkvision 60ft",
+            "other_physical_features": ["feline agility (free dash 1/rest)", ("darkvision", 60, "ft"),
                                         "cat's claws (natural weapons, 1d4 slashing damage)"]
         }
     },
@@ -544,7 +586,7 @@ race = { # Common elf contains the complete template
             "skills": ["stealth", "sleight of hand"]
         },
         "other_info": {
-            "other_physical_features": ["darkvision 60ft", "mimicry"]
+            "other_physical_features": [("darkvision", 60, "ft"), "mimicry"]
         }
     },
     "Goliath": {
@@ -683,7 +725,7 @@ race = { # Common elf contains the complete template
         },
         "other_info": {
             "resistances": ["diseases"],
-            "other_physical_features": ["darkvision 60ft", "keen hearing", "keen smell",
+            "other_physical_features": [("darkvision", 60, "ft"), "keen hearing", "keen smell",
                                         "pack tactics (advantage on attack rolls against a creature if at least one of your allies is within 5ft of it and isn't incapacitated)",
                                         "natural weapons (claws 1d4 slashing damage, bite 1d6 piercing damage)"]
         }
@@ -748,7 +790,7 @@ race = { # Common elf contains the complete template
         "other_info": {
             "resistances": ["diseases"],
             "immunities": ["draconic_ancestory_list"],
-            "other_physical_features": ["darkvision 120ft",
+            "other_physical_features": [("darkvision", 120, "ft"),
                                         "breath weapon (30ft cone or 60ft line, 4d6 damage, DC 15 dex save for half)",
                                         "trasformation (can polymorph into dragonish (and back) form gaining flight 60ft, natural weapons (bite 2d10 piercing damage, claw 2d6 slashing damage))",
                                         "legendary resistance (3/rest, can choose to succeed a failed saving throw)"]
@@ -767,7 +809,7 @@ race = { # Common elf contains the complete template
             "skills": ["random_skill_list"]
         },
         "other_info": {
-            "other_physical_features": ["darkvision 60ft",
+            "other_physical_features": [("darkvision", 60, "ft"),
                                         "pack tactics (advantage on attack rolls against a creature if at least one of your allies is within 5ft of it and isn't incapacitated)",
                                         "sunlight sensitivity"]
         }
@@ -786,7 +828,7 @@ race = { # Common elf contains the complete template
             "skills": ["survival","perception"]
         },
         "other_info": {
-            "other_physical_features": ["breath hold 15 min", "natural weapons (bite 1d6 piercing damage)"]
+            "other_physical_features": [("hold breath", 15, "minutes"), "natural weapons (bite 1d6 piercing damage)"]
         }
     },
     "Firefly": {
@@ -811,7 +853,7 @@ race = { # Common elf contains the complete template
         "other_info": {
             "resistances": ["fire"],
             "vulnerabilities": ["cold"],
-            "other_physical_features": ["darkvision 60ft", "bioluminescence (can emit bright light in 10ft radius and dim light for additional 10ft)"]
+            "other_physical_features": [("darkvision", 60, "ft"), "bioluminescence (can emit bright light in 10ft radius and dim light for additional 10ft)"]
         }
     },
     "Pale Knight": {
@@ -861,7 +903,7 @@ race = { # Common elf contains the complete template
             "skills": ["insight","intimidation"]
         },
         "other_info": {
-            "other_physical_features": ["darkvision 60ft", "nimble escape (can take disengage or hide action as a bonus action on each of its turns)"]
+            "other_physical_features": [("darkvision", 60, "ft"), "nimble escape (can take disengage or hide action as a bonus action on each of its turns)"]
         }
     },
     "Hobgoblin": {
@@ -875,7 +917,7 @@ race = { # Common elf contains the complete template
             "skills": ["history","intimidation"]
         },
         "other_info": {
-            "other_physical_features": ["darkvision 60ft", "martial advantage (when it or an ally within 5ft attacks with a martial weapon, can roll with advantage)"]
+            "other_physical_features": [("darkvision", 60, "ft"), "martial advantage (when it or an ally within 5ft attacks with a martial weapon, can roll with advantage)"]
         }
     },
     "Lost Sea Goblin": {
@@ -897,7 +939,7 @@ race = { # Common elf contains the complete template
             "known_spells": ["minor illusion (free 4/day)"]
             },
         "other_info": {
-            "other_physical_features": ["darkvision 60ft", "breath hold 30 min"]
+            "other_physical_features": [("darkvision", 60, "ft"), ("hold breath", 30, "minutes")]
         }
     },
     "Mushroomfolk": {
@@ -939,7 +981,7 @@ race = { # Common elf contains the complete template
             "skills": ["intimidation"]
         },
         "other_info": {
-            "other_physical_features": ["darkvision 60ft", "powerful build (counts as one size larger for carrying capacity and push/drag/lift)",
+            "other_physical_features": [("darkvision", 60, "ft"), "powerful build (counts as one size larger for carrying capacity and push/drag/lift)",
                                         "fists of steel (natural weapons, 1d8 bluedgeoning damage)"]
         }
     },
@@ -953,7 +995,7 @@ race = { # Common elf contains the complete template
             "skills": ["intimidation", "athletics"]
         },
         "other_info": {
-            "other_physical_features": ["darkvision 60ft", "powerful build (counts as one size larger for carrying capacity and push/drag/lift)",
+            "other_physical_features": [("darkvision", 60, "ft"), "powerful build (counts as one size larger for carrying capacity and push/drag/lift)",
                                         "heavy fists (natural weapons, 1d6 bluedgeoning damage)"]
         }
     },
@@ -969,7 +1011,7 @@ race = { # Common elf contains the complete template
         },
         "other_info": {
             "other_physical_features": [
-                "darkvision 60ft",
+                ("darkvision", 60, "ft"),
                 "electroreception (sense electrical fields within 30ft)",
                 "compound eyes or mandibles",
                 "insectoid physiology"
@@ -1016,7 +1058,7 @@ race = { # Common elf contains the complete template
         },
         "other_info": {
             "other_physical_features": [
-                "darkvision 60ft",
+                ("darkvision", 60, "ft"),
                 "amphibious (can breathe air and water)",
                 "scavenger culture (advantage on checks to find usable materials)"
             ]
@@ -1048,7 +1090,7 @@ race = { # Common elf contains the complete template
             "weapons": ["greataxe", "javelin"]
         },
         "other_info": {
-            "other_physical_features": ["darkvision 60ft", "powerful build (counts as one size larger for carrying capacity and push/drag/lift"]
+            "other_physical_features": [("darkvision", 60, "ft"), "powerful build (counts as one size larger for carrying capacity and push/drag/lift"]
         }
     },
     "Plantfolk": {
@@ -1088,7 +1130,7 @@ race = { # Common elf contains the complete template
         },
         "other_info": {
             "resistances": ["fire"],
-            "other_physical_features": ["darkvision 60ft"]
+            "other_physical_features": [("darkvision", 60, "ft")]
         }
     },
     "Demonoid": {
@@ -1115,7 +1157,7 @@ race = { # Common elf contains the complete template
             "resistances": ["fire"],
             "other_physical_features": [
                 "demonic heritage (can recall demonic powers, manifests as luminescent horns, wings or tail)",
-                "darkvision 60ft"
+                ("darkvision", 60, "ft")
             ]
         },
     },
@@ -1131,7 +1173,7 @@ race = { # Common elf contains the complete template
         },
         "other_info": {
             "immunities": ["poison"],
-            "other_physical_features": ["darkvision 60ft", "magic resistance (advantage vs spells)"]
+            "other_physical_features": [("darkvision", 60, "ft"), "magic resistance (advantage vs spells)"]
         }
     },
     "Demon": {
@@ -1157,7 +1199,7 @@ race = { # Common elf contains the complete template
             "resistances": ["fire", "cold", "lightning", "force"],
             "immunities": ["charmed", "frightened"],
             "vulnerabilities": ["radiant", "necrotic"],
-            "other_physical_features": ["darkvision 120ft",
+            "other_physical_features": [("darkvision", 120, "ft"),
                                         "regeneration (regain 5 HP at the start of its turn if it has at least 1 HP)",
                                         "demonic taunt (once per turn, can deal extra 7 (2d6) necrotic damage to a creature it hits with a weapon attack)",
                                         "true sight 45ft"]
@@ -1185,7 +1227,7 @@ race = { # Common elf contains the complete template
             "other_physical_features": [
                 "regenerative skin (heals minor wounds faster for 1d4 HP at the start of its turn)",
                 "tail can be used for balance or minor attacks (1d4 bludgeoning)",
-                "darkvision 60ft"
+                ("darkvision", 60, "ft")
             ]
         }
     },
@@ -1209,7 +1251,7 @@ race = { # Common elf contains the complete template
         "other_info": {
             "resistances": ["fire"],
             "other_physical_features": [
-                "darkvision 60ft",
+                ("darkvision", 60, "ft"),
                 "horns (natural weapons, 1d6 piercing damage)",
                 "innate flame affinity (fire spells are deep red or purple)"
             ]
@@ -1237,7 +1279,7 @@ race = { # Common elf contains the complete template
         "other_info": {
             "resistances": ["fire"],
             "other_physical_features": [
-                "darkvision 60ft",
+                ("darkvision", 60, "ft"),
                 "magic vision (can see magic energy and auras)"
             ]
         }
@@ -1263,7 +1305,7 @@ race = { # Common elf contains the complete template
         "other_info": {
             "resistances": ["fire", "necrotic"],
             "other_physical_features": [
-                "darkvision 60ft",
+                ("darkvision", 60, "ft"),
                 "thermal vision 10ft",
                 "tremorsense 10ft",
                 "heightened senses (advantage on perception checks involving smell, sight, or hearing)",
@@ -1349,7 +1391,7 @@ race = { # Common elf contains the complete template
             "add_advantage_on": ["feared"],
             "other_physical_features": [
                 "celestial heritage (can manifest wings of light, halo or radiant tail)",
-                "darkvision 60ft"
+                ("darkvision", 60, "ft")
             ]
         }
     },
@@ -1384,8 +1426,8 @@ race = { # Common elf contains the complete template
             "other_physical_features": [
                 "divine regeneration (regain 5 hp at the start of its turn if it has at least 1 hp)",
                 "angelic touch (heals a creature or mends an object for 2d4 + 3 hp as an action)",
-                "darkvision 120ft",
-                "truesight 30ft"
+                ("darkvision", 120, "ft"),
+                ("truesight", 30, "ft")
             ]
         }
     },
@@ -1413,7 +1455,7 @@ race = { # Common elf contains the complete template
         "other_info": {
             "resistances": ["radiant", "necrotic"],
             "other_physical_features": [
-                "darkvision 60ft",
+                ("darkvision", 60, "ft"),
                 "celestial legacy (aasimar_transformation_list)"
             ]
         }
@@ -1462,7 +1504,7 @@ race = { # Common elf contains the complete template
             "known_cantrips": ["minor illusion"]
         },
         "other_info": {
-            "senses": ["darkvision 60ft"],
+            "senses": [("darkvision", 60, "ft")],
             "other_physical_features": [
                 "fox senses (recognizes individuals by scent and magical trace)",
                 "heat sensitivity (can detect warm creatures within 10ft)",
@@ -1492,7 +1534,7 @@ race = { # Common elf contains the complete template
             "resistances": ["necrotic"],
             "add_advantage_on": ["frightened"],
             "other_physical_features": [
-                "darkvision 60ft",
+                ("darkvision", 60, "ft"),
                 "armor shell (can inhabit incomplete or abandoned armor that drops if defeated)"
             ]
         }
@@ -1559,7 +1601,7 @@ race = { # Common elf contains the complete template
             "resistances": ["necrotic"],
             "add_disadvantage_on": ["perception (sight, under direct sunlight)", "attack rolls (if sight is needed under direct sunlight)"],
             "other_physical_features": [
-                "darkvision 60ft",
+                ("darkvision", 60, "ft"),
                 "telepathy 60ft (Voshedi only)",
                 "dark sustenance (does not need to eat or drink normally)",
                 "darknesssynthesis (inverted photosynthesis)",
@@ -1657,7 +1699,7 @@ race = { # Common elf contains the complete template
                 "loyal bond (can cast spells above the 4th level only for a chosen bonded creature)",
                 "restricted attunement (only one weapon or focus)",
                 "fatigue sensitivity (disadvantage on constitution saving throws against exhaustion effects)",
-                "darkvision 120ft"
+                ("darkvision", 120, "ft")
             ]
         }
     },
@@ -1686,7 +1728,7 @@ race = { # Common elf contains the complete template
             "add_advantage_on": ["arcana"],
             "add_disadvantage_on": ["stealth"],
             "other_physical_features": [
-                "darkvision 60ft"
+                ("darkvision", 60, "ft")
             ]
         }
     },
@@ -1733,7 +1775,7 @@ race = { # Common elf contains the complete template
             "add_advantage_on": ["death effects"],
             "add_disadvantage_on": ["perception (smell, when garlic is in 5ft)"],
             "other_physical_features": [
-                "darkvision 120ft",
+                ("darkvision", 120, "ft"),
                 "enhanced senses (advantage on perception checks relying on smell, taste, or hearing)",
                 "no heartbeat",
                 "does not need to breathe",
@@ -1771,7 +1813,7 @@ race = { # Common elf contains the complete template
             "add_advantage_on": ["stealth"],
             "other_physical_features": [
                 "incorporeal movement (can move through solid objects as if they're difficult terrain)",
-                "darkvision 60ft"
+                ("darkvision", 60, "ft")
             ]
         }
     },
@@ -1796,7 +1838,7 @@ race = { # Common elf contains the complete template
             "other_physical_features": [
                 "amphibious (breathe air and water)",
                 "aquatic adaptation (water contact reveals scale skin, gills, webbed fingers/toes)",
-                "darkvision 60ft"
+                ("darkvision", 60, "ft")
             ]
         }
     },
@@ -1854,7 +1896,7 @@ race = { # Common elf contains the complete template
             "add_disadvantage_on": ["dexterity saving throws"],
             "other_physical_features": [
                 "tough shell (can retract as a bonus action to increase AC by 3)",
-                "breath hold 15 min"
+                ("hold breath", 15, "minutes")
             ]
         }
     },
@@ -1882,7 +1924,7 @@ race = { # Common elf contains the complete template
                 "tentacular limbs (can interact with objects, grapple, or climb using tentacles; advantage on grapple checks)",
                 "chromatic shift (can change skin color briefly; gains advantage on stealth checks)",
                 "ink burst (once per short rest, release ink in a 10ft radius underwater, heavily obscured for 1 minute)",
-                "darkvision 60ft"
+                ("darkvision", 60, "ft")
             ]
         }
     },
@@ -1913,7 +1955,7 @@ race = { # Common elf contains the complete template
             "other_physical_features": [
                 "incorporeal movement (can move through solid objects as if they're difficult terrain)",
                 "wail resonance (once per long rest, emit a wail causing all creatures within 30ft to make a DC 15 constitution saving throw or take 4d6 psychic damage and be frightened for 1 minute; half damage and no fright on successful save)",
-                "darkvision 60ft"
+                ("darkvision", 60, "ft")
             ]
         }
     }
@@ -2169,7 +2211,7 @@ subtype = {
                 "add_advantage_on": ["stealth (if underwater)"],
                 "other_physical_features": [
                     "amphibious (air and water breathing)",
-                    "darkvision 60ft"
+                    ("darkvision", 60, "ft")
                 ]
             }
         },
@@ -2458,7 +2500,7 @@ age_category = {
                 "vulnerabilities": [],
                 "add_advantage_on": [],
                 "add_disadvantage_on": [],
-                "other_physical_features": ["darkvision 60ft"]
+                "other_physical_features": [("darkvision", 60, "ft")]
             }
         },
         "teen": {"wisdom": +2, "speed": -5},
