@@ -2472,7 +2472,7 @@ subtype = {
 #ToDo from here
 age_category = {
         "child": {
-        "core_combat": {
+            "core_combat": {
                 "speed_bonus": {"speed.walking": -5,
                                 "speed.flying": -5,
                                 "speed.swimming": 0,
@@ -2481,7 +2481,7 @@ age_category = {
                 "size": "" #basic is medium
             },
             "ability_scores": {
-                "strength": 0,
+                "strength": {"apply": "add", "expr": [{"rd_choice": []}]},
                 "dexterity": 2,
                 "constitution": 0,
                 "intelligence": 1,
@@ -2489,26 +2489,9 @@ age_category = {
                 "charisma": 0
             },
             "proficiencies": {
-                "weapons": ["longsword","shortsword","longbow","shortbow"],
-                "armors": [],
-                "tools": [],
-                "skills": ["perception"],
-                "saving_throws": []
-            },
-            "magic": {
-                "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
-                "spellcasting_ability": "",
-                "spell_slots": {"spell_slots.1": 0, "spell_slots.2": 0},
-                "known_spells": [],
-                "known_cantrips": ["wizard_cantrip_list"]
-            },
-            "other_info": {
-                "resistances": [],
-                "immunities": ["charmed (magic-induced sleep)"],
-                "vulnerabilities": [],
-                "add_advantage_on": [],
-                "add_disadvantage_on": [],
-                "other_physical_features": [("darkvision", 60, "ft")]
+                "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list
+                "armors": {"apply": "replace", "expr": [{"min": [{"stat": "armors"}, {"const": ArmorType.LIGHT}]}]},
+                "tools": {"apply": "replace", "expr": [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]}
             }
         },
         "teen": {"wisdom": +2, "speed": -5},
