@@ -33,7 +33,7 @@ class NPC:
             f"Race and Eventual Subtype: {self.race} {self.subtype}\n"
             f"Language: {self.language}\n\n"
             f"Social Level: {self.social_level.name.capitalize()}\n"
-            f"Occupation: {self.occupation}\n\n"
+            f"Occupation: {self.occupation['display']}\n\n"
             f"Age: {self.age} ({self.age_category})\n"
             f"alignment: {self.alignment}\n"
             f"Partnership Status: {self.partnership}\n"

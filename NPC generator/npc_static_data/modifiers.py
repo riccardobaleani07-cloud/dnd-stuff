@@ -72,6 +72,7 @@ draconic_ancestory_list = [] # (ex: red dragon (fire type))
 plantfolk_vulnerability_list = []
 aasimar_transformation_list = [] # (ex: transformation name (description))
 lycantrope_natural_weapons_list = [] # (ex: natural weapons (bite, 1d6 piercing damage))
+board_games_list = []
 
 
 
@@ -2469,42 +2470,225 @@ subtype = {
         }
     }
 
-#ToDo from here
 age_category = {
         "child": {
             "core_combat": {
-                "speed_bonus": {"speed.walking": -5,
-                                "speed.flying": -5,
-                                "speed.swimming": 0,
-                                "speed.climbing": -10
+                "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]},
+                                "speed.flying": {"apply": "subtract", "expr": [{"const": 5}]},
+                                "speed.climbing": {"apply": "subtract", "expr": [{"const": 10}]}
                                 }, #it's going to be added to the computed speeds
-                "size": "" #basic is medium
+                "size": {"apply": "replace", "expr": [{"add": [{"stat": "size"}, {"const": -1}]}]}
             },
             "ability_scores": {
-                "strength": {"apply": "add", "expr": [{"rd_choice": []}]},
-                "dexterity": 2,
-                "constitution": 0,
-                "intelligence": 1,
-                "wisdom": 0,
-                "charisma": 0
+                "strength": {"apply": "subtract", "expr": [{"const": [4]}]},
+                "dexterity": {"apply": "subtract", "expr": [{"const": [4]}]},
+                "constitution": {"apply": "subtract", "expr": [{"const": [4]}]},
+                "intelligence": {"apply": "subtract", "expr": [{"const": [4]}]},
+                "wisdom": {"apply": "subtract", "expr": [{"const": [2]}]},
+                "charisma": {"apply": "add", "expr": [{"const": [4]}]}
             },
             "proficiencies": {
-                "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list
-                "armors": {"apply": "replace", "expr": [{"min": [{"stat": "armors"}, {"const": ArmorType.LIGHT}]}]},
-                "tools": {"apply": "replace", "expr": [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]}
+                "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list (in this case the two lists that are being multiplied are the simple_weapon_list and thealready existing weapon proficiencies)
+                "armors": {"apply": "replace", "expr": [{"const": ArmorType.UNARMORED}]},
+                "tools": {"apply": "replace", "expr": [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]} # it aims to reduce the number of proficiencies capping them at two
             }
         },
-        "teen": {"wisdom": +2, "speed": -5},
-        "adult": {"dexterity": +2},
-        "middle-aged": {"dexterity": +2},
-        "elderly": {"dexterity": +2}
+        "teen": {
+            "ability_scores": {
+                "strength": {"apply": "subtract", "expr": [{"const": [2]}]},
+                "dexterity": {"apply": "subtract", "expr": [{"const": [1]}]},
+                "constitution": {"apply": "subtract", "expr": [{"const": [2]}]},
+                "intelligence": {"apply": "subtract", "expr": [{"const": [1]}]},
+                "charisma": {"apply": "add", "expr": [{"const": [2]}]}
+            },
+            "proficiencies": {
+                "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list (in this case the two lists that are being multiplied are the simple_weapon_list and thealready existing weapon proficiencies)
+                "armors": {"apply": "replace", "expr": [{"min": [{"stat": "armors"}, {"const": ArmorType.LIGHT}]}]},
+                "tools": {"apply": "replace", "expr": [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]} # it aims to reduce the number of proficiencies capping them at three
+            }
+        },
+        "adult": {},
+        "middle-aged": {
+            "core_combat": {
+                "speed_bonus": {"speed.climbing": {"apply": "subtract", "expr": [{"const": 5}]}
+                                }, #it's going to be added to the computed speeds
+            },
+            "ability_scores": {
+                "wisdom": {"apply": "add", "expr": [{"const": [1]}]}
+            }
+        },
+        "elderly": {
+            "core_combat": {
+                "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]},
+                                "speed.flying": {"apply": "subtract", "expr": [{"const": 5}]},
+                                "speed.climbing": {"apply": "subtract", "expr": [{"const": 10}]}
+                                }, #it's going to be added to the computed speeds
+            },
+            "ability_scores": {
+                "strength": {"apply": "subtract", "expr": [{"const": [3]}]},
+                "dexterity": {"apply": "subtract", "expr": [{"const": [3]}]},
+                "constitution": {"apply": "subtract", "expr": [{"const": [5]}]},
+                "intelligence": {"apply": "subtract", "expr": [{"const": [1]}]},
+                "wisdom": {"apply": "subtract", "expr": [{"const": [3]}]},
+                "charisma": {"apply": "add", "expr": [{"const": [2]}]}
+            }
+        }
     }
 
 #ToDo
-occupation = {
-        "Farmer/Field Worker": {"dexterity": +2},
-        "Unemployed": {"dexterity": +2}
-    }
+jobs = {
+    # --- Core occupations ---
+    "Monarch": { #Monarch contains the complete template for occupations
+        "core_combat": {
+            "hp": {"apply": "add", "expr": [{"const": 0}]},
+            "ac": {"apply": "add", "expr": [{"const": 0}]},
+            "initiative": {"apply": "add", "expr": [{"const": 0}]},
+            "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 0}]}}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 0}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 0}]},
+            "constitution": {"apply": "add", "expr": [{"const": 0}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 0}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}, {"rd_choice": martial_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]},
+            "skills": {"apply": "add", "expr": []},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["charisma"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.NONE}, {"stat": "magic_source"}]}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"stat": "spellcasting_ability"}]},
+            "spell_slots": {"spell_slots.1": {"apply": "add", "expr": [{"const": 0}]},
+                            "spell_slots.2": {"apply": "add", "expr": [{"const": 0}]}},
+            "known_spells": {"apply": "add", "expr": [{"const": []}]},
+            "known_cantrips": {"apply": "replace", "expr": [{"stat": "known_cantrips"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": []}]},
+            "immunities": {"apply": "add", "expr": [{"const": []}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": []}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": []}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": []}]},
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}]}]
+        }
+    },
+    "Prince/Princess": {},
+    "High Diplomat": {},
+    "Chancelor": {},
+    "Chamberlain": {},
+    "General": {},
+    "High Priest": {},
+    "Royal Advisor": {},
+
+    "Lord/Lady": {},
+    "Knight": {},
+    "Merchant Lord": {},
+    "Politician": {},
+    "Judge": {},
+    "Guildmaster": {},
+    "Cleric/Bishop": {},
+    "Temple Keeper": {},
+    "Archmage": {},
+    "Architect": {},
+    "Engineer": {},
+    "Historian": {},
+    "Cartographer": {},
+    "Explorer": {},
+    "Entrepreneur": {},
+    "Ship Captain/Admiral": {},
+    "Banker": {},
+    "Noble Hunter/Falconer": {},
+    "Artist": {},
+    "Patron of the Arts": {},
+    "Specialised Doctor": {},
+
+    "Farmer": {},
+    "Blacksmith": {},
+    "Healer": {},
+    "Soldier": {},
+    "Merchant": {},
+    "Bard": {},
+    "Builder/Site Manager": {},
+    "Tailor/Leatherworker": {},
+    "Innkeeper": {},
+    "Cook": {},
+    "Brewer": {},
+    "Apothecary": {},
+    "Priest/Monk": {},
+    "Bard/Entertainer": {},
+    "Fisher": {},
+    "Sailor": {},
+    "Dockworker": {},
+    "Miner": {},
+    "Librarian": {},
+    "Hunter": {},
+    "Teacher/Tutor": {},
+    "Adventurer/Mercenary": {},
+    "Beggar/Vagrant": {},
+    "Mage": {},
+    "Courier": {},
+    "Waiter": {},
+    "Doctor": {},
+    "Nurse": {},
+
+    "Farmer/Field Worker": {},
+    "Shepherd": {},
+    "Laborer": {},
+    "Servant/Housemaid": {},
+    "Peddler": {},
+    "Tinker": {},
+    "Stablehand": {},
+    "Monk": {},
+    "Performer": {},
+
+    "Domestic Servant": {},
+    "Field Worker": {},
+    "Pleasure Performer": {},
+
+    # --- Exotic occupations ---
+    "Monster Hunter": {},
+    "Witch/Warlock": {},
+    "Necromancer": {},
+    "Oracle/Dream Interpreter": {},
+    "Beast Tamer": {},
+    "Familiar Keeper": {},
+    "Artifact Collector": {},
+    "Inventor": {},
+    "Pirate": {},
+    "Gravekeeper": {},
+    "Assassin/Spy": {},
+    "Magical Item Broker": {},
+    "Rune Engraver/Enchanter": {},
+    "Wyvern Keeper": {},
+    "Demonologist": {},
+    "Traveler": {},
+    "Elemental Binder": {},
+    "Chronomancer": {},
+    "Portal Keeper": {},
+    "Astrologer": {},
+    "Vet/Beasts' Doctor": {},
+    "Arms Dealer/Drug Dealer": {},
+    "Slave Trader": {},
+    "Mafia Boss": {},
+    "Gangster": {},
+    "Other": {}
+}
+
+employment_stages = {
+    "Unemployed": {},
+    "Apprentice/Student": {},
+    "Minor Worker": {},
+    "Full-time Occupation": {},
+    "Retired": {},
+    "Advisor": {},
+    "Minor Duties": {}
+}
 
 #ToDo
 backstory_seed = {

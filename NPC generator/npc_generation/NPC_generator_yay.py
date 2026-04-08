@@ -195,7 +195,11 @@ class NPCGenerator:
             # Output format: “Employment Stage (Job)”, e.g., “Apprentice/Student (Blacksmith)” or “Full-time Occupation (Healer)”
             occupation = f"{employment_stage} ({job})"
 
-        return occupation
+        return {
+            "stage": employment_stage,
+            "job": job if "Unemployed" not in employment_stage and "Minor Duties" not in employment_stage else None,
+            "display": occupation  # keep your string for UI
+        }
 
     def generate_wealth(self, social_level: SocialLevel, wealth_ranges) -> Wealth:
         low, high = wealth_ranges[social_level]
@@ -415,8 +419,8 @@ class NPCGenerator:
 
     # --- Other DM-facing info ---
     passive_perception = 10      # = 10 + WIS mod (+ proficiency if applicable)
-    advantage_on = []            # race, background
-    disadvantage_on = []         # race, background
+    add_advantage_on = []            # race, background
+    add_disadvantage_on = []         # race, background
     resistances = []             # race, background
     immunities = []              # race
     vulnerabilities = []         # race
@@ -451,10 +455,6 @@ class NPCGenerator:
         reputation = self.infer_reputation_from_personality(personality_traits, data.reputation_types.copy(), data.trait_to_reputation) #reputation_types needs to be copied to avoid mutation
         backstory = self.generate_backstory(backstory_seed, name, age_category, race)
         subtype = self.conditional_choose_subtype(data.available_subtypes, race)
-
-
-
-
 
 
 
