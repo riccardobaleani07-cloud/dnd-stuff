@@ -8,7 +8,7 @@ Each modifier has an "apply" field and an "expr" field.
 The "expr" field is a pure expression tree. It does not mutate any values. It evaluates recursively from the innermost operations outward and returns a single result. Expressions may contain:
 
 "const" — a constant value
-"stat" — a reference to a stat (including "old_stat" for the current value before modification)
+"stat" — a reference to a stat (including "old_self" for the current value before modification)
 "op?" — an operation applied to a list of values (you write the operation name as the key, and the value can be  asingle value or a list of values, which can themselves be expressions)
 
 Supported expression operations include "add", "inverse" (is like add, but adds the inverse of the value, value*-1), "multiply", "divide", "rd_choice", "max" and "min". Each operation applies only to its listed values (skipping invalid ones) and returns the computed result. Operations do not implicitly reference previous results or external state.
@@ -61,11 +61,12 @@ druid_cantrip_list = []
 simple_weapon_list = []
 random_skill_list = []
 exotic_weapon_list = []
-random_weapon_list = [martial_weapon_list, simple_weapon_list, exotic_weapon_list]
+random_weapon_list = [martial_weapon_list, simple_weapon_list, exotic_weapon_list] # needs to be fixed: needs to be a list of strings and NOT a list of lists
 random_toolkit_list = []
 random_damage_type_list = []
 musical_instrument_list = []
-random_first_level_spell = []
+first_level_spell = []
+second_level_spell = []
 cleric_cantrip_list = []
 giant_element_list = []
 draconic_ancestory_list = [] # (ex: red dragon (fire type))
@@ -73,7 +74,16 @@ plantfolk_vulnerability_list = []
 aasimar_transformation_list = [] # (ex: transformation name (description))
 lycantrope_natural_weapons_list = [] # (ex: natural weapons (bite, 1d6 piercing damage))
 board_games_list = []
-
+cleric_spell_list = []
+wizard_spell_list = []
+improvised_weapon_list = []
+random_gadget = []
+warlock_spell_list = []
+warlock_cantrip_list = []
+random_magical_charms = [] # (ex: charm name (description/effect))
+enchanted_weapon_list = [] # (ex: weapon name (description/effect & damage))
+sentient_item_list = [] # (ex: item name (description/effect))
+random_drug_list = [] # (ex: drug name (description/effect))
 
 
 race = { # Common elf contains the complete template
@@ -329,7 +339,7 @@ race = { # Common elf contains the complete template
             "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["wisdom", "intelligence", "charisma"]}]},
             "spell_slots": {"spell_slots.1": {"apply": "add", "expr": [{"rd_choice": [0, 0, 0, 1, 1, 2]}]},
                             "spell_slots.2": {"apply": "add", "expr": [{"rd_choice": [0, 0, 1]}]}},
-            "known_spells": {"apply": "add", "expr": [{"rd_choice": random_first_level_spell}]},
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": first_level_spell}]},
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": {"add": [wizard_cantrip_list, druid_cantrip_list, cleric_cantrip_list]}}]}
         },
         "other_info": {
@@ -1201,7 +1211,7 @@ race = { # Common elf contains the complete template
     },
     "Demon": {
         "core_combat": {
-            "hp": {"apply": "add", "expr": [{"op": "multiply", "value": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
+            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
             "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
             "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
         },
@@ -1423,7 +1433,7 @@ race = { # Common elf contains the complete template
     },
     "Angel": {
         "core_combat": {
-            "hp": {"apply": "add", "expr": [{"op": "multiply", "value": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
+            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
             "ac": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
             "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
         },
@@ -2536,9 +2546,9 @@ age_category = {
     }
 
 #ToDo
-jobs = {
+jobs = { #Monarch contains the complete template for occupations
     # --- Core occupations ---
-    "Monarch": { #Monarch contains the complete template for occupations
+    "Monarch": {
         "core_combat": {
             "hp": {"apply": "add", "expr": [{"const": 0}]},
             "ac": {"apply": "add", "expr": [{"const": 0}]},
@@ -2575,109 +2585,1236 @@ jobs = {
             "add_advantage_on": {"apply": "add", "expr": [{"const": []}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": []}]},
-            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}]}]
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}, {"const": "royal regalia (crown, scepter, royal robes)"}, {"const": "longsword"}]}]}
         }
     },
-    "Prince/Princess": {},
-    "High Diplomat": {},
-    "Chancelor": {},
-    "Chamberlain": {},
-    "General": {},
-    "High Priest": {},
-    "Royal Advisor": {},
+    "Prince/Princess": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}, {"rd_choice": martial_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["charisma"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}, {"const": "royal regalia (crown, scepter, royal robes)"}]}]}
+        }
+    },
+    "High Diplomat": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list, random_toolkit_list]}]}]},
+            "skills": {"apply": "add", "expr": ["deception"]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}]}]}
+        }
+    },
+    "Chancelor": {
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}, {"rd_choice": random_toolkit_list}]},
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}, {"rd_choice": ["rapier", "lonsword"]}]}]}
+        }
+    },
+    "Chamberlain": {
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}, {"rd_choice": random_toolkit_list}]},
+            "skills": {"apply": "add", "expr": [{"rd_choice": random_skill_list}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]}]}
+        }
+    },
+    "General": {
+        "core_combat": {
+            "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}, {"rd_choice": martial_weapon_list}, {"rd_choice": random_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]},
+            "skills": {"apply": "add", "expr": [{"const": "persuasion"}, {"rd_choice": random_skill_list}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["constitution"]}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"rd_choice": ["slashing", "piercing", "bludgeoning", "force"]}]},
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}, {"const": ["longsword","shortsword"]}, {"rd_choice": ["longbow","shortbow"]}, {"multiply": [{"const": 6}, {"const": "javelin"}]}, {"multiply": [{"const": 20}, {"const": "arrow"}]}]}]}
+        }
+    },
+    "High Priest": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 2}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [musical_instrument_list, board_games_list]}]}]},
+            "skills": {"apply": "add", "expr": [{"const": "religion"}, {"rd_choice": random_skill_list}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["wisdom"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 1}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": cleric_cantrip_list}]}
+        },
+        "other_info": {
+            "add_advantage_on": {"apply": "add", "expr": [{"const": ["religion"]}]},
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"const": "holy symbol"}, {"const": "ceremonial robes"}, {"rd_choice": [{"stat": "tools"}]}]}]}
+        }
+    },
+    "Royal Advisor": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, random_toolkit_list]}]}]},
+            "skills": {"apply": "add", "expr": [{"const": "insight"}, {"rd_choice": random_skill_list}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["intelligence"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.LEARNED}, {"stat": "magic_source"}]}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["intelligence", "wisdom"]}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "add_advantage_on": {"apply": "add", "expr": [{"const": ["insight"]}]},
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"const": "scrolls and documents"}, {"rd_choice": [{"stat": "tools"}]}]}]}
+        }
+    },
 
-    "Lord/Lady": {},
-    "Knight": {},
-    "Merchant Lord": {},
-    "Politician": {},
-    "Judge": {},
-    "Guildmaster": {},
-    "Cleric/Bishop": {},
-    "Temple Keeper": {},
-    "Archmage": {},
-    "Architect": {},
-    "Engineer": {},
-    "Historian": {},
-    "Cartographer": {},
-    "Explorer": {},
-    "Entrepreneur": {},
-    "Ship Captain/Admiral": {},
-    "Banker": {},
-    "Noble Hunter/Falconer": {},
-    "Artist": {},
-    "Patron of the Arts": {},
-    "Specialised Doctor": {},
+    "Lord/Lady": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["fine clothes", "signet ring"]}]}
+        }
+    },
+    "Knight": {
+        "core_combat": {
+            "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword","lance","shield"]}, {"rd_choice": martial_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.MEDIUM}, {"stat": "armors"}]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["strength"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["longsword", "shield", "lance"]}, {"rd_choice": random_weapon_list}]}
+        }
+    },
+    "Merchant Lord": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["ledger", "fine clothes"]}, {"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Politician": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion", "deception"]}]}
+        }
+    },
+    "Judge": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight"]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["wisdom"]}]}
+        }
+    },
+    "Guildmaster": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["ledger", "guild seal"]}, {"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Cleric/Bishop": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["religion"]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["wisdom"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 1}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": cleric_cantrip_list}]}
+        }
+    },
+    "Temple Keeper": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["religion"]}]}
+        }
+    },
+    "Archmage": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "intelligence"}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 5}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.3": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.4": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.5": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "add_advantage_on": {"apply": "add", "expr": [{"const": ["arcana"]}]},
+            "equipment": {"apply": "add", "expr": [{"const": ["spellbook"]}, {"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}]}]}
+        }
+    },
+    "Architect": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}, {"const": ["architect's tools"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["architect's tools"]}, {"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Engineer": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}, {"const": ["tinker's tools"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["tinker's tools"]}, {"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Historian": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history"]}]}
+        }
+    },
+    "Cartographer": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["cartographer's tools"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["cartographer's tools"]}, {"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Explorer": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["navigator's tools", "explorer's pack"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["survival"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["navigator's tools", "explorer's pack"]}, {"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Entrepreneur": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        }
+    },
+    "Ship Captain/Admiral": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["perception"]}]}
+        },
+        "other_info": {
+            "add_advantage_on": {"apply": "add", "expr": [{"const": ["perception"]}]},
+            "equipment": {"apply": "add", "expr": [{"const": ["spyglass", "nautical charts"]}, {"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Banker": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]}
+        }
+    },
+    "Noble Hunter/Falconer": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["longbow"]}, {"rd_choice": martial_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["survival"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["longbow"]}, {"rd_choice": random_weapon_list}, {"const": "hunting trap"}]}
+        }
+    },
+    "Artist": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": [musical_instrument_list, random_toolkit_list]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Patron of the Arts": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        }
+    },
+    "Specialised Doctor": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["first aid tools"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["medicine"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["first aid tools"]}, {"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
 
-    "Farmer": {},
-    "Blacksmith": {},
-    "Healer": {},
-    "Soldier": {},
-    "Merchant": {},
-    "Bard": {},
-    "Builder/Site Manager": {},
-    "Tailor/Leatherworker": {},
-    "Innkeeper": {},
-    "Cook": {},
-    "Brewer": {},
-    "Apothecary": {},
-    "Priest/Monk": {},
-    "Bard/Entertainer": {},
-    "Fisher": {},
-    "Sailor": {},
-    "Dockworker": {},
-    "Miner": {},
-    "Librarian": {},
-    "Hunter": {},
-    "Teacher/Tutor": {},
-    "Adventurer/Mercenary": {},
-    "Beggar/Vagrant": {},
-    "Mage": {},
-    "Courier": {},
-    "Waiter": {},
-    "Doctor": {},
-    "Nurse": {},
+    "Farmer": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["herbalism kit", "sickle", "shovel"]}]},
+            "skills": {"apply": "add", "expr": [{"rd_choice": ["animal handling", "nature"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["sickle", "shovel"]}]}
+        }
+    },
+    "Blacksmith": {
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["smith's tools"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["smith's tools"]}, {"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Healer": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["herbalism kit", "fisrt aid tools"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["medicine"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["first aid tools"]}]}
+        }
+    },
+    "Soldier": {
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["shortsword", "shortbow", "javelin", "spear", "shield"]}, {"rd_choice": martial_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["constitution"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}]}, {"multiply": [6, "javelin"]}]}
+        }
+    },
+    "Merchant": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["ledger", "coin pouch"]}]}
+        }
+    },
+    "Bard": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": musical_instrument_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["performance"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Builder/Site Manager": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["hammer", "measuring tools"]}]}
+        }
+    },
+    "Tailor/Leatherworker": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["leatherworker's tools"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["leatherworker's tools", "leather/cloth scraps"]}]}
+        }
+    },
+    "Innkeeper": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["perception", "insight"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["ledger", "keys"]}]}
+        }
+    },
+    "Cook": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["cook's utensils"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["cook's utensils"]}]}
+        }
+    },
+    "Brewer": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["brewer's supplies"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["brewer's supplies"]}]}
+        }
+    },
+    "Apothecary": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["alchemist's supplies"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["medicine"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["alchemist's supplies"]}]}
+        }
+    },
+    "Priest/Monk": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["religion"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": cleric_cantrip_list}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["holy symbol"]}]}
+        }
+    },
+    "Bard/Entertainer": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["performance"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "tools"}]}]}
+        }
+    },
+    "Fisher": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["fishing tackle"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["fishing tackle"]}]}
+        }
+    },
+    "Sailor": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["athletics"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["rope", "dagger"]}]}
+        }
+    },
+    "Dockworker": {
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["rope", "hook"]}]}
+        }
+    },
+    "Miner": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["pickaxe"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["pickaxe"]}]}
+        }
+    },
+    "Librarian": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["book", "scroll"]}]}
+        }
+    },
+    "Hunter": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": ["longbow", "light crossbow", "shortbow"]}, {"rd_choice": martial_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "tools": {"apply": "add", "expr": [{"const": ["hunting trap"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["survival"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"multiply": [4, "hunting trap"]}, {"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}, {"multiply": [20, "arrow"]}]}
+        }
+    },
+    "Teacher/Tutor": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history", "insight", "intimidation", "persuasion"]}]}
+        }
+    },
+    "Adventurer/Mercenary": {
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}, {"rd_choice": simple_weapon_list}, {"rd_choice": random_weapon_list}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "skills": {"apply": "add", "expr": [{"rd_choice": random_skill_list}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}]}
+        }
+    },
+    "Beggar/Vagrant": {
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [improvised_weapon_list, {"const": ["begging bowl"]}]}]}
+        }
+    },
+    "Mage": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "intelligence"}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [wizard_spell_list, second_level_spell]}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["arcane focus"]}]}
+        }
+    },
+    "Courier": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["message satchel"]}]}
+        }
+    },
+    "Waiter": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"rd_choice": ["persuasion", "deception", "insight"]}]}
+        }
+    },
+    "Doctor": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["first aid tools"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["medicine"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["first aid tools"]}]}
+        }
+    },
+    "Nurse": {
+        "proficiencies": {
+            "toools": {"apply": "add", "expr": [{"const": ["first aid tools"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"const": ["first aid tool"]}]}
+        }
+    },
 
-    "Farmer/Field Worker": {},
-    "Shepherd": {},
-    "Laborer": {},
-    "Servant/Housemaid": {},
-    "Peddler": {},
-    "Tinker": {},
-    "Stablehand": {},
-    "Monk": {},
-    "Performer": {},
+    "Farmer/Field Worker": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["sickle", "shovel"]}]},
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"const": ["sickle", "pitchfork", "shovel"]}]},
+                {"rd_choice": [{"const": ["rope", "bucket", "lantern"]}]}
+            ]}
+        }
+    },
+    "Shepherd": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["animal handling"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["wooden staff"]},
+                {"rd_choice": [{"const": ["pan-flute", "horn", "whistle"]}]}
+            ]}
+        }
+    },
+    "Laborer": {
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"const": ["hammer", "shovel", "pickaxe"]}]},
+                {"rd_choice": [{"const": ["rope", "hook"]}]}
+            ]}
+        }
+    },
+    "Servant/Housemaid": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"rd_choice": ["insight", "perception"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"const": ["keys", "cleaning kit"]}]},
+                {"rd_choice": [{"const": ["tray", "pocket knife"]}]}
+            ]}
+        }
+    },
+    "Peddler": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"rd_choice": ["persuasion", "deception"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["coin pouch"]},
+                {"rd_choice": [{"const": ["trinket", "small goods", "metal bauble"]}]}
+            ]}
+        }
+    },
+    "Tinker": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["tinker's tools"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["tinker's tools"]},
+                {"rd_choice": [{"const": ["scrap parts", {"rd_choice": random_gadget}, "clockwork bits"]}]}
+            ]}
+        }
+    },
+    "Stablehand": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["animal handling"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["rope"]},
+                {"rd_choice": [{"const": ["whip", "brush", "feed bag"]}]}
+            ]}
+        }
+    },
+    "Monk": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["religion"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": cleric_cantrip_list}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["staff"]},
+                {"rd_choice": [{"const": ["prayer beads", "holy symbol"]}]}
+            ]}
+        }
+    },
+    "Performer": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": musical_instrument_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["performance"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"stat": "tools"}]},
+                {"rd_choice": [{"const": ["costume", "mask", "props"]}]}
+            ]}
+        }
+    },
 
-    "Domestic Servant": {},
-    "Field Worker": {},
-    "Pleasure Performer": {},
+    "Domestic Servant": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"rd_choice": ["insight", "perception"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"const": ["keys", "cleaning kit"]}]},
+                {"rd_choice": [{"const": ["tray", "pocket knife", "keys"]}]}
+            ]}
+        }
+    },
+    "Field Worker": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"const": ["shovel", "hoe", "sickle"]}]},
+                {"rd_choice": [{"const": ["rope", "bucket"]}]}
+            ]}
+        }
+    },
+    "Pleasure Performer": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"rd_choice": musical_instrument_list}, {"const": ["disguise kit"]}]},
+            "skills": {"apply": "add", "expr": [{"rd_choice": ["performance", "persuasion", "deception"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"const": ["fine clothes", "bunny costume"]}]},
+                {"const": [{"const": ["perfume", "jewelry", "disguise kit",
+                                      {"rd_choice": [{"const": ["poisoner's kit", "pocket knife"]}]}
+                                      ]}]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
 
     # --- Exotic occupations ---
-    "Monster Hunter": {},
-    "Witch/Warlock": {},
-    "Necromancer": {},
-    "Oracle/Dream Interpreter": {},
-    "Beast Tamer": {},
-    "Familiar Keeper": {},
-    "Artifact Collector": {},
-    "Inventor": {},
-    "Pirate": {},
-    "Gravekeeper": {},
-    "Assassin/Spy": {},
-    "Magical Item Broker": {},
-    "Rune Engraver/Enchanter": {},
-    "Wyvern Keeper": {},
-    "Demonologist": {},
-    "Traveler": {},
-    "Elemental Binder": {},
-    "Chronomancer": {},
-    "Portal Keeper": {},
-    "Astrologer": {},
-    "Vet/Beasts' Doctor": {},
-    "Arms Dealer/Drug Dealer": {},
-    "Slave Trader": {},
-    "Mafia Boss": {},
-    "Gangster": {},
-    "Other": {}
+    "Monster Hunter": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [
+                {"rd_choice": ["longbow", "shortbow"]},
+                {"rd_choice": ["longbow", "heavy crossbow", "shortsword"]},
+                {"rd_choice": martial_weapon_list}
+            ]},
+            "tools": {"apply": "add", "expr": [{"const": ["hunting trap"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["survival"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"multiply": [4, "hunting trap"]},
+                {"multiply": [20, "arrow"]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Witch/Warlock": {
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["wisdom", "charisma"]}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "known_spells": {"apply": "add", "expr": [
+                {"rd_choice": [{"multiply": [warlock_spell_list, first_level_spell]}]},
+                {"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]} #it's not typo: i want diversity
+            ]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": warlock_cantrip_list},
+                                                        {"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["arcane focus"]},
+                {"rd_choice": ["large pointy hat", "herbalist's kit", "bone charms"]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Necromancer": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "intelligence"}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 4}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.3": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.4": {"apply": "add", "expr": [{"const": 1}]},
+                "spell_slots.5": {"apply": "add", "expr": [{"const": 1}]},
+                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]}
+            },
+            "known_spells": {"apply": "add", "expr": [
+                {"rd_choice": ["false life", "ray of sickness", "inflict wounds", "wrathful smite"]},
+                {"rd_choice": ["death armor", "gentle repose", "ray of enfeeblement", "false life", "inflict wounds"]},
+                {"rd_choice": ["animate dead", "vampiric touch", "feign death", "speak with dead", "bestow curse"]},
+                {"rd_choice": ["blight", "contagion", "raise dead", "reincarnate"]},
+                {"const": ["finger of death", "summon undead"]}
+            ]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": ["chill touch", "spare the dying", "toll the dead"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["arcane focus"]},
+                {"rd_choice": ["bone cage", "animal's skull", "grave dust pouch"]}
+            ]}
+        }
+    },
+    "Oracle/Dream Interpreter": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": cleric_cantrip_list}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": ["tarot cards", "crystal ball", "unholy symbol"]}
+            ]}
+        }
+    },
+    "Beast Tamer": {
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["whip"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["animal handling"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["whip", "hunting trap"]},
+                {"rd_choice": ["feed bag", "fur cloak", "beast whistle"]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Familiar Keeper": {
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["intelligence", "wisdom"]}]},
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["find familiar (at will)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": ["mage hand", "minor illusion", "prestidigitation"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["arcane focus"]},
+                {"rd_choice": ["small cage", "hunting trap", "beast whistle"]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Artifact Collector": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"rd_choice": ["history", "arcana"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": ["ancient relic", "mysterious artifact"]},
+                {"rd_choice": ["map fragments", "notes"]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Inventor": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["tinker's tools"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["tinker's tools"]},
+                {"rd_choice": [{"rd_choice": random_gadget}, "mechanical parts"]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Pirate": {
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [
+                {"const": ["scimitar", "dagger", "flintlock pistol"]},
+                {"rd_choice": random_weapon_list}
+            ]},
+            "skills": {"apply": "add", "expr": [{"const": ["athletics"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"const": ["rope", "dagger"]},
+                {"rd_choice": ["rum bottle", "coin pouch"]},
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Gravekeeper": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["shovel"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["shovel"]},
+                {"rd_choice": [{"const": ["lantern", "bells"]}]}
+            ]}
+        }
+    },
+    "Assassin/Spy": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [
+                {"const": ["dagger"]},
+                {"rd_choice": martial_weapon_list}
+            ]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
+            "tools": {"apply": "add", "expr": [{"const": ["disguise kit", "thieves' tools", "poisoner's kit"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["stealth", "deception"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"multiply": [2, "dagger"]},
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"stat": "tools"}
+            ]}
+        }
+    },
+    "Magical Item Broker": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"rd_choice": sentient_item_list}, {"rd_choice": enchanted_weapon_list}]},
+                {"const": ["coin pouch", {"rd_choice": random_magical_charms}]}
+            ]}
+        }
+    },
+    "Rune Engraver/Enchanter": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["tinker's tools", "smith's tools"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": ["true strike", "mending"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["tinker's tools","smith's tools"]},
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"rd_choice": [enchanted_weapon_list]}
+            ]}
+        }
+    },
+    "Wyvern Keeper": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["animal handling"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["whip", "hunting trap", "rope", "wyvern shield (fire immunity)"]},
+                {"rd_choice": ["heavy chains", "feed bag", "beast whistle"]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Demonologist": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["intelligence", "charisma"]}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.3": {"apply": "add", "expr": [{"const": 1}]},
+                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]},
+                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]},
+                "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0]}]},
+            },
+            "known_spells": {"apply": "add", "expr": [
+                {"rd_choice": ["hellish rebuke (3/day)", "command(1/day)"]},
+                {"rd_choice": ["summon fiend", "counterspell", "dispel magic"]}
+            ]},
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["arcane focus"]},
+                {"rd_choice": ["unholy symbol", {"rd_choice": sentient_item_list}]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Traveler": {
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["map", "bedroll"]},
+                {"rd_choice": ["walking stick", "pocket knife", "compass"]},
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Elemental Binder": {
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "intelligence"}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.3": {"apply": "add", "expr": [{"rd_choice": [1, 2]}]},
+                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]},
+                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]}
+            },
+            "known_spells": {"apply": "add", "expr": [
+                {"rd_choice": ["burning hands", "fog cloud", "dragon's breath", "elemental weapon"]},
+                {"rd_choice": ["fireball", "call lightning", "wall of stone", "wind wall"]}
+            ]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": ["fire bolt", "ray of frost", "light", "acid splash"]}, {"const": "elementalism"}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["arcane focus"]},
+                {"rd_choice": random_magical_charms},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Chronomancer": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "intelligence"}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.3": {"apply": "add", "expr": [{"rd_choice": [1, 2]}]},
+                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]},
+                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]},
+                "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0]}]},
+                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0]}]},
+                "spell_slots.8": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0, 0]}]},
+                "spell_slots.9": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0, 0]}]},
+            },
+            "known_spells": {"apply": "add", "expr": [
+                {"rd_choice": ["haste", "slow", "time stop", "misty step"]},
+                {"rd_choice": ["haste", "slow", "time stop", "misty step"]}
+            ]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": ["mage hand", "minor illusion", "prestidigitation"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["arcane focus"]},
+                {"rd_choice": ["cursed timeline map", "pocket watch", "hourglass"]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Portal Keeper": {
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": ["portal key", "sigil stone"]},
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Astrologer": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "history"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["star charts"]},
+                {"rd_choice": ["telescope", "astrolabe"]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Vet/Beasts' Doctor": {
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": ["first aid tools"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["medicine", "animal handling"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["cure wounds (3/day)", "calm emotions (at will)", "speak with animals (at will)"]},
+                                                      {"const": "animal friendship (at will)"}]},
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["first aid tools", "feed bag"]}
+            ]}
+        }
+    },
+    "Arms Dealer/Drug Dealer": {
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": ["poisoner's kit", "alchemist's supplies", "disguise kit", "thieves' tools", "smith's tools"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["deception"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"add":
+                    [{"rd_choice": random_weapon_list},
+                    {"rd_choice": exotic_weapon_list},
+                    {"rd_choice": exotic_weapon_list}]
+                }, {"add": [
+                    {"rd_choice": random_drug_list},
+                    {"rd_choice": random_drug_list},
+                    {"rd_choice": random_drug_list}
+                ]}]},
+                {"rd_choice": [{"stat": "weapons"}]}
+            ]}
+        }
+    },
+    "Slave Trader": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["intimidation"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"const": ["chains"]},
+                {"rd_choice": ["whip", "ledger", "arcane sigil"]},
+                {"rd_choice": {"stat": "weapons"}}
+            ]}
+        }
+    },
+    "Mafia Boss": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["intimidation", "persuasion"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"rd_choice": ["coin pouch", "jewelry", "cigar", "goblet of wine"]},
+                {"const": ["fine clothes"]},
+                {"rd_choice": {"stat": "weapons"}}
+            ]}
+        }
+    },
+    "Gangster": {
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["intimidation"]}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"stat": "weapons"}]},
+                {"rd_choice": ["coin pouch", "cloak", "hood", "cigarette"]},
+                {"rd_choice": {"stat": "weapons"}}
+            ]}
+        }
+    },
+    "Other": {
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"rd_choice": random_skill_list}]}
+        },
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"stat": "weapons"}, {"rd_choice": random_toolkit_list}]}
+            ]}
+        }
+    }
 }
 
 employment_stages = {
