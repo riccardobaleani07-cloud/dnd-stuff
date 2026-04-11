@@ -2673,11 +2673,37 @@ jobs = { #Monarch contains the complete template for occupations
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
             "spell_slots": {
-                "spell_slots.1": {"apply": "add", "expr": [{"const": 1}]},
-                "spell_slots.2": {"apply": "add", "expr": [{"const": 1}]}
+                "spell_slots.1": {"apply": "add", "expr": [{"rd_choice": [3, 4, 4, 5]}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.1"}, -1]}, {"const": 0}]},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.1"}, -2]}, {"const": 0}]}]
+                                                                          }]},
+                "spell_slots.3": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.2"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.2"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.2"}, 2]}]
+                                                                          }]},
+                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.3"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.3"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.3"}, 2]}]
+                                                                          }]},
+                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.4"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.4"}, 2]}]
+                                                                          }]},
+                "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.5"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.5"}, 2]}]
+                                                                          }]},
+                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.6"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.6"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.6"}, 2]}]
+                                                                          }]},
+                "spell_slots.8": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.7"},
+                                                                          {"divide": [{"stat": "spell_slots.7"}, 2]}]
+                                                                          }]},
+                "spell_slots.9": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.8"},
+                                                                          {"divide": [{"stat": "spell_slots.8"}, 2]}]
+                                                                          }]}
             },
-            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}]},
-            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": cleric_cantrip_list}]}
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [cleric_spell_list, second_level_spell]}]}, {"rd_choice": cleric_spell_list}, {"rd_choice": cleric_spell_list}, {"rd_choice": cleric_spell_list}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": cleric_cantrip_list}, {"rd_choice": cleric_cantrip_list}, {"rd_choice": cleric_cantrip_list}, {"rd_choice": cleric_cantrip_list}, {"rd_choice": cleric_cantrip_list}]}
         },
         "other_info": {
             "add_advantage_on": {"apply": "add", "expr": [{"const": ["religion"]}]},
@@ -2795,10 +2821,10 @@ jobs = { #Monarch contains the complete template for occupations
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
             "spell_slots": {
-                "spell_slots.1": {"apply": "add", "expr": [{"const": 1}]},
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 3}]},
                 "spell_slots.2": {"apply": "add", "expr": [{"const": 1}]}
             },
-            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}]},
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [cleric_spell_list, second_level_spell]}]}]},
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": cleric_cantrip_list}]}
         }
     },
@@ -2818,14 +2844,37 @@ jobs = { #Monarch contains the complete template for occupations
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "intelligence"}]},
             "spell_slots": {
-                "spell_slots.1": {"apply": "add", "expr": [{"const": 5}]},
-                "spell_slots.2": {"apply": "add", "expr": [{"const": 3}]},
-                "spell_slots.3": {"apply": "add", "expr": [{"const": 3}]},
-                "spell_slots.4": {"apply": "add", "expr": [{"const": 2}]},
-                "spell_slots.5": {"apply": "add", "expr": [{"const": 1}]}
+                "spell_slots.1": {"apply": "add", "expr": [{"rd_choice": [4, 5, 5, 6]}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.1"}, -1]}, {"const": 0}]},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.1"}, -2]}, {"const": 0}]}]
+                                                                          }]},
+                "spell_slots.3": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.2"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.2"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.2"}, 2]}]
+                                                                          }]},
+                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.3"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.3"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.3"}, 2]}]
+                                                                          }]},
+                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.4"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.4"}, 2]}]
+                                                                          }]},
+                "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.5"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.5"}, 2]}]
+                                                                          }]},
+                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.6"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.6"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.6"}, 2]}]
+                                                                          }]},
+                "spell_slots.8": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.7"},
+                                                                          {"divide": [{"stat": "spell_slots.7"}, 2]}]
+                                                                          }]},
+                "spell_slots.9": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.8"},
+                                                                          {"divide": [{"stat": "spell_slots.8"}, 2]}]
+                                                                          }]}
             },
-            "known_spells": {"apply": "add", "expr": [{"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}]},
-            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}]}
         },
         "other_info": {
             "add_advantage_on": {"apply": "add", "expr": [{"const": ["arcana"]}]},
@@ -3173,10 +3222,36 @@ jobs = { #Monarch contains the complete template for occupations
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "intelligence"}]},
             "spell_slots": {
-                "spell_slots.1": {"apply": "add", "expr": [{"const": 3}]},
-                "spell_slots.2": {"apply": "add", "expr": [{"const": 2}]}
+                "spell_slots.1": {"apply": "add", "expr": [{"rd_choice": [2, 2, 3, 4]}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.1"}, -1]}, {"const": 0}]},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.1"}, -2]}, {"const": 0}]}]
+                                                                          }]},
+                "spell_slots.3": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.2"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.2"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.2"}, 2]}]
+                                                                          }]},
+                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.3"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.3"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.3"}, 2]}]
+                                                                          }]},
+                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.4"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.4"}, 2]}]
+                                                                          }]},
+                "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.5"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.5"}, 2]}]
+                                                                          }]},
+                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.6"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.6"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.6"}, 2]}]
+                                                                          }]},
+                "spell_slots.8": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.7"},
+                                                                          {"divide": [{"stat": "spell_slots.7"}, 2]}]
+                                                                          }]},
+                "spell_slots.9": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.8"},
+                                                                          {"divide": [{"stat": "spell_slots.8"}, 2]}]
+                                                                          }]}
             },
-            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [wizard_spell_list, second_level_spell]}]}]},
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [wizard_spell_list, second_level_spell]}]}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}, {"rd_choice": wizard_spell_list}]},
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}]}
         },
         "other_info": {
@@ -3398,11 +3473,46 @@ jobs = { #Monarch contains the complete template for occupations
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["wisdom", "charisma"]}]},
             "spell_slots": {
-                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]}
+                "spell_slots.1": {"apply": "add", "expr": [{"rd_choice": [2, 2, 3, 4]}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.1"}, -1]}, {"const": 0}]},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.1"}, -2]}, {"const": 0}]}]
+                                                                          }]},
+                "spell_slots.3": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.2"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.2"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.2"}, 2]}]
+                                                                          }]},
+                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.3"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.3"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.3"}, 2]}]
+                                                                          }]},
+                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.4"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.4"}, 2]}]
+                                                                          }]},
+                "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.5"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.5"}, 2]}]
+                                                                          }]},
+                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.6"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.6"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.6"}, 2]}]
+                                                                          }]},
+                "spell_slots.8": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.7"},
+                                                                          {"divide": [{"stat": "spell_slots.7"}, 2]}]
+                                                                          }]},
+                "spell_slots.9": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.8"},
+                                                                          {"divide": [{"stat": "spell_slots.8"}, 2]}]
+                                                                          }]}
             },
             "known_spells": {"apply": "add", "expr": [
                 {"rd_choice": [{"multiply": [warlock_spell_list, first_level_spell]}]},
-                {"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]} #it's not typo: i want diversity
+                {"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]}, #it's not typo: i want diversity
+                {"rd_choice": warlock_spell_list},
+                {"rd_choice": wizard_spell_list},
+                {"rd_choice": warlock_spell_list},
+                {"rd_choice": wizard_spell_list},
+                {"rd_choice": warlock_spell_list},
+                {"rd_choice": wizard_spell_list},
+                {"rd_choice": warlock_spell_list},
+                {"rd_choice": wizard_spell_list}
             ]},
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": warlock_cantrip_list},
                                                         {"rd_choice": wizard_cantrip_list}]}
@@ -3423,13 +3533,35 @@ jobs = { #Monarch contains the complete template for occupations
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "intelligence"}]},
             "spell_slots": {
-                "spell_slots.1": {"apply": "add", "expr": [{"const": 4}]},
-                "spell_slots.2": {"apply": "add", "expr": [{"const": 3}]},
-                "spell_slots.3": {"apply": "add", "expr": [{"const": 2}]},
-                "spell_slots.4": {"apply": "add", "expr": [{"const": 1}]},
-                "spell_slots.5": {"apply": "add", "expr": [{"const": 1}]},
-                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]}
-            },
+                "spell_slots.1": {"apply": "add", "expr": [{"rd_choice": [2, 2, 3, 4, 5]}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.1"}, -1]}, {"const": 0}]},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.1"}, -2]}, {"const": 0}]}]
+                                                                          }]},
+                "spell_slots.3": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.2"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.2"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.2"}, 2]}]
+                                                                          }]},
+                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.3"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.3"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.3"}, 2]}]
+                                                                          }]},
+                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.4"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.4"}, 2]}]
+                                                                          }]},
+                "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.5"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.5"}, 2]}]
+                                                                          }]},
+                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.6"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.6"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.6"}, 2]}]
+                                                                          }]},
+                "spell_slots.8": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.7"},
+                                                                          {"divide": [{"stat": "spell_slots.7"}, 2]}]
+                                                                          }]},
+                "spell_slots.9": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.8"},
+                                                                          {"divide": [{"stat": "spell_slots.8"}, 2]}]
+                                                                          }]}
+            }, # Spellcasting slot levels vs count example
             "known_spells": {"apply": "add", "expr": [
                 {"rd_choice": ["false life", "ray of sickness", "inflict wounds", "wrathful smite"]},
                 {"rd_choice": ["death armor", "gentle repose", "ray of enfeeblement", "false life", "inflict wounds"]},
@@ -3680,15 +3812,34 @@ jobs = { #Monarch contains the complete template for occupations
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "intelligence"}]},
             "spell_slots": {
-                "spell_slots.1": {"apply": "add", "expr": [{"const": 3}]},
-                "spell_slots.2": {"apply": "add", "expr": [{"const": 2}]},
-                "spell_slots.3": {"apply": "add", "expr": [{"rd_choice": [1, 2]}]},
-                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]},
-                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [1, 0]}]},
-                "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0]}]},
-                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0]}]},
-                "spell_slots.8": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0, 0]}]},
-                "spell_slots.9": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0, 0]}]},
+                "spell_slots.1": {"apply": "add", "expr": [{"rd_choice": [2, 2, 3, 4]}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.1"}, -1]}, {"const": 0}]},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.1"}, -2]}, {"const": 0}]}]
+                                                                          }]},
+                "spell_slots.3": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.2"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.2"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.2"}, 2]}]
+                                                                          }]},
+                "spell_slots.4": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.3"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.3"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.3"}, 2]}]
+                                                                          }]},
+                "spell_slots.5": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.4"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.4"}, 2]}]
+                                                                          }]},
+                "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [{"max": [{"add": [{"stat": "spell_slots.5"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.5"}, 2]}]
+                                                                          }]},
+                "spell_slots.7": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.6"},
+                                                                          {"max": [{"add": [{"stat": "spell_slots.6"}, -1]}, {"const": 0}]},
+                                                                          {"divide": [{"stat": "spell_slots.6"}, 2]}]
+                                                                          }]},
+                "spell_slots.8": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.7"},
+                                                                          {"divide": [{"stat": "spell_slots.7"}, 2]}]
+                                                                          }]},
+                "spell_slots.9": {"apply": "add", "expr": [{"rd_choice": [{"stat": "spell_slots.8"},
+                                                                          {"divide": [{"stat": "spell_slots.8"}, 2]}]
+                                                                          }]}
             },
             "known_spells": {"apply": "add", "expr": [
                 {"rd_choice": ["haste", "slow", "time stop", "misty step"]},
