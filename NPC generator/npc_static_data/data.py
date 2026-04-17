@@ -978,7 +978,7 @@ race_age_ranges = {
     "Mountains Dorojan Human": {"child": (0, 10), "teen": (11, 19), "adult": (20, 50), "middle-aged": (51, 60), "elderly": (61, 100)},
     "Common Elf": {"child": (0, 10), "teen": (11, 100), "adult": (101, 8000), "middle-aged": (8001, 18000), "elderly": (18001, 20000)},
     "Dwarf": {"child": (0, 20), "teen": (21, 40), "adult": (41, 150), "middle-aged": (151, 280), "elderly": (281, 500)},
-    "Dragonborn": {"child": (0, 10), "teen": (11, 20), "adult": (21, 80), "middle-aged": (81, 120), "elderly": (121, 150)},
+    "Dragonborn": {"child": (0, 10), "teen": (11, 20), "adult": (21, 70), "middle-aged": (71, 120), "elderly": (121, 150)},
     "Beastfolk": {"child": (0, 8), "teen": (9, 15), "adult": (16, 60), "middle-aged": (61, 90), "elderly": (91, 120)},
     "Gnome": {"child": (0, 40), "teen": (41, 80), "adult": (81, 200), "middle-aged": (201, 300), "elderly": (301, 500)},
     "Ogre": {"child": (0, 5), "teen": (6, 10), "adult": (11, 30), "middle-aged": (31, 50), "elderly": (51, 70)},
