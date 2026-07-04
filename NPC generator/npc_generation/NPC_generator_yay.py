@@ -7,7 +7,8 @@ import pandas as pd
 from npc_static_data.enums import Size, SocialLevel, Wealth, MagicSource, ArmorType
 from npc_static_data import data
 from npc_static_data import models
-
+from npc_static_data import base_stats
+from enum import Enum, IntEnum, auto
 
 
 
@@ -365,7 +366,7 @@ class NPCGenerator:
         known = {native_lang}
         for lang, weight in weights.items():
             # Roll for each possible neighbour
-            if random.random() < weight:
+            if random.random() < weight: #toFix: strange error: TypeError: '<' not supported between instances of 'float' and 'str'
                 known.add(lang)
         
         return ", ".join(known)
@@ -374,69 +375,306 @@ class NPCGenerator:
 
     # From this point on i'll handle common stats useful for DMs
 
-    # --- Core combat and progression ---
-    hp = 10                   # depends on CON (and maybe race, size, level)
-    ac = 10                   # base 10, modified by DEX, armor, and possibly race
-    initiative = 0            # equals DEX mod (+ race or feats if you add them later)
-    speed = {"walking": 30,
-            "flying": 0,
-            "swimming": 0,
-            "climbing": 0}    # race-based primarily, possibly age-based
-    level = 1                 # influences proficiency and class-like features
-    size = Size.MEDIUM        # depends on race and age category
-
-    proficiency_bonus = 2     # directly derived from level
-
-    # --- Ability scores and modifiers ---
-    strength = 10             # race and age category affect
-    strength_mod = 0          # derived from strength
-    dexterity = 10            # race and age category affect
-    dexterity_mod = 0         # derived from dexterity
-    constitution = 10         # race and age category affect
-    constitution_mod = 0      # derived from constitution
-    intelligence = 10         # race and age category affect
-    intelligence_mod = 0      # derived from intelligence
-    wisdom = 10               # race and age category affect
-    wisdom_mod = 0            # derived from wisdom
-    charisma = 10             # race and age category affect
-    charisma_mod = 0          # derived from charisma
-
-    # --- Proficiencies ---
-    weapons = []              # race, background, occupation
-    armors = ArmorType.UNARMORED# race, background, occupation
-    tools = []                # race, background, occupation
-    skills = []               # race, background, occupation
-    saving_throws = []        # race, background, occupation
-
-    # --- Magic ---
-    magic_source = MagicSource.NONE       # race, background, occupation (can be none, innate (spellcasting ability not required) or learned; those three parameters have power on each other in that order)
-    spellcasting_ability = random.choice(["wisdom", "intelligence", "charisma"]) # race, background, occupation
-    spell_save_dc = 0         # = 8 + prof_bonus + spellcasting ability mod
-    spell_attack_bonus = 0    # = prof_bonus + spellcasting ability mod
-    spell_slots = {level: 0 for level in range(1, 10)} # race, background, occupation
-    known_spells = []         # race, background, occupation
-    known_cantrips = []        # race, background, occupation
-
-    # --- Other DM-facing info ---
-    passive_perception = 10      # = 10 + WIS mod (+ proficiency if applicable)
-    add_advantage_on = []            # race, background
-    add_disadvantage_on = []         # race, background
-    resistances = []             # race, background
-    immunities = []              # race
-    vulnerabilities = []         # race
-    other_physical_features = [] # race
-    equipment = []               # occupation, background, wealth level
-    overall_cr = 0.125           # manual input or computed later
-
 
     # ToDo: logic to generate raw stats stated above, based on the npc_static_data/modifiers.py file
-    # Before, i need to fix size (needs to be an enum), magic_source (needs to be an enum as well), breath time and vision type (probably a better data structure is needed for both)
     # The approach will be simple: the order of generation is relevant to what has more importance
     # The initialized values are not placeholders: they are the base for a generic humanoid, and the generation process is only going to modify them, almost never overriding.
     # For now level will be left at 1, but the logic will be still implemented for a few attributes.
     # List of things i can generate instantly: speed, level, size, raw ability scores, all proficiencies, magic_source, spellcasting_ability, spell_slots, known_spells, known_cantrips, advantage_on, disadvantage_on, every other dm-facing info (except the CR and the passive_perception)
     # I aim to cycle through each sub-section three times max: 1 to find the right race/occupation/background/etc, 2 to compute all of the above, 3 to compute the rest.
     # It is very probabile that between step 2 and 3 i need a finalization of some stats before applying other modifiers.
+
+    # Evaluating function: given a list expression, it will return the evaluated result following the rules of the modifiers.py file.
+    # Example expressions: [{"min": [{"stat": "armors"}, {"const": ArmorType.LIGHT}]}]
+    #                      [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]    
+
+    # Operational functions
+
+    def _key(self, v):
+        if isinstance(v, (int, float)):
+            return (0, v)
+
+        if isinstance(v, tuple) and len(v) == 3:
+            val, ttype, measure = v
+            return (1, ttype, measure, val)
+
+        # fallback: everything else is lowest priority
+        return (2, str(v))
+
+    def _partition(self, values):
+        nums = []
+        strings = []
+        lists = []
+        tuples = []
+        others = []
+
+        for v in values:
+
+            # bools are treated as numbers (0 or 1)
+            if isinstance(v, bool):
+                nums.append(int(v))
+
+            # numeric primitives
+            elif isinstance(v, (int, float)):
+                nums.append(v)
+
+            # ordered enums (IntEnum or numeric Enum)
+            elif isinstance(v, IntEnum):
+                nums.append(v.value)
+
+            elif isinstance(v, str):
+                strings.append(v)
+
+            elif isinstance(v, list):
+                lists.append(v)
+
+            elif isinstance(v, tuple) and len(v) == 3:
+                tuples.append(v)
+
+            else:
+                others.append(v)
+
+        return nums, strings, lists, tuples, others
+
+    def op_add(self, values):
+
+        nums, strings, lists, tuples, others = self._partition(values)
+
+        result = []
+
+        # numbers
+        if nums:
+            result.append(sum(nums))
+
+
+        merged = []
+        # strings
+        if strings:
+            for s in strings:
+                merged.extend(s)
+            result.append(merged)
+
+        # lists
+        if lists:
+            for l in lists:
+                merged.extend(l)
+            result.append(merged)
+
+        # tuples (only first field, type/measure preserved)
+        if tuples:
+            # only works if same (type, measure)
+            grouped = {}
+            for val, ttype, measure in tuples:
+                key = (ttype, measure)
+                if key not in grouped:
+                    grouped[key] = []
+                grouped[key].append(val)
+
+            for (ttype, measure), vals in grouped.items():
+                result.append((sum(vals), ttype, measure))
+
+        # others (passthrough)
+        result.extend(others)
+
+        return result
+
+    def op_multiply(self, values):
+
+        nums, strings, lists, tuples, others = self._partition(values)
+
+        # 1. compute factor
+        factor = 1
+        for n in nums:
+            factor *= n
+
+        result = []
+
+        # 2. strings (repeat)
+        for s in strings:
+            result.append(s * int(factor))
+
+        # 3. lists (intersection)
+        if lists:
+            if len(lists) == 1:
+                result.append(lists[0] * int(factor))
+            else:
+                common = set(lists[0])
+                for l in lists[1:]:
+                    common &= set(l)
+                result.append(list(common) * int(factor))
+
+        # 4. tuples (scale first field only)
+        for val, ttype, measure in tuples:
+            result.append((val * factor, ttype, measure))
+
+        # 5. keep numeric result if nothing else is present
+        if  not lists and not strings and not tuples:
+            result.append(factor)
+
+        # 6. others untouched
+        result.extend(others)
+
+        return result
+
+    def op_divide(self, values):
+
+        nums, strings, lists, tuples, others = self._partition(values)
+
+        result = []
+
+        # 1. numeric divisor
+        divisor = 1
+        for n in nums:
+            if n == 0:
+                continue
+            divisor /= n
+
+        if divisor == 0:
+            divisor = 1
+
+        # 2. strings (probabilistic retention)
+        for s in strings:
+            kept = []
+            for ch in s:
+                if random.random() < (1 / divisor):
+                    kept.append(ch)
+            result.append("".join(kept))
+
+        # 3. lists output only the NOT shared elements
+        if lists:
+            if len(lists) == 1:
+                result.append(lists[0])
+            else:
+                shared = set(lists[0])
+                for l in lists[1:]:
+                    shared &= set(l)
+                for l in lists:
+                    result.append([item for item in l if item not in shared])
+
+        # 4. tuples (divide first field)
+        for val, ttype, measure in tuples:
+            result.append((val / divisor, ttype, measure))
+
+        # 5. keep numeric result if nothing else is present
+        if not lists and not strings and not tuples:
+            result.append(divisor)
+
+        # 6. others unchanged
+        result.extend(others)
+
+        return result
+
+    def op_min(self, values):
+
+        if not values:
+            return []
+
+        best = min(values, key=self._key)
+        return [best]
+
+    def op_max(self, values):
+
+        if not values:
+            return []
+
+        best = max(values, key=self._key)
+        return [best]
+
+    def resolve_stat(self, values):
+
+        # if len(values) != 1:
+        #     raise ValueError(f"stat expects exactly 1 argument, got {values}")
+
+        path = values
+
+        if not isinstance(path, str):
+            raise TypeError("stat expects a string path")
+
+        parts = path.split(".")
+        current = base_stats
+
+        for p in parts:
+            if isinstance(current, dict):
+                if p not in current:
+                    raise KeyError(f"Unknown stat: {path}")
+                current = current[p]
+            else:
+                # accessing attribute of imported objects (Enum, etc.)
+                if not hasattr(current, p):
+                    raise KeyError(f"Invalid substat access: {path}")
+                current = getattr(current, p)
+
+        # IMPORTANT RULE:
+        # disallow partial resolution of structured containers
+        if isinstance(current, dict):
+            raise ValueError(f"Cannot resolve partial stat group: {path}")
+
+        return current
+
+    # Routing functions
+    def _flatten(self, value):
+        result = []
+        for v in value:
+            result.extend(self.evaluate(v))
+        return result
+
+    def evaluate(self, expr):
+
+        # 1. list = operand container
+        if isinstance(expr, list):
+            result = []
+            for e in expr:
+                result.extend(self.evaluate(e))
+            return result
+
+        # 2. atomic value
+        if not isinstance(expr, dict):
+            return [expr]   # ALWAYS list-wrapped
+
+        # 3. operator node
+        op, value = next(iter(expr.items()))
+
+        # ---------------- CONST ----------------
+        if op == "const":
+            # print(f"Evaluating const: {value}")
+            return [value]
+
+        # ---------------- STAT ----------------
+        if op == "stat":
+            return [self.resolve_stat(value)]
+
+        # ---------------- MIN ----------------
+        if op == "min":
+            vals = self._flatten(value)
+            return self.op_min(vals) if vals else []
+
+        # ---------------- MAX ----------------
+        if op == "max":
+            vals = self._flatten(value)
+            return self.op_max(vals) if vals else []
+
+        # ---------------- RD CHOICE ----------------
+        if op == "rd_choice":
+            vals = self._flatten(value)
+            return  [random.choice(vals)] if vals else []
+
+        # ---------------- ADD ----------------
+        if op == "add":
+            vals = self._flatten(value)
+            return self.op_add(vals) if vals else []
+
+        # ---------------- MULTIPLY ----------------
+        if op == "multiply":
+            vals = self._flatten(value)
+            return self.op_multiply(vals) if vals else []
+
+        # ---------------- DIVIDE ----------------
+        if op == "divide":
+            vals = self._flatten(value)
+            return self.op_divide(vals) if vals else []
+
+        raise ValueError(f"Unknown operation: {op}")
+
 
     def generate_npc(self):
         race = self.choose_race(data.races)

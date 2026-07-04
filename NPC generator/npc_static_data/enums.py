@@ -5,7 +5,7 @@ class Size(IntEnum):
     NANOMETRIC = -4 # not an official size category, it is like a real size average virus
     MICROSCOPIC = -3 # not an official size category, it is like a real size average bacterium
     VISIBLE = -2 # not an official size category, it is like a real size average fly, it is big enought to be seen by the naked eye
-    VERY_TINY = -1 # not an official size category, it is like a real size lizard or small mouse
+    VERY_TINY = -1 # not an official size category, it is like a real size small lizard or small mouse
     TINY = 0
     SMALL = 1
     MEDIUM = 2

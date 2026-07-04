@@ -1,4 +1,4 @@
-from enums import Size, MagicSource, ArmorType
+from npc_static_data.enums import Size, MagicSource, ArmorType
 
 
 # That's the map for modify the base attributes
@@ -10,8 +10,8 @@ The "expr" field is a pure expression tree. It does not mutate any values. It ev
 "const" — a constant value
 "stat" — a reference to a stat (including "old_self" for the current value before modification)
 "op?" — an operation applied to a list of values (you write the operation name as the key, and the value can be  asingle value or a list of values, which can themselves be expressions)
-
 Supported expression operations include "add", "inverse" (is like add, but adds the inverse of the value, value*-1), "multiply", "divide", "rd_choice", "max" and "min". Each operation applies only to its listed values (skipping invalid ones) and returns the computed result. Operations do not implicitly reference previous results or external state.
+
 The "apply" field defines how the evaluated expression result is applied to the target stat:
 
 "add" → old_stat += result
@@ -56,35 +56,44 @@ This separation ensures that expressions remain pure calculations, while the "ap
 
 # ToDo: check the list placeholders
 wizard_cantrip_list = ["light", "mage hand", "minor illusion", "prestidigitation", "ray of frost", "shocking grasp", "true strike", "chill touch", "dancing lights", "fire bolt", "poison spray", "resistance", "sacred flame", "thorn whip", "vicious mockery"]
-martial_weapon_list = []
-druid_cantrip_list = []
-simple_weapon_list = []
-random_skill_list = []
-exotic_weapon_list = []
+martial_weapon_list = ["boomerang"]
+druid_cantrip_list = ["boomerang"]
+simple_weapon_list = ["boomerang"]
+random_skill_list = ["boomerang"]
+exotic_weapon_list = ["boomerang"]
 random_weapon_list = [martial_weapon_list, simple_weapon_list, exotic_weapon_list] # needs to be fixed: needs to be a list of strings and NOT a list of lists
-random_toolkit_list = []
-random_damage_type_list = []
-musical_instrument_list = []
-first_level_spell = []
-second_level_spell = []
-cleric_cantrip_list = []
-giant_element_list = []
-draconic_ancestory_list = [] # (ex: red dragon (fire type))
-plantfolk_vulnerability_list = []
-aasimar_transformation_list = [] # (ex: transformation name (description))
-lycantrope_natural_weapons_list = [] # (ex: natural weapons (bite, 1d6 piercing damage))
-board_games_list = []
-cleric_spell_list = []
-wizard_spell_list = []
-improvised_weapon_list = []
-random_gadget = []
-warlock_spell_list = []
-warlock_cantrip_list = []
-random_magical_charms = [] # (ex: charm name (description/effect))
-enchanted_weapon_list = [] # (ex: weapon name (description/effect & damage))
-sentient_item_list = [] # (ex: item name (description/effect))
-random_drug_list = [] # (ex: drug name (description/effect))
+random_toolkit_list = ["boomerang"]
+random_damage_type_list = ["boomerang"]
+musical_instrument_list = ["boomerang"]
+first_level_spell = ["boomerang"]
+second_level_spell = ["boomerang"]
+cleric_cantrip_list = ["boomerang"]
+giant_element_list = ["boomerang"]
+draconic_ancestory_list = ["boomerang"] # (ex: red dragon (fire type))
+plantfolk_vulnerability_list = ["boomerang"]
+aasimar_transformation_list = ["boomerang"] # (ex: transformation name (description))
+lycantrope_natural_weapons_list = ["boomerang"] # (ex: natural weapons (bite, 1d6 piercing damage))
+board_games_list = ["boomerang"]
+cleric_spell_list = ["boomerang"]
+wizard_spell_list = ["boomerang"]
+improvised_weapon_list = ["boomerang"]
+random_gadget = ["boomerang"]
+warlock_spell_list = ["boomerang"]
+warlock_cantrip_list = ["boomerang"]
+random_magical_charms = ["boomerang"] # (ex: charm name (description/effect))
+enchanted_weapon_list = ["boomerang"] # (ex: weapon name (description/effect & damage))
+sentient_item_list = ["boomerang"] # (ex: item name (description/effect))
+random_drug_list = ["boomerang"] # (ex: drug name (description/effect))
 
+
+#ToDo
+wealth = {
+        "Royal": {"dexterity": +2},
+        "Noble": {"dexterity": +2},
+        "Commoner": {"dexterity": +2},
+        "Peasant": {"dexterity": +2},
+        "Slave": {"dexterity": +2}
+    }
 
 race = { # Common elf contains the complete template
     "Common Elf": {
@@ -254,13 +263,13 @@ race = { # Common elf contains the complete template
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "necrotic"}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": "radiant"}]},
-            "other_physical_features": [
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
                 ("darkvision", 60, "ft"),
                 ("hold breath", 10, "minutes"),
                 "incorporeal movement (can move through creatures and objcts as if they're difficult terrain)",
                 ("truesight", 15, "ft"),
                 ("spectral sense (sense living creatures)", 60, "ft")
-            ]
+            ]}]}
         }
     },
     "Lopunnie": {
@@ -340,7 +349,7 @@ race = { # Common elf contains the complete template
             "spell_slots": {"spell_slots.1": {"apply": "add", "expr": [{"rd_choice": [0, 0, 0, 1, 1, 2]}]},
                             "spell_slots.2": {"apply": "add", "expr": [{"rd_choice": [0, 0, 1]}]}},
             "known_spells": {"apply": "add", "expr": [{"rd_choice": first_level_spell}]},
-            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": {"add": [wizard_cantrip_list, druid_cantrip_list, cleric_cantrip_list]}}]}
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": [{"add": [wizard_cantrip_list, druid_cantrip_list, cleric_cantrip_list]}]}]}
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"rd_choice": random_damage_type_list}]}
@@ -579,7 +588,7 @@ race = { # Common elf contains the complete template
         },
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"const": ["battleaxe","warhammer","handaxe","shield"]}]},
-            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.MEDIUM}, {"stat": "armor_type"}]}]},
+            "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.MEDIUM}, {"stat": "armors"}]}]},
             "tools": {"apply": "add", "expr": [{"const": ["smith's tools","brewer's supplies","mason's tools"]}]}
         },
         "other_info": {
@@ -1413,7 +1422,7 @@ race = { # Common elf contains the complete template
             "charisma": {"apply": "add", "expr": [{"const": 2}]}
         },
         "proficiencies": {
-            "weapons": {"apply": "add", "expr": [{"rd_choice": simple_weapon_list}, {"rdChoice", martial_weapon_list}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": simple_weapon_list}, {"rd_choice": martial_weapon_list}]},
             "skills": {"apply": "add", "expr": [{"const": "insight"}]}
         },
         "magic": {
@@ -1554,7 +1563,7 @@ race = { # Common elf contains the complete template
             "charisma": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "armors": {"apply": "add", "expr": [{"max": [{"const": ArmorType.HEAVY}, {"stat": "armor"}]}]},
+            "armors": {"apply": "add", "expr": [{"max": [{"const": ArmorType.HEAVY}, {"stat": "armors"}]}]},
             "weapons": {"apply": "add", "expr": [{"const": "shield"}, {"rd_choice": simple_weapon_list}, {"rd_choice": random_weapon_list}]},
             "skills": {"apply": "add", "expr": [{"const": "intimidation"}]}
         },
@@ -2466,7 +2475,7 @@ subtype = {
             "proficiencies": {
                 "skills": {"apply": "add", "expr": [{"const": ["performance", "sleight of hand"]}]},
                 "tools": {"apply": "add", "expr": [{"const": "disguise kit"}]},
-                "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armor"}]}]}
+                "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]}
             }
         },
         "Other": {
@@ -2545,7 +2554,6 @@ age_category = {
         }
     }
 
-#ToDo
 jobs = { #Monarch contains the complete template for occupations
     # --- Core occupations ---
     "Monarch": {
@@ -3922,7 +3930,7 @@ jobs = { #Monarch contains the complete template for occupations
             "equipment": {"apply": "add", "expr": [
                 {"const": ["chains"]},
                 {"rd_choice": ["whip", "ledger", "arcane sigil"]},
-                {"rd_choice": {"stat": "weapons"}}
+                {"rd_choice": [{"stat": "weapons"}]}
             ]}
         }
     },
@@ -3939,7 +3947,7 @@ jobs = { #Monarch contains the complete template for occupations
                 {"rd_choice": [{"stat": "weapons"}]},
                 {"rd_choice": ["coin pouch", "jewelry", "cigar", "goblet of wine"]},
                 {"const": ["fine clothes"]},
-                {"rd_choice": {"stat": "weapons"}}
+                {"rd_choice": [{"stat": "weapons"}]}
             ]}
         }
     },
@@ -3952,7 +3960,7 @@ jobs = { #Monarch contains the complete template for occupations
             "equipment": {"apply": "add", "expr": [
                 {"rd_choice": [{"stat": "weapons"}]},
                 {"rd_choice": ["coin pouch", "cloak", "hood", "cigarette"]},
-                {"rd_choice": {"stat": "weapons"}}
+                {"rd_choice": [{"stat": "weapons"}]}
             ]}
         }
     },
@@ -3984,12 +3992,152 @@ backstory_seed = {
         "Former slave": {"dexterity": +2}
     }
 
-#ToDo
-wealth = {
-        "Royal": {"dexterity": +2},
-        "Noble": {"dexterity": +2},
-        "Commoner": {"dexterity": +2},
-        "Peasant": {"dexterity": +2},
-        "Slave": {"dexterity": +2}
-    }       
 
+# debugger list
+debugger  = {
+
+    # ---------------- CONST ----------------
+
+    "const_number": {
+        "apply": "replace",
+        "expr": [{"const": 42}]
+    },
+
+    "const_string": {
+        "apply": "replace",
+        "expr": [{"const": "hello"}]
+    },
+
+    "const_list": {
+        "apply": "replace",
+        "expr": [{"const": [1,2,3]}]
+    },
+
+    "const_tuple": {
+        "apply": "replace",
+        "expr": [{"const": ("weight", 10, "kg")}]
+    },
+
+    "const_enum": {
+        "apply": "replace",
+        "expr": [{"const": Size.MEDIUM}]
+    },
+
+
+    # ---------------- ADD ----------------
+
+    "add_numbers": {
+        "apply": "replace",
+        "expr": [
+            {"add": [2, 4, 6]}
+        ]
+    },
+
+    "add_mixed": {
+        "apply": "replace",
+        "expr": [
+            {"add": [5, "x", [10], ("speed", 5, "ft")]}
+        ]
+    },
+
+
+    # ---------------- MULTIPLY ----------------
+
+    "multiply_numbers": {
+        "apply": "replace",
+        "expr": [
+            {"multiply": [2, 3, 4]}
+        ]
+    },
+
+    "multiply_string": {
+        "apply": "replace",
+        "expr": [
+            {"multiply": ["ha", 3]}
+        ]
+    },
+
+    "multiply_nested": {
+        "apply": "replace",
+        "expr": [
+            {"multiply": [
+                {"add": [2, 3]},
+                {"const": 4}
+            ]}
+        ]
+    },
+
+
+    # ---------------- DIVIDE ----------------
+
+    "divide_numbers": {
+        "apply": "replace",
+        "expr": [
+            {"divide": [100, 2, 5]}
+        ]
+    },
+
+    "divide_list": {
+        "apply": "replace",
+        "expr": [
+            {"divide": [list(range(10)), 2]}
+        ]
+    },
+
+    "divide_nested": {
+        "apply": "replace",
+        "expr": [
+            {"divide": [
+                {"add": [10, 20]},
+                {"const": 2}
+            ]}
+        ]
+    },
+
+
+    # ---------------- MIN/MAX ----------------
+
+    "max_test": {
+        "apply": "replace",
+        "expr": [
+            {"max": [3, 9, 1]}
+        ]
+    },
+
+    "min_test": {
+        "apply": "replace",
+        "expr": [
+            {"min": [3, 9, 1]}
+        ]
+    },
+
+
+    # ---------------- RANDOM ----------------
+
+    "rd_choice_test": {
+        "apply": "replace",
+        "expr": [
+            {"rd_choice": [[1,2], [3,4], [5]]}
+        ]
+    },
+
+
+    # ---------------- STAT ----------------
+
+    "stat_basic": {
+        "apply": "replace",
+        "expr": [
+            {"stat": "dexterity_mod"}
+        ]
+    },
+
+    "stat_nested": {
+        "apply": "replace",
+        "expr": [
+            {"add": [
+                {"stat": "dexterity_mod"},
+                2
+            ]}
+        ]
+    }
+}
