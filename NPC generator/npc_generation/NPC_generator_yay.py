@@ -546,34 +546,46 @@ class NPCGenerator:
         divisor = 1
         for n in nums:
             if n == 0:
+                print(f"Warning: division by zero encountered in values {values}, skipping this value")
                 continue
             divisor /= n
 
         if divisor == 0:
+            print(f"Warning: final divisor is zero after processing values {values}, defaulting to 1")
             divisor = 1
 
-        # 2. strings (probabilistic retention)
-        for s in strings:
-            kept = []
-            for ch in s:
-                if random.random() < (1 / divisor):
-                    kept.append(ch)
-            result.append("".join(kept))
+        # print(f"Debug: Divisor computed as {divisor} from values {nums}")
 
-        # 3. lists output only the NOT shared elements
+        # 2. strings (probabilistic retention)
+        kept = []
+        for s in strings:
+            if random.random() < divisor:
+                kept.append(s)
+            
+        result.extend(kept)
+
+        # 3. lists output the simmetric difference of all lists
         if lists:
+            # print(f"Debug: lists to reduce: {lists}")
             if len(lists) == 1:
-                result.append(lists[0])
+                for item in lists[0]:
+                    if random.random() < divisor:
+                        result.append(item)
             else:
-                shared = set(lists[0])
+                merged = lists[0]
+                # print(f"Debug: initial merged list: {merged}")
                 for l in lists[1:]:
-                    shared &= set(l)
-                for l in lists:
-                    result.append([item for item in l if item not in shared])
+                    # print(f"Debug: symmetric difference between {merged} and {l}: {list(set(merged) ^ set(l))}")
+                    merged = list(set(merged) ^ set(l))
+                    # print(f"Debug: merged list after reduction: {merged}")
+
+                for item in merged:
+                    if random.random() < divisor:
+                        result.append(item)
 
         # 4. tuples (divide first field)
         for val, ttype, measure in tuples:
-            result.append((val / divisor, ttype, measure))
+            result.append((ttype, val * divisor, measure))
 
         # 5. keep numeric result if nothing else is present
         if not lists and not strings and not tuples:

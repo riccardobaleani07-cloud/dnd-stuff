@@ -31,7 +31,7 @@ for name, value in vars(modifiers).items():
         continue
 
     # Only process dictionaries (race, jobs, age_category, ...)
-    if isinstance(value, dict) & (name == "debugger"):
+    if isinstance(value, dict): # & (name == "debugger"):
 
         print(f"\n=== Testing {name} ===")
         walk(value, name)

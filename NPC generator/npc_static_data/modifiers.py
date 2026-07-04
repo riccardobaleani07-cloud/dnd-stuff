@@ -4202,5 +4202,65 @@ debugger = {
                 ]
             }
         ]
+    },
+
+    # string shrink: probabilistic retention of characters using inverse probability (1/factor)
+    "string_shrink": {
+        "apply": "replace",
+        "expr": [{"divide": [{"const": "shield"}, {"const": 2}]}]
+    },
+
+    # single list passthrough: divide with a single list should return that list unchanged
+    "single_list_passthrough": {
+        "apply": "replace",
+        "expr": [{"divide": [{"const": ["longsword", "shortsword", "axe"]}]}]
+    },
+
+    # list complement basic: common element 'b' should be removed from both lists -> expect [['a','c'], ['d']]
+    "list_complement_basic": {
+        "apply": "replace",
+        "expr": [{"divide": [{"const": ["a", "b", "c"]}, {"const": ["b", "d"]}]}]
+    },
+
+    # list-of-lists complement:
+    # shared = ["axe","bow"] -> expect [['longsword'], ['spear']]
+    "list_of_lists_flatten": {
+        "apply": "replace",
+        "expr": [{"divide": [{"const": ["longsword", "axe", "bow"]}, {"const": ["axe", "bow", "spear"]}]}]
+    },
+
+    # tuple division: tuple format here uses numeric-first (val, type, measure)
+    # (120, "darkvision", "ft") divided by 2 -> (60, "darkvision", "ft")
+    "tuple_division": {
+        "apply": "replace",
+        "expr": [{"divide": [{"const": (120, "darkvision", "ft")}, {"const": 2}]}]
+    },
+
+    # guard divide by zero: divisor contains a zero -> should be handled/guarded
+    "divide_by_zero_guard": {
+        "apply": "replace",
+        "expr": [{"divide": [{"const": 100}, {"const": 0}]}]
+    },
+
+    # mixed: two lists + numeric factor - ensures lists complement is computed correctly even with numeric operand
+    # lists: ["a","b","c"] and ["b","c","d"], numeric factor 2 -> shared ["b","c"] -> result ['a', 'd']
+    "mixed_lists_and_number": {
+        "apply": "replace",
+        "expr": [{"divide": [{"const": ["a", "b", "c"]}, {"const": ["b", "c", "d"]}, {"const": 2}]}]
+    },
+
+    # rd_choice used inside divide: rd_choice returns one list (or element) and divide logic must handle it
+    "rd_choice_inside_divide": {
+        "apply": "replace",
+        "expr": [{"divide": [{"rd_choice": [{"const": ["x", "y"]}, {"const": ["y", "z"]}]}, {"const": ["y"]}]}]
+    },
+
+    # deeper nested: mixture of expressions, min/max used to produce a non-zero divisor
+    "nested_divide_guarded": {
+        "apply": "replace",
+        "expr": [{"divide": [
+            {"const": 200},
+            {"max": [{"const": 0}, {"min": [ {"const": 0}, {"const": 1} ] }, {"const": 1}]}
+        ]}]
     }
 }
