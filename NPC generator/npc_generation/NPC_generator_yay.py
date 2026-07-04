@@ -395,8 +395,8 @@ class NPCGenerator:
             return (0, v)
 
         if isinstance(v, tuple) and len(v) == 3:
-            val, ttype, measure = v
-            return (1, ttype, measure, val)
+            ttype, val, measure = v
+            return (1, ttype, val, measure)
 
         # fallback: everything else is lowest priority
         return (2, str(v))

@@ -21,12 +21,12 @@ class Size(IntEnum):
     TINY_GALACTICAL = 12 # not an official size category, it is less than a tiny galaxy, can be seen from deep space
     GALACTICAL = 13 # not an official size category, it is like a galaxy, can be seen from deep space
 
-class SocialLevel(Enum):
-    ROYAL = auto()
-    NOBLE = auto()
-    COMMONER = auto()
-    PEASANT = auto()
-    SLAVE = auto()
+class SocialLevel(IntEnum):
+    ROYAL = 0
+    NOBLE = 1
+    COMMONER = 2
+    PEASANT = 3
+    SLAVE = 4
 
 class Wealth(IntEnum):
     POOR = 0
