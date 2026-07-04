@@ -3994,150 +3994,213 @@ backstory_seed = {
 
 
 # debugger list
-debugger  = {
-
-    # ---------------- CONST ----------------
-
+debugger = {
     "const_number": {
         "apply": "replace",
         "expr": [{"const": 42}]
     },
 
-    "const_string": {
-        "apply": "replace",
-        "expr": [{"const": "hello"}]
-    },
-
-    "const_list": {
-        "apply": "replace",
-        "expr": [{"const": [1,2,3]}]
-    },
-
     "const_tuple": {
         "apply": "replace",
-        "expr": [{"const": ("weight", 10, "kg")}]
+        "expr": [{"const": ("darkvision", 60, "ft")}]
     },
-
-    "const_enum": {
-        "apply": "replace",
-        "expr": [{"const": Size.MEDIUM}]
-    },
-
-
-    # ---------------- ADD ----------------
 
     "add_numbers": {
         "apply": "replace",
-        "expr": [
-            {"add": [2, 4, 6]}
-        ]
+        "expr": [{"add": [2, 4, 6]}]
     },
 
-    "add_mixed": {
+    "add_with_stat": {
         "apply": "replace",
-        "expr": [
-            {"add": [5, "x", [10], ("speed", 5, "ft")]}
-        ]
+        "expr": [{"add": [{"stat": "dexterity"}, 2]}]
     },
-
-
-    # ---------------- MULTIPLY ----------------
 
     "multiply_numbers": {
         "apply": "replace",
-        "expr": [
-            {"multiply": [2, 3, 4]}
-        ]
+        "expr": [{"multiply": [2, 3]}]
     },
 
     "multiply_string": {
         "apply": "replace",
-        "expr": [
-            {"multiply": ["ha", 3]}
-        ]
+        "expr": [{"multiply": ["ha", 3]}]
     },
-
-    "multiply_nested": {
-        "apply": "replace",
-        "expr": [
-            {"multiply": [
-                {"add": [2, 3]},
-                {"const": 4}
-            ]}
-        ]
-    },
-
-
-    # ---------------- DIVIDE ----------------
 
     "divide_numbers": {
         "apply": "replace",
-        "expr": [
-            {"divide": [100, 2, 5]}
-        ]
+        "expr": [{"divide": [100, 4]}]
     },
 
-    "divide_list": {
+    "divide_by_zero": {
         "apply": "replace",
-        "expr": [
-            {"divide": [list(range(10)), 2]}
-        ]
+        "expr": [{"divide": [10, 0]}]  # tests error handling or guard logic
     },
 
-    "divide_nested": {
+    "max_min_mix": {
         "apply": "replace",
-        "expr": [
-            {"divide": [
-                {"add": [10, 20]},
-                {"const": 2}
-            ]}
-        ]
+        "expr": [{"max": [{"const": 3}, {"const": 5}, {"min": [1, 2]}]}]
     },
-
-
-    # ---------------- MIN/MAX ----------------
-
-    "max_test": {
-        "apply": "replace",
-        "expr": [
-            {"max": [3, 9, 1]}
-        ]
-    },
-
-    "min_test": {
-        "apply": "replace",
-        "expr": [
-            {"min": [3, 9, 1]}
-        ]
-    },
-
-
-    # ---------------- RANDOM ----------------
 
     "rd_choice_test": {
         "apply": "replace",
+        "expr": [{"rd_choice": [["a", "b"], ["c"], ["d", "e"]]}]
+    },
+
+    "list_constant": {
+        "apply": "replace",
+        "expr": [{"const": ["longsword", "shortsword"]}]
+    },
+
+    "enum_replace": {
+        "apply": "replace",
+        "expr": [{"const": Size.SMALL}]
+    },
+
+    "apply_add_to_stat": {
+        "apply": "add",
+        "expr": [{"const": 2}]
+    },
+
+    "apply_multiply_to_stat": {
+        "apply": "multiply",
+        "expr": [{"const": 2}]
+    },
+
+    # nested arithmetic: multiply(level * 2) + (10 / max(proficiency_bonus,1)) + min(3,5)
+    "nested_arithmetic": {
+        "apply": "replace",
         "expr": [
-            {"rd_choice": [[1,2], [3,4], [5]]}
+            {
+                "add": [
+                    {"multiply": [{"const": 2}, {"stat": "level"}]},
+                    {"divide": [{"const": 10}, {"max": [{"stat": "proficiency_bonus"}, {"const": 1}]}]},
+                    {"min": [3, {"const": 5}]}
+                ]
+            }
         ]
     },
 
-
-    # ---------------- STAT ----------------
-
-    "stat_basic": {
+    # nested rd_choice: choices themselves are expressions (and nested rd_choice)
+    "rd_choice_nested": {
         "apply": "replace",
         "expr": [
-            {"stat": "dexterity_mod"}
+            {
+                "rd_choice": [
+                    {"add": [1, 2]},                        # one choice evaluates to 3
+                    {"rd_choice": [                         # another choice picks between 4 and an expression
+                        {"const": 4},
+                        {"multiply": [3, {"stat": "level"}]}
+                    ]},
+                    {"const": 5}
+                ]
+            }
         ]
     },
 
-    "stat_nested": {
+    # list-of-tuples merging: two darkvision entries (60 vs 120) to test tuple reduction behavior
+    "tuple_list_merge": {
         "apply": "replace",
         "expr": [
-            {"add": [
-                {"stat": "dexterity_mod"},
-                2
-            ]}
+            {
+                "add": [
+                    ("darkvision", 60, "ft"),
+                    ("darkvision", 120, "ft"),
+                    ("hold breath", 10, "minutes"),
+                    ("darkvision (underground only)", 180, "ft")
+                ]
+            }
+        ]
+    },
+
+    # list intersection semantics: multiplying two lists should keep only common items
+    "list_intersection_multiply": {
+        "apply": "replace",
+        "expr": [
+            {
+                "multiply": [
+                    {"const": ["longsword", "axe", "bow"]},
+                    {"const": ["axe", "bow", "dagger"]}
+                ]
+            }
+        ]
+    },
+
+    # string multiplication & concatenation like "ha" * 3
+    "string_multiply": {
+        "apply": "replace",
+        "expr": [
+            {"multiply": [{"const": "ha"}, {"const": 3}]}
+        ]
+    },
+
+    # max with enum: used in many places to elevate magic_source (enum mixing)
+    "max_enum_with_stat": {
+        "apply": "replace",
+        "expr": [
+            {"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}
+        ]
+    },
+
+    # complex spell-slot derived expression: use divide & max to avoid zero-division
+    "derived_spell_slots_half": {
+        "apply": "replace",
+        "expr": [
+            {
+                "divide": [
+                    {"stat": "spell_slots.1"},
+                    {"max": [{"const": 1}, {"const": 2}, {"const": 2}]}
+                ]
+            }
+        ]
+    },
+
+    # mixed-type add: list + list + single item (checks list concatenation / merging behavior)
+    "mixed_list_add_and_rdchoice": {
+        "apply": "replace",
+        "expr": [
+            {
+                "add": [
+                    {"const": "shortsword"},
+                    {"const": ["shield", "dagger"]},
+                    {"rd_choice": [["boomerang"], ["spear"], ["dagger"]]}
+                ]
+            }
+        ]
+    },
+
+    # guardable divide by zero path: use max/min to ensure a nonzero denominator,
+    # but still allow test of branch that would have divided by zero if unguarded
+    "guarded_divide_by_zero": {
+        "apply": "replace",
+        "expr": [
+            {
+                "divide": [
+                    {"const": 100},
+                    {"max": [{"const": 0}, {"const": 1}]}
+                ]
+            }
+        ]
+    },
+
+    # deeply nested expression combining most ops (add, multiply, rd_choice, min, max)
+    "deeply_nested_stress": {
+        "apply": "replace",
+        "expr": [
+            {
+                "add": [
+                    {"multiply": [
+                        {"add": [2, {"stat": "level"}]},
+                        {"rd_choice": [2, 3, {"const": 4}]}
+                    ]},
+                    {"min": [
+                        {"max": [ {"const": 1}, {"stat": "proficiency_bonus"} ]},
+                        {"const": 5}
+                    ]},
+                    {"rd_choice": [
+                        {"const": ("darkvision", 60, "ft")},
+                        {"const": ("darkvision", 30, "ft")}
+                    ]}
+                ]
+            }
         ]
     }
 }

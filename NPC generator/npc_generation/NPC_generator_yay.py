@@ -445,36 +445,42 @@ class NPCGenerator:
         # numbers
         if nums:
             result.append(sum(nums))
+            # print(f"Debug: Adding numbers {nums} -> {sum(nums)}")
 
 
         merged = []
         # strings
         if strings:
             for s in strings:
-                merged.extend(s)
-            result.append(merged)
+                merged.append(s)
+            # print(f"Debug: Adding strings {strings} -> {merged} -> {result}")
 
         # lists
         if lists:
             for l in lists:
-                merged.extend(l)
-            result.append(merged)
+                for item in l:
+                    merged.append(item)
+            # print(f"Debug: Adding lists {lists} -> {merged} -> {result}")
+
+        result.extend(merged)
 
         # tuples (only first field, type/measure preserved)
         if tuples:
+            # print(f"Debug: Adding tuples {tuples}")
             # only works if same (type, measure)
             grouped = {}
-            for val, ttype, measure in tuples:
-                key = (ttype, measure)
+            for ttype, val, measure in tuples:
+                key = (ttype)
                 if key not in grouped:
                     grouped[key] = []
                 grouped[key].append(val)
 
-            for (ttype, measure), vals in grouped.items():
-                result.append((sum(vals), ttype, measure))
+            for (ttype), vals in grouped.items():
+                result.append((ttype, sum(vals), measure))
 
         # others (passthrough)
         result.extend(others)
+        # print(f"Debug: Adding others {others} -> {result}")
 
         return result
 
@@ -487,29 +493,43 @@ class NPCGenerator:
         for n in nums:
             factor *= n
 
+        # normalize factor to integer for repeat counts
+        try:
+            factor_count = int(round(factor))
+        except Exception:
+            print(f"Warning: factor {factor} is not a valid integer, defaulting to 1")
+            factor_count = 1
+
         result = []
 
         # 2. strings (repeat)
         for s in strings:
-            result.append(s * int(factor))
+            for factor_count in range(factor_count):
+                result.append(s)
 
         # 3. lists (intersection)
         if lists:
+            # print(f"Debug: lists to intersect: {lists}")
             if len(lists) == 1:
-                result.append(lists[0] * int(factor))
+                for factor_count in range(factor_count):
+                    result.append(lists[0])
             else:
-                common = set(lists[0])
-                for l in lists[1:]:
-                    common &= set(l)
-                result.append(list(common) * int(factor))
+                merged = lists[0]
+                for l in lists:
+                    merged = list(set(merged) & set(l))
+                    # print(f"Debug: merged list after intersection: {merged}")
+
+                for factor_count in range(factor_count):
+                    result.extend(merged)
+                    
 
         # 4. tuples (scale first field only)
         for val, ttype, measure in tuples:
-            result.append((val * factor, ttype, measure))
+            result.append((ttype, val * factor_count, measure))
 
         # 5. keep numeric result if nothing else is present
         if  not lists and not strings and not tuples:
-            result.append(factor)
+            result.append(factor_count)
 
         # 6. others untouched
         result.extend(others)
@@ -636,7 +656,6 @@ class NPCGenerator:
 
         # ---------------- CONST ----------------
         if op == "const":
-            # print(f"Evaluating const: {value}")
             return [value]
 
         # ---------------- STAT ----------------
@@ -655,8 +674,8 @@ class NPCGenerator:
 
         # ---------------- RD CHOICE ----------------
         if op == "rd_choice":
-            vals = self._flatten(value)
-            return  [random.choice(vals)] if vals else []
+            vals = value
+            return  self._flatten([random.choice(vals)] if vals else [])
 
         # ---------------- ADD ----------------
         if op == "add":
