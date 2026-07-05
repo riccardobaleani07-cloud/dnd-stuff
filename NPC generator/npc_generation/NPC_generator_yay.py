@@ -706,6 +706,108 @@ class NPCGenerator:
 
         raise ValueError(f"Unknown operation: {op}")
 
+    # Apply functions (they might use the evaluate's helper functios)
+    def _var_type(self, var):
+        if isinstance(var, (int, float, IntEnum)):
+            return "number"
+        elif isinstance(var, str):
+            return "string"
+        elif isinstance(var, list):
+            return "list"
+        elif isinstance(var, tuple) and len(var) == 3:
+            return "tuple"
+        else:
+            return "other"
+
+    def _is_compatible(self, var, result):
+        # numbers and IntEnums accept each other
+        # strings accept only strings, numbers and IntEnums (not vice versa)
+        # lists accept anything
+        # touples are only accepted by lists
+
+        # result is always a list of values
+
+        var_type = self._var_type(var)
+        result_types = {self._var_type(r) for r in result}
+
+        if var_type == "number":
+            return all(rt == "number" for rt in result_types)
+        elif var_type == "string":
+            return all(rt in {"string", "number"} for rt in result_types)
+        elif var_type == "list":
+            return True  # lists accept anything
+        elif var_type == "tuple":
+            return all(rt == "tuple" for rt in result_types)
+        else:
+            return False
+
+    def apply(self, stat, mode, expression):
+        # 1. evaluate the expression
+        result = self.evaluate(expression)
+
+        # 2. apply the result to the target stat(s)
+        var_type = self._var_type(stat)
+
+        if not self._is_compatible(stat, result):
+            raise TypeError(f"Incompatible types: cannot apply {result} to {stat}")
+        
+        for r in result:
+            if mode == "replace":
+                if var_type == self._var_type(r):
+                    stat = r
+                else:
+                    print(f"Warning: type mismatch for replace: {r} ({self._var_type(r)}), {stat} ({var_type})")
+                    stat = r  # still replace, but warn
+            elif mode == "add":
+                if var_type == self._var_type(r):
+                    stat += r # pyright: ignore[reportOperatorIssue]
+                elif var_type == "list":
+                    stat.append(r) # pyright: ignore[reportAttributeAccessIssue]
+                elif var_type == "string" and self._var_type(r) == "number":
+                    stat += str(r) # pyright: ignore[reportOperatorIssue]
+                else:
+                    print(f"Warning: type mismatch for add: {r} ({self._var_type(r)}), {stat} ({var_type})")
+                    stat += r  # pyright: ignore[reportOperatorIssue] # still add, but warn
+                    print(f"Debug: stat after add: {stat}")
+            elif mode == "subtract":
+                if var_type == self._var_type(r) and var_type == "number":
+                    # warning suppressed because pyright is not recognizing that var_type is "number" here
+                    stat -= r # pyright: ignore[reportOperatorIssue]
+                elif var_type == "string":
+                    print(f"Warning: cannot subtract from string: {r} ({self._var_type(r)}), {stat} ({var_type})")
+                elif var_type == "list":
+                    if r in stat: # pyright: ignore[reportOperatorIssue]
+                        stat.remove(r) # pyright: ignore[reportAttributeAccessIssue]
+                    else:
+                        print(f"Warning: item {r} not found in list {stat} for subtraction")
+                else:
+                    print(f"Warning: type mismatch for subtract: {r} ({self._var_type(r)}), {stat} ({var_type})")
+            elif mode == "multiply":
+                if var_type == self._var_type(r) and var_type == "number":
+                    stat *= r # pyright: ignore[reportOperatorIssue]
+                elif var_type == "string":
+                    print(f"Warning: cannot multiply string: {r} ({self._var_type(r)}), {stat} ({var_type})")
+                elif var_type == "list":
+                    stat = self.op_multiply([stat, r]) # the order wich r are inserted matters and it is not handled: it's intended to provide a randomness factor to the system
+                else:
+                    print(f"Warning: type mismatch for multiply: {r} ({self._var_type(r)}), {stat} ({var_type})")
+            elif mode == "divide":
+                if var_type == self._var_type(r) and var_type == "number":
+                    if r == 0:
+                        print(f"Warning: division by zero encountered for {stat} / {r}, skipping this operation")
+                    else:
+                        stat /= r # pyright: ignore[reportOperatorIssue]
+                elif var_type == "string":
+                    print(f"Warning: cannot divide string: {r} ({self._var_type(r)}), {stat} ({var_type})")
+                elif var_type == "list":
+                    stat = self.op_divide([stat, r]) # the order wich r are inserted matters and it is not handled: it's intended to provide a randomness factor to the system
+                else:
+                    print(f"Warning: type mismatch for divide: {r} ({self._var_type(r)}), {stat} ({var_type})")
+            else:
+                raise ValueError(f"Unknown apply mode: {mode}")
+            
+        return stat
+
 
     def generate_npc(self):
         race = self.choose_race(data.races)
