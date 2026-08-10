@@ -375,8 +375,12 @@ class NPCGenerator:
         known = {native_lang}
         for lang, weight in weights.items():
             # Roll for each possible neighbour
-            if random.random() < weight: #toFix: strange error: TypeError: '<' not supported between instances of 'float' and 'str'
-                known.add(lang)
+            try:
+                if random.random() < float(weight): # pyright: ignore[reportArgumentType]
+                    known.add(str(lang))
+            except (ValueError, TypeError):
+                # Skip if weight is not convertible to float
+                pass
         
         return ", ".join(known)
 
@@ -448,7 +452,7 @@ class NPCGenerator:
         return nums, strings, lists, tuples, others
 
     def op_add(self, values):
-        print(f"Debug: Adding values {values}")
+        #print(f"Debug: Adding values {values}")
         nums, strings, lists, tuples, others = self._partition(values)
 
         result = []
@@ -493,12 +497,12 @@ class NPCGenerator:
         result.extend(others)
         # print(f"Debug: Adding others {others} -> {result}")
 
-        print(f"Debug: Final result of addition: {result}")
+        #print(f"Debug: Final result of addition: {result}")
         return result
 
     def op_multiply(self, values):
 
-        print(f"Multiplying this values: {values}")
+        #print(f"Multiplying this values: {values}")
 
         nums, strings, lists, tuples, others = self._partition(values)
 
@@ -548,12 +552,12 @@ class NPCGenerator:
         # 6. others untouched
         result.extend(others)
 
-        print(f"Result: {result}")
+        #print(f"Result: {result}")
         return result
 
     def op_divide(self, values):
 
-        print(f"Dividing this values: {values}")
+        #print(f"Dividing this values: {values}")
         nums, strings, lists, tuples, others = self._partition(values)
 
         result = []
@@ -613,7 +617,7 @@ class NPCGenerator:
         # 6. others unchanged
         result.extend(others)
 
-        print(f"Result: {result}")
+        #print(f"Result: {result}")
         return result
 
     def op_min(self, values):
@@ -1030,7 +1034,7 @@ class NPCGenerator:
         ]
 
         for stat in update_order:
-            print(f"running the stat {stat}")
+            # print(f"running the stat {stat}")
 
             # 1. Apply derived/base rule for THIS stat
             if stat in modifiers.base:
