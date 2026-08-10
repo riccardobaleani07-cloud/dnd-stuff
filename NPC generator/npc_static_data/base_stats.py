@@ -4,6 +4,7 @@ import random
 
 # --- Core combat and progression ---
 hp = 10                   # depends on CON (and maybe race, size, level)
+hp_dice = 4               # depends on occupation, race, size, and level (never used for now)
 ac = 10                   # base 10, modified by DEX, armor, and possibly race
 initiative = 0            # equals DEX mod (+ race or feats if you add them later)
 speed = {"walking": 30,
@@ -39,6 +40,7 @@ saving_throws = []        # race, background, occupation
 # --- Magic ---
 magic_source = MagicSource.NONE       # race, background, occupation (can be none, innate (spellcasting ability not required) or learned; those three parameters have power on each other in that order)
 spellcasting_ability = random.choice(["wisdom", "intelligence", "charisma"]) # race, background, occupation
+spellcasting_ability_mod = 0 # derived from spellcasting_ability
 spell_save_dc = 0         # = 8 + prof_bonus + spellcasting ability mod
 spell_attack_bonus = 0    # = prof_bonus + spellcasting ability mod
 spell_slots = {"1": 0,
@@ -64,3 +66,80 @@ vulnerabilities = []         # race
 other_physical_features = [] # race
 equipment = []               # occupation, background, wealth level
 overall_cr = 0.125           # manual input or computed later
+
+UPDATE_ORDER = [
+
+    "level",
+    "proficiency_bonus",        # depends only on level
+    "hp_dice",                   # it is just rolled once at the beginning and sometimes modified by level, constants and proficiency bonus
+
+    "size",
+
+    "strength",
+    "strength_mod",
+
+    "dexterity",
+    "dexterity_mod",
+
+    "constitution",
+    "constitution_mod",
+
+    "intelligence",
+    "intelligence_mod",
+
+    "wisdom",
+    "wisdom_mod",
+
+    "charisma",
+    "charisma_mod",
+
+    "initiative",               # depends only on dex mod
+    "hp",                       # depends on CON mod, level, and hp_dice (sometimes even on proficiency bonus and ability_mod)
+    "passive_perception",        # depends on WIS mod
+
+    "speed.walking",
+    "speed.flying",
+    "speed.swimming",
+    "speed.climbing",
+
+    "weapons",
+    "armors",
+    "tools",
+    "skills",
+    "saving_throws",
+
+    "magic_source",
+
+    "spellcasting_ability",
+    "spellcasting_ability_mod", # depends on spellcasting_ability
+
+    "spell_slots.1",
+    "spell_slots.2",
+    "spell_slots.3",
+    "spell_slots.4",
+    "spell_slots.5",
+    "spell_slots.6",
+    "spell_slots.7",
+    "spell_slots.8",
+    "spell_slots.9",
+    "spell_slots.10",
+
+    "known_spells",
+    "known_cantrips",
+
+    "spell_attack_bonus",        # needs spellcasting ability mod + proficiency
+    "spell_save_dc",             # same
+
+    "equipment",
+
+    "resistances",
+    "immunities",
+    "vulnerabilities",
+
+    "add_advantage_on",
+    "add_disadvantage_on",
+
+    "other_physical_features",
+
+    "overall_cr",
+]

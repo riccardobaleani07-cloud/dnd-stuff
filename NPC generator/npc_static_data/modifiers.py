@@ -1,4 +1,4 @@
-from npc_static_data.enums import Size, MagicSource, ArmorType
+from npc_static_data.enums import Size, MagicSource, ArmorType, Wealth
 
 
 # That's the map for modify the base attributes
@@ -54,6 +54,8 @@ This separation ensures that expressions remain pure calculations, while the "ap
 # Notes on list for post format: random_weapon_list, plantfolk_vulnerability_list, random_toolkit_list, random_damage_type_list, lycantrope_natural_weapons_list, aasimar_transformation_list, random_skill_list, giant_element_list, draconic_ancestory_list, musical_instrument_list, wizard_cantrip_list, druid_cantrip_list, martial_weapon_list, simple_weapon_list
 # When any list is mentioned, it means that it should be rolled from the items in that list, because the list name is a placeholder.
 
+
+
 # ToDo: check the list placeholders
 wizard_cantrip_list = ["light", "mage hand", "minor illusion", "prestidigitation", "ray of frost", "shocking grasp", "true strike", "chill touch", "dancing lights", "fire bolt", "poison spray", "resistance", "sacred flame", "thorn whip", "vicious mockery"]
 martial_weapon_list = ["boomerang"]
@@ -84,21 +86,147 @@ random_magical_charms = ["boomerang"] # (ex: charm name (description/effect))
 enchanted_weapon_list = ["boomerang"] # (ex: weapon name (description/effect & damage))
 sentient_item_list = ["boomerang"] # (ex: item name (description/effect))
 random_drug_list = ["boomerang"] # (ex: drug name (description/effect))
+random_dice_list = [4, 6, 6, 8, 8, 10, 12] # (ex: d4, d6, d8, d10, d12, d20) some dice are more common than others, so they appear multiple times in the list to increase their probability of being rolled. The d20 is not included because it is not used for damage rolls.
 
 
 #ToDo
 wealth = {
-        "Royal": {"dexterity": +2},
-        "Noble": {"dexterity": +2},
-        "Commoner": {"dexterity": +2},
-        "Peasant": {"dexterity": +2},
-        "Slave": {"dexterity": +2}
+        Wealth.OPULENT: {},
+        Wealth.RICH: {},
+        Wealth.WEALTHY: {},
+        Wealth.MODEST: {},
+        Wealth.POOR: {}
     }
 
-race = { # Common elf contains the complete template
+base = { # This one is used to define the base dependecy of some stats, like proficiency bonus, ability_mod, or others
+    # Formula: proficiency_bonus = 2 + ((level - 1) / 4)
+    "proficiency_bonus": { 
+    "apply": "replace",
+    "expr": [
+        {"add": [
+            {"const": 2},
+            {"divide": [
+                {"add": [
+                    {"stat": "level"},
+                    {"const": -1}
+                ]},
+                {"const": 4}
+            ]}
+        ]}
+    ]
+},
+
+    # Formula: ability_mod = (ability_score - 10) / 2
+    "strength_mod": {
+    "apply": "replace",
+    "expr": [
+        {"divide": [
+            {"add": [
+                {"stat": "strength"},
+                {"const": -10}
+            ]},
+            {"const": 2}
+        ]}
+    ]
+},
+    "dexterity_mod": {
+    "apply": "replace",
+    "expr": [
+        {"divide": [
+            {"add": [
+                {"stat": "dexterity"},
+                {"const": -10}
+            ]},
+            {"const": 2}
+        ]}
+    ]
+},
+    "constitution_mod": {
+    "apply": "replace",
+    "expr": [
+        {"divide": [
+            {"add": [
+                {"stat": "constitution"},
+                {"const": -10}
+            ]},
+            {"const": 2}
+        ]}
+    ]
+},
+    "intelligence_mod": {
+    "apply": "replace",
+    "expr": [
+        {"divide": [
+            {"add": [
+                {"stat": "intelligence"},
+                {"const": -10}
+            ]},
+            {"const": 2}
+        ]}
+    ]
+},
+    "wisdom_mod": {
+    "apply": "replace",
+    "expr": [
+        {"divide": [
+            {"add": [
+                {"stat": "wisdom"},
+                {"const": -10}
+            ]},
+            {"const": 2}
+        ]}
+    ]
+},
+    "charisma_mod": {
+    "apply": "replace",
+    "expr": [
+        {"divide": [
+            {"add": [
+                {"stat": "charisma"},
+                {"const": -10}
+            ]},
+            {"const": 2}
+        ]}
+    ]
+},
+
+    # Formula: initiative = dexterity_mod
+    "initiative": {"apply": "replace", "expr": [{"stat": "dexterity_mod"}]},
+
+    # Formula: hp_dice = random_dice
+    "hp_dice": {"apply": "replace", "expr": [{"rd_choice": random_dice_list}]},
+
+    # Formula: hp = random_dice + constitution_mod + ((random_dice/2 + 0.5 + constitution_mod) * (level - 1))
+    "hp": {"apply": "replace", "expr": [{"add": [{"stat": "hp_dice"}, {"stat": "constitution_mod"}, {"multiply": [{"add": [{"divide": [{"stat": "hp_dice"}, {"const": 2}]}, {"const": 0.5}, {"stat": "constitution_mod"}]}, {"add": [{"stat": "level"}, {"const": -1}]}]}]}]},
+
+    # Formula: passive_perception = 10 + wisdom_mod
+    "passive_perception": {"apply": "replace", "expr": [{"add": [{"const": 10}, {"stat": "wisdom_mod"}]}]},
+
+    "spellcasting_ability_mod": {
+    "apply": "replace",
+    "expr": [
+        {"divide": [
+            {"add": [
+                {"stat": {"stat": "spellcasting_ability"}},
+                {"const": -10}
+            ]},
+            {"const": 2}
+        ]}
+    ]
+},
+
+    # Formula: spell_attack_bonus = spellcasting_ability_mod + proficiency_bonus
+    "spell_attack_bonus": {"apply": "replace", "expr": [{"add": [{"divide": [{"stat": "spellcasting_ability_mod"}, {"const": 2}]}, {"stat": "proficiency_bonus"}]}]},
+
+    # Formula: spell_save_dc = 8 + spellcasting_ability_mod + proficiency_bonus
+    "spell_save_dc": {"apply": "replace", "expr": [{"add": [{"const": 8}, {"stat": "spellcasting_ability_mod"}, {"stat": "proficiency_bonus"}]}]}
+}
+
+race = { # Common elf contains what a race can modify
     "Common Elf": {
         "core_combat": {
             "hp": {"apply": "add", "expr": [{"const": 0}]},
+            "hp_dice": {"apply": "add", "expr": [{"const": 0}]},
             "ac": {"apply": "add", "expr": [{"const": 0}]},
             "initiative": {"apply": "add", "expr": [{"const": 0}]},
             "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 0}]}}, #it's going to be added to the base speed (speed.walking is 30ft others are 0) of the specified type
@@ -438,7 +566,7 @@ race = { # Common elf contains the complete template
     },
     "Pixie": {
         "core_combat": {
-            "hp": {"apply": "subtract", "expr": [{"multiply": [{"const": 2}, {"stat": "level"}]}]},
+            "hp_dice": {"apply": "subtract", "expr": [{"const": 2}]},
             "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}},
             "size": {"apply": "replace", "expr": [{"const": Size.TINY}]} #basic is medium
         },
@@ -485,7 +613,7 @@ race = { # Common elf contains the complete template
     },
     "Firbolg": {
         "core_combat": {
-            "hp": {"apply": "add", "expr": [{"multiply": [{"const": 2}, {"stat": "level"}]}]}
+            "hp_dice": {"apply": "add", "expr": [{"const": 2}]},
         },
         "ability_scores": {
             "strength": {"apply": "add", "expr": [{"const": 1}]},
@@ -630,7 +758,7 @@ race = { # Common elf contains the complete template
     },
     "Goliath": {
         "core_combat": {
-            "hp": {"apply": "add", "expr": [{"multiply": [{"const": 3}, {"stat": "level"}]}]}
+            "hp_dice": {"apply": "add", "expr": [{"const": 3}]},
         },
         "ability_scores": {
             "strength": {"apply": "add", "expr": [{"const": 2}]},
@@ -809,7 +937,8 @@ race = { # Common elf contains the complete template
     },
     "True Dragon": {
         "core_combat": {
-            "hp": {"apply": "multiply", "expr": [{"const": 3}]},
+            "hp": {"apply": "add", "expr": [{"const": 80}, {"multiply" : [{"stat": "hp_dice"}, {"const": 2}]}]},
+            "hp_dice": {"apply": "replace", "expr": [{"const": 4}, {"multiply" : [{"stat": "hp_dice"}, {"const": 2}]}]},
             "ac": {"apply": "add", "expr": [{"const": 4}]},
             "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 10}]}}, #it's going to be added to the base speed (speed.walking is 30ft others are 0) of the specified type
         },
@@ -1220,7 +1349,7 @@ race = { # Common elf contains the complete template
     },
     "Demon": {
         "core_combat": {
-            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
+            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}, {"const": 2}]}]},
             "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
             "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
         },
@@ -1381,7 +1510,7 @@ race = { # Common elf contains the complete template
     },
     "Nightmare": {
         "core_combat": {
-            "hp": {"apply": "subtract", "expr": [{"stat": "proficiency_bonus"}]},
+            "hp": {"apply": "divide", "expr": [{"const": 2}]},
         },
         "ability_scores": {
             "strength": {"apply": "add", "expr": [{"const": -1}]},
@@ -1442,7 +1571,7 @@ race = { # Common elf contains the complete template
     },
     "Angel": {
         "core_combat": {
-            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
+            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}, {"const": 3}]}]},
             "ac": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
             "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
         },
@@ -1691,7 +1820,8 @@ race = { # Common elf contains the complete template
     },
     "Starborn": {
         "core_combat": {
-            "hp": {"apply": "subtract", "expr": [{"stat": "proficiency_bonus"}]},
+            "hp": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}, {"const": 20}]},
+            "hp_dice": {"apply": "replace", "expr": [{"const": 7}]},
             "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
             "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 10}]},
                             "speed.flying": {"apply": "replace", "expr": [{"const": 20}]}},
@@ -1786,7 +1916,8 @@ race = { # Common elf contains the complete template
     },
     "True Vampire": {
         "core_combat": {
-            "hp": {"apply": "add", "expr": [{"stat": "constitution_mod"}, {"stat": "proficiency_bonus"}]},
+            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "constitution_mod"}, {"stat": "level"}]}, {"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
+            "hp_dice": {"apply": "replace", "expr": [{"const": 9}]},
             "ac": {"apply": "add", "expr": [{"const": 1}]},
             "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
             "speed_bonus": {
@@ -1824,7 +1955,7 @@ race = { # Common elf contains the complete template
     },
     "Spectre": {
         "core_combat": {
-            "hp": {"apply": "subtract", "expr": [{"stat": "proficiency_bonus"}]},
+            "hp_dice": {"apply": "subtract", "expr": [{"min": [{"stat": "proficiency_bonus"}, {"const": 3}]}]},
             "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
         },
         "ability_scores": {
@@ -2030,7 +2161,7 @@ subtype = {
         },
         "Ghost": {
             "core_combat": {
-                "hp": {"apply": "subtract", "expr": [{"stat": "proficiency_bonus"}]},
+                "hp_dice": {"apply": "subtract", "expr": [{"min": [{"stat": "proficiency_bonus"}, {"const": 3}]}]},
                 "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
                 "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
             },
@@ -2066,7 +2197,7 @@ subtype = {
         },
         "Zombie": {
             "core_combat": {
-                "hp": {"apply": "add", "expr": [{"stat": "constitution_mod"}]},
+                "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "constitution_mod"}, {"stat": "level"}]}]},
                 "initiative": {"apply": "subtract", "expr": [{"stat": "dexterity_mod"}]},
                 "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]}}
             },
@@ -2489,7 +2620,7 @@ subtype = {
         }
     }
 
-age_category = {
+age_category = { # thoose modifiers are flat modifications to the already existing base stats
         "child": {
             "core_combat": {
                 "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]},
@@ -2499,12 +2630,12 @@ age_category = {
                 "size": {"apply": "replace", "expr": [{"add": [{"stat": "size"}, {"const": -1}]}]}
             },
             "ability_scores": {
-                "strength": {"apply": "subtract", "expr": [{"const": [4]}]},
-                "dexterity": {"apply": "subtract", "expr": [{"const": [4]}]},
-                "constitution": {"apply": "subtract", "expr": [{"const": [4]}]},
-                "intelligence": {"apply": "subtract", "expr": [{"const": [4]}]},
-                "wisdom": {"apply": "subtract", "expr": [{"const": [2]}]},
-                "charisma": {"apply": "add", "expr": [{"const": [4]}]}
+                "strength": {"apply": "subtract", "expr": [{"const": 4}]},
+                "dexterity": {"apply": "subtract", "expr": [{"const": 4}]},
+                "constitution": {"apply": "subtract", "expr": [{"const": 4}]},
+                "intelligence": {"apply": "subtract", "expr": [{"const": 4}]},
+                "wisdom": {"apply": "subtract", "expr": [{"const": 2}]},
+                "charisma": {"apply": "add", "expr": [{"const": 4}]}
             },
             "proficiencies": {
                 "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list (in this case the two lists that are being multiplied are the simple_weapon_list and thealready existing weapon proficiencies)
@@ -2514,11 +2645,11 @@ age_category = {
         },
         "teen": {
             "ability_scores": {
-                "strength": {"apply": "subtract", "expr": [{"const": [2]}]},
-                "dexterity": {"apply": "subtract", "expr": [{"const": [1]}]},
-                "constitution": {"apply": "subtract", "expr": [{"const": [2]}]},
-                "intelligence": {"apply": "subtract", "expr": [{"const": [1]}]},
-                "charisma": {"apply": "add", "expr": [{"const": [2]}]}
+                "strength": {"apply": "subtract", "expr": [{"const": 2}]},
+                "dexterity": {"apply": "subtract", "expr": [{"const": 1}]},
+                "constitution": {"apply": "subtract", "expr": [{"const": 2}]},
+                "intelligence": {"apply": "subtract", "expr": [{"const": 1}]},
+                "charisma": {"apply": "add", "expr": [{"const": 2}]}
             },
             "proficiencies": {
                 "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list (in this case the two lists that are being multiplied are the simple_weapon_list and thealready existing weapon proficiencies)
@@ -2533,7 +2664,7 @@ age_category = {
                                 }, #it's going to be added to the computed speeds
             },
             "ability_scores": {
-                "wisdom": {"apply": "add", "expr": [{"const": [1]}]}
+                "wisdom": {"apply": "add", "expr": [{"const": 1}]}
             }
         },
         "elderly": {
@@ -2544,18 +2675,17 @@ age_category = {
                                 }, #it's going to be added to the computed speeds
             },
             "ability_scores": {
-                "strength": {"apply": "subtract", "expr": [{"const": [3]}]},
-                "dexterity": {"apply": "subtract", "expr": [{"const": [3]}]},
-                "constitution": {"apply": "subtract", "expr": [{"const": [5]}]},
-                "intelligence": {"apply": "subtract", "expr": [{"const": [1]}]},
-                "wisdom": {"apply": "subtract", "expr": [{"const": [3]}]},
-                "charisma": {"apply": "add", "expr": [{"const": [2]}]}
+                "strength": {"apply": "subtract", "expr": [{"const": 3}]},
+                "dexterity": {"apply": "subtract", "expr": [{"const": 3}]},
+                "constitution": {"apply": "subtract", "expr": [{"const": 5}]},
+                "intelligence": {"apply": "subtract", "expr": [{"const": 1}]},
+                "wisdom": {"apply": "subtract", "expr": [{"const": 3}]},
+                "charisma": {"apply": "add", "expr": [{"const": 2}]}
             }
         }
     }
 
-jobs = { #Monarch contains the complete template for occupations
-    # --- Core occupations ---
+jobs = { #Monarch contains the max possible template for occupations
     "Monarch": {
         "core_combat": {
             "hp": {"apply": "add", "expr": [{"const": 0}]},
@@ -3988,8 +4118,8 @@ employment_stages = {
 
 #ToDo
 backstory_seed = {
-        "Runaway noble child": {"dexterity": +2},
-        "Former slave": {"dexterity": +2}
+        "Runaway noble child": {},
+        "Former slave": {}
     }
 
 

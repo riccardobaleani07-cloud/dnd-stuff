@@ -8,6 +8,7 @@ from npc_static_data.enums import Size, SocialLevel, Wealth, MagicSource, ArmorT
 from npc_static_data import data
 from npc_static_data import models
 from npc_static_data import base_stats
+from npc_static_data import modifiers
 from enum import Enum, IntEnum, auto
 
 
@@ -15,6 +16,14 @@ from enum import Enum, IntEnum, auto
 
 
 class NPCGenerator:
+
+    def __init__(self):
+        self.current_stats = {}
+        self.ENUM_STAT_TYPES = {
+            "size": Size,
+            "armors": ArmorType,
+            "magic_source": MagicSource,
+        }
 
     # I define class-level constants just before a function needs them
     # But all the big data structures can be found in npc_static_data/data.py
@@ -389,6 +398,8 @@ class NPCGenerator:
     #                      [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]    
 
     # Operational functions
+    
+    
 
     def _key(self, v):
         if isinstance(v, (int, float)):
@@ -437,7 +448,7 @@ class NPCGenerator:
         return nums, strings, lists, tuples, others
 
     def op_add(self, values):
-
+        print(f"Debug: Adding values {values}")
         nums, strings, lists, tuples, others = self._partition(values)
 
         result = []
@@ -482,9 +493,12 @@ class NPCGenerator:
         result.extend(others)
         # print(f"Debug: Adding others {others} -> {result}")
 
+        print(f"Debug: Final result of addition: {result}")
         return result
 
     def op_multiply(self, values):
+
+        print(f"Multiplying this values: {values}")
 
         nums, strings, lists, tuples, others = self._partition(values)
 
@@ -534,25 +548,30 @@ class NPCGenerator:
         # 6. others untouched
         result.extend(others)
 
+        print(f"Result: {result}")
         return result
 
     def op_divide(self, values):
 
+        print(f"Dividing this values: {values}")
         nums, strings, lists, tuples, others = self._partition(values)
 
         result = []
 
         # 1. numeric divisor
         divisor = 1
-        for n in nums:
+        if nums:
+            divisor = nums[0]
+        for n in nums[1:]:
             if n == 0:
-                print(f"Warning: division by zero encountered in values {values}, skipping this value")
+                print(f"Warning: division by zero encountered in values {values}, result will be 0 regardless of math rules")
+                divisor = 0
                 continue
             divisor /= n
 
-        if divisor == 0:
-            print(f"Warning: final divisor is zero after processing values {values}, defaulting to 1")
-            divisor = 1
+        # if divisor == 0:
+        #     print(f"Warning: final divisor is zero after processing values {values}, defaulting to 1")
+        #     divisor = 1
 
         # print(f"Debug: Divisor computed as {divisor} from values {nums}")
 
@@ -594,6 +613,7 @@ class NPCGenerator:
         # 6. others unchanged
         result.extend(others)
 
+        print(f"Result: {result}")
         return result
 
     def op_min(self, values):
@@ -612,18 +632,33 @@ class NPCGenerator:
         best = max(values, key=self._key)
         return [best]
 
-    def resolve_stat(self, values):
+    def resolve_stat(self, path):
+        """
+        Reads the current generated NPC stats.
+        Used by {"stat": "..."} expressions.
 
-        # if len(values) != 1:
-        #     raise ValueError(f"stat expects exactly 1 argument, got {values}")
+        A stat can be:
+            {"stat": "strength"}
+        or:
+            {"stat": {"stat": "spellcasting_ability"}}
 
-        path = values
+        The latter resolves the inner stat first, then uses its result
+        as the path for the outer stat.
+        """
 
+        # Nested stat reference
+        if isinstance(path, dict):
+            if len(path) != 1 or "stat" not in path:
+                raise TypeError("Nested operations in stat references can only be 'stat'")
+
+            path = self.resolve_stat(path["stat"])
+
+        # After resolving nesting, the path MUST be a string
         if not isinstance(path, str):
-            raise TypeError("stat expects a string path")
+            raise TypeError(f"stat expects a string path, got {path!r}")
 
         parts = path.split(".")
-        current = base_stats
+        current = self.current_stats
 
         for p in parts:
             if isinstance(current, dict):
@@ -631,13 +666,10 @@ class NPCGenerator:
                     raise KeyError(f"Unknown stat: {path}")
                 current = current[p]
             else:
-                # accessing attribute of imported objects (Enum, etc.)
                 if not hasattr(current, p):
                     raise KeyError(f"Invalid substat access: {path}")
                 current = getattr(current, p)
 
-        # IMPORTANT RULE:
-        # disallow partial resolution of structured containers
         if isinstance(current, dict):
             raise ValueError(f"Cannot resolve partial stat group: {path}")
 
@@ -749,7 +781,7 @@ class NPCGenerator:
         var_type = self._var_type(stat)
 
         if not self._is_compatible(stat, result):
-            raise TypeError(f"Incompatible types: cannot apply {result} to {stat}")
+            raise TypeError(f"Incompatible types: cannot apply {result} to {stat}, mode={mode}")
         
         for r in result:
             if mode == "replace":
@@ -805,11 +837,229 @@ class NPCGenerator:
                     print(f"Warning: type mismatch for divide: {r} ({self._var_type(r)}), {stat} ({var_type})")
             else:
                 raise ValueError(f"Unknown apply mode: {mode}")
-            
         return stat
 
+    def _call_apply(self, stat, stats, operation):
+        parts = stat.split(".")
 
-    def generate_npc(self):
+        # Simple stat: stats["strength"]
+        if len(parts) == 1:
+            stats[stat] = self.apply(
+                stats[stat],
+                operation["apply"],
+                operation["expr"]
+            )
+            return stats
+
+        # Nested stat: stats["speed"]["walking"]
+        current = stats
+
+        # Follow the path until the final element
+        for part in parts[:-1]:
+            if not isinstance(current, dict):
+                raise TypeError(
+                    f"Cannot access '{part}' in stat path '{stat}'"
+                )
+
+            if part not in current:
+                raise KeyError(f"Unknown stat path: {stat}")
+
+            current = current[part]
+
+        final_part = parts[-1]
+
+        if not isinstance(current, dict):
+            raise TypeError(
+                f"Cannot access '{final_part}' in stat path '{stat}'"
+            )
+
+        if final_part not in current:
+            raise KeyError(f"Unknown stat path: {stat}")
+
+        current[final_part] = self.apply(
+            current[final_part],
+            operation["apply"],
+            operation["expr"]
+        )
+
+        return stats
+
+    def initialize_stats(self, update_order):
+        """
+        Creates the working copy of the NPC stats.
+        """
+
+        stats = {}
+
+        for stat in update_order:
+            value = self.get_base_stat(stat)
+
+            # handle paths like speed.walking
+            parts = stat.split(".")
+
+            current = stats
+
+            for p in parts[:-1]:
+                if p not in current:
+                    current[p] = {}
+                current = current[p]
+
+            current[parts[-1]] = value
+
+        return stats
+
+    def get_base_stat(self, path):
+        """
+        Reads the initial value from npc_static_data.base_stats.
+        This does not modify anything.
+        """
+
+        if not isinstance(path, str):
+            raise TypeError("stat expects a string path")
+
+        parts = path.split(".")
+        current = base_stats
+
+        for p in parts:
+            if isinstance(current, dict):
+                if p not in current:
+                    raise KeyError(f"Unknown base stat: {path}")
+                current = current[p]
+            else:
+                if not hasattr(current, p):
+                    raise KeyError(f"Invalid base stat access: {path}")
+                current = getattr(current, p)
+
+        if isinstance(current, dict):
+            raise ValueError(f"Cannot resolve partial stat group: {path}")
+
+        return current
+
+    def get_local_modifier(self, modifier_table, selected):
+        """
+        Returns the modifier tree for the selected option.
+        If no modifier exists, returns an empty dictionary.
+        """
+
+        #print(f"This is what it got extracted for the selected argument ({selected})")
+        #print(f"{modifier_table.get(selected, {})}")
+        return modifier_table.get(selected, {})
+
+    def flatten_modifiers(self, modifier_tree):
+        """
+        Extracts every actual operation from a modifier tree.
+
+        Returns:
+            [
+                (target_stat, operation),
+                ...
+            ]
+        """
+
+        result = []
+
+        for key, value in modifier_tree.items():
+
+            # We found an actual operation
+            if isinstance(value, dict) and "apply" in value and "expr" in value:
+                result.append((key, value))
+
+            # We found another category/group
+            elif isinstance(value, dict):
+                result.extend(self.flatten_modifiers(value))
+
+        # print(f"Flattened this modifier tree {modifier_tree}")
+        # print(f"Into this flattened thing: {result}")
+        return result
+
+    def normalize_enums(self, stats):
+        for stat, enum_type in self.ENUM_STAT_TYPES.items():
+            if stat in stats:
+                value = stats[stat]
+
+                if isinstance(value, enum_type):
+                    continue
+
+                try:
+                    stats[stat] = enum_type(value)
+                except ValueError:
+                    raise ValueError(
+                        f"Invalid value {value!r} for {stat} "
+                        f"({enum_type.__name__})"
+                    )
+
+        return stats
+
+    def compute_stats(
+        self,
+        race,
+        subtype,
+        age_category,
+        occupation,
+        employment_stage,
+        wealth,
+        backstory_seed,
+        update_order=base_stats.UPDATE_ORDER
+    ):
+
+        self.current_stats = self.initialize_stats(update_order)
+        stats = self.current_stats
+
+        race_mod = self.get_local_modifier(modifiers.race, race)
+        subtype_mod = self.get_local_modifier(modifiers.subtype, subtype)
+        age_mod = self.get_local_modifier(modifiers.age_category, age_category)
+        occupation_mod = self.get_local_modifier(modifiers.jobs, occupation)
+        employment_mod = self.get_local_modifier(
+            modifiers.employment_stages,
+            employment_stage
+        )
+        wealth_mod = self.get_local_modifier(modifiers.wealth, wealth)
+        backstory_mod = self.get_local_modifier(
+            modifiers.backstory_seed,
+            backstory_seed
+        )
+
+        local_modifiers = [
+            race_mod,
+            subtype_mod,
+            age_mod,
+            occupation_mod,
+            employment_mod,
+            wealth_mod,
+            backstory_mod
+        ]
+
+        for stat in update_order:
+            print(f"running the stat {stat}")
+
+            # 1. Apply derived/base rule for THIS stat
+            if stat in modifiers.base:
+                stats = self._call_apply(
+                    stat,
+                    stats,
+                    modifiers.base[stat]
+                )
+
+            # 2. Apply local modifiers targeting THIS stat
+            for modifier_set in local_modifiers:
+                if not modifier_set:
+                    continue
+
+                flattened_set = self.flatten_modifiers(modifier_set)
+
+                for target, operation in flattened_set:
+                    if target == stat:
+                        stats = self._call_apply(
+                            target,
+                            stats,
+                            operation
+                        )
+
+        
+        return self.normalize_enums(stats)
+
+
+    def generate_npc(self, lore_only = False):
         race = self.choose_race(data.races)
         language = self.pick_languages(race)
         gender = self.choose_gender(data.genders, race, data.species_gender_map)
@@ -827,10 +1077,17 @@ class NPCGenerator:
         backstory = self.generate_backstory(backstory_seed, name, age_category, race)
         subtype = self.conditional_choose_subtype(data.available_subtypes, race)
 
+        if not lore_only:
+            self.compute_stats(race, subtype, age_category, occupation["job"], occupation["stage"], wealth, backstory_seed)
+            return models.NPC(name, gender, race, subtype, language, occupation, age_category,
+                                      age, alignment, partnership, personality_traits, offsprings, reputation,
+                                      wealth, backstory_seed, social_level, backstory, self.current_stats)
 
 
-        return models.NPC(name, gender, race, subtype, language, occupation, age_category, age, alignment, partnership, personality_traits, offsprings, reputation, wealth, backstory_seed, social_level, backstory
-                          )
+
+        return models.NPC(name, gender, race, subtype, language, occupation, age_category,
+                          age, alignment, partnership, personality_traits, offsprings, reputation,
+                          wealth, backstory_seed, social_level, backstory)
 
 
 
