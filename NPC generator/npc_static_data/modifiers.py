@@ -1953,7 +1953,7 @@ base = { # This one is used to define the base dependecy of some stats, like pro
     "spell_save_dc": {"apply": "replace", "expr": [{"add": [{"const": 8}, {"stat": "spellcasting_ability_mod"}, {"stat": "proficiency_bonus"}]}]}
 }
 
-race = { # Common elf contains what a race can modify
+race = { # Common elf contains what a race can modify, being some sort of template
     "Common Elf": {
         "core_combat": {
             "hp": {"apply": "add", "expr": [{"const": 0}]},
