@@ -1,0 +1,1602 @@
+
+backstory_seed = {
+    "Lost heir": {
+        "core_combat": {
+            "hp": {"apply": "add", "expr": [{"const": 0}]},
+            "hp_dice": {"apply": "add", "expr": [{"const": 0}]},
+            "ac": {"apply": "add", "expr": [{"const": 0}]},
+            "initiative": {"apply": "add", "expr": [{"const": 0}]},
+            "speed_bonus": {"apply": "add", "expr": [{"const": 0}]}
+        },
+
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 0}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 0}]},
+            "constitution": {"apply": "add", "expr": [{"const": 0}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 0}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": []}]},
+            "armors": {"apply": "add", "expr": [{"const": 0}]},
+            "tools": {"apply": "add", "expr": [{"const": []}]},
+            "skills": {"apply": "add", "expr": [{"const": ["history", "persuasion"]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": []}]}
+        },
+
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"const": 0}]},
+            "spellcasting_ability": {"apply": "add", "expr": [{"const": 0}]},
+            "spell_slots": {"apply": "add", "expr": [{"const": 0}]},
+            "known_spells": {"apply": "add", "expr": [{"const": 0}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": 0}]}
+        },
+
+        "other_info": {
+            "coins": {"apply": "add", "expr": [{"multiply": [
+                                                            {"rd_choice": [1.00, 2.00, 3.00]},
+                                                            {"rd_choice": [1.00, 2.00, 3.00]},
+                                                            {"rd_choice": [1.00, 2.00, 3.00]}
+                                                            ]}]},
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [
+                                                        "family signet",
+                                                        "heirloom jewelry",
+                                                        "old family document",
+                                                        "noble insignia"
+                                                    ]}]},
+            "resistances": {"apply": "add", "expr": [{"const": []}]},
+            "immunities": {"apply": "add", "expr": [{"const": []}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": []}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const":  "checks related to formal etiquette"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": []}]}
+        }
+    },
+    "Exiled noble": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "persuasion"]}]}
+        },
+
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [
+                                                        "family signet",
+                                                        "noble insignia",
+                                                        "sealed letter of lineage",
+                                                        "old ceremonial garment"
+                                                    ]}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": [{"const": "recognizing noble customs"}]}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": ["social interactions with nobles"]}]}
+        }
+    },
+    "Former soldier": {
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["intimidation", "survival", "athletics"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [
+                                                        "old military insignia",
+                                                        "campaign medal",
+                                                        "old military ID",
+                                                        "old uniform piece"
+                                                    ]}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": [{"const": "social interaction with army members"}]}]}
+        }
+    },
+    "Wandering scholar": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history", "investigation"]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": ["calligrapher's supplies", "cartographer's tools"]}]}
+        },
+
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [
+                                                            "research journal",
+                                                            "collection of annotated maps",
+                                                            "scholarly reference book",
+                                                            "bundle of research notes"
+                                                        ]}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "recalling historical information"}]}
+        }
+    },
+    "Cursed individual": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "survival"]}]}
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": ["necrotic", "psychic", "poison"]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "identifying supernatural curses"}]
+            },
+            "add_disadvantage_on": {
+                "apply": "add",
+                "expr": [{"const": "interactions related to the curse"}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "cursed mark: visible mark associated with the curse",
+                    "unnatural eyes: eyes visibly altered by the curse",
+                    "shadow distortion: shadow behaves unnaturally"
+                ]}]
+            }
+        }
+    },
+    "Plague survivor": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["medicine", "survival"]}]}
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"const": ["poison"]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "resisting diseses"}]
+            }
+        }
+    },
+    "Refugee from the North/South/East/West": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["survival", "perception"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "finding shelter and food in survival checks"}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old regional keepsake",
+                    "worn travel map",
+                    "family photograph or portrait",
+                    "small bundle of belongings"
+                ]}]
+            }
+        }
+    },
+    "Escaped experiment": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["arcana", "survival"]}]
+            }
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "fire",
+                    "cold",
+                    "lightning",
+                    "acid",
+                    "poison",
+                    "psychic"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "unnatural scarification: strange scars left by experimentation",
+                    "arcane implant: a foreign mechanism or magical object embedded in the body",
+                    "altered eyes: eyes visibly altered by experiments",
+                    "unnatural markings: patterns appeared on the body after the experiments"
+                ]}]
+            }
+        }
+    },
+    "Disgraced knight": {
+        "core_combat": {
+            "ac": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "ability_scores": {
+            "strenght": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "weapons": {
+                "apply": "add",
+                "expr": [{"const": ["longsword", "lance", "shield"]}]
+            },
+            "armors": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": ArmorType.MEDIUM},
+                    {"stat": "armors"}
+                ]}]
+            },
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["athletics", "persuasion"]}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "damaged heraldic shield",
+                    "old knightly insignia",
+                    "worn ceremonial cloak",
+                    "broken family crest"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "recognizing military and noble etiquette"}]
+            },
+            "add_disadvantage_on": {
+                "apply": "add",
+                "expr": [{"const": "interactions with people"}]
+            }
+        }
+    },
+    "Amnesiac drifter": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["perception", "insight"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "dream interpretation"}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "mysterious scar: a prominent scar with an unknown origin",
+                    "unknown tattoo: a symbol whose meaning the character does not remember",
+                    "familiar accent: speech patterns suggesting an unknown place of origin"
+                ]}]
+            }
+        }
+    },
+    "Former slave": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["survival", "insight"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["constitution checks against exhaustion"]}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old identification tag",
+                    "keepsake from their former life as a slave",
+                    "small personal memento",
+                    "worn piece of clothing from their former owner"
+                ]}]
+            }
+        }
+    },
+    "Treasure hunter": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["perception", "investigation", "survival"]}]
+            },
+            "tools": {
+                "apply": "add",
+                "expr": [{"const": ["thieves' tools"]}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old treasure map",
+                    "compass",
+                    "set of excavation tools",
+                    "magnifying glass",
+                    "collection of unidentified relics"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "checks to estimate the value of an object",
+                    "spotting hidden compartments"
+                ]}]
+            }
+        }
+    },
+    "Fugitive from the law": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["stealth", "survival", "deception"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "hiding/blending against city guards",
+                    "recognizing signs of surveillance"
+                ]}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "false identification papers",
+                    "disguise kit",
+                    "stolen map",
+                    "hooded traveling cloak"
+                ]}]
+            }
+        }
+    },
+    "Dream-chaser": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["insight", "persuasion"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["inspiring others"]}]
+            }
+        }
+    },
+    "Wandering artist": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["performance", "persuasion", "sleight of hand"]}]
+            },
+            "tools": {
+                "apply": "add",
+                "expr": [{"rd_choice": musical_instrument_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "artist's sketchbook",
+                    "traveling paint set",
+                    "collection of sketches",
+                    "personal instrument case"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["performing for an audience", "reading an audience"]}]
+            }
+        }
+    },
+    "Apostle of a Witch of Sin or Angel of Virtue": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "religion",
+                    "insight",
+                    "persuasion",
+                    "intimidation"
+                ]}]
+            },
+            "weapons": {
+                "apply": "add",
+                    "expr": [{"rd_choice": random_apostle_weapon}]
+            }
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    cleric_cantrip_list,
+                    warlock_cantrip_list
+                ]}]
+            },
+            "known_spells": {
+                "apply": "add",
+                    "expr": [{"rd_choice": apostle_divine_spell_list}, {"rd_choice": apostle_divine_spell_list}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["recognizing other's power level", "recognizing divine influence"]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "divine mark: a visible mark associated with the deity",
+                    "unnatural aura: a supernatural presence surrounding the creature",
+                    "distinctive clothing: wears something proper only to an apostle"
+                ]},
+                {"stat": "proficiencies"}]
+            }
+        }
+    },
+    "Former pirate": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "speed_bonus": {
+                "speed.walking": {
+                    "apply": "add",
+                    "expr": [{"const": 5}]
+                }
+            }
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["acrobatics", "athletics", "deception"]}]
+            },
+            "weapons": {
+                "apply": "add",
+                "expr": [{"const": ["scimitar", "dagger", "hand crossbow"]}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old pirate insignia",
+                    "weathered nautical map",
+                    "lucky coin",
+                    "old ship's compass",
+                    "treasure's map"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["navigation at sea", "recognizing pirate customs"]}]
+            }
+        }
+    },
+    "Marked by the gods": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    {"rd_choice": cleric_cantrip_list},
+                    {"rd_choice": wizard_cantrip_list},
+                    {"rd_choice": warlock_cantrip_list}
+                ]}]
+            }
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "radiant",
+                    "necrotic",
+                    "force",
+                    "psychic",
+                    "thunder"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "divine birthmark: a supernatural mark associated with an unknown deity",
+                    "glowing eyes: the eyes emit a faint supernatural light",
+                    "holy scar: a mysterious symbol appeared on the body",
+                    "moving sigil: a magical symbol subtly changes over time"
+                ]}]
+            }
+        }
+    },
+    "Bearer of a forbidden gift": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    {"rd_choice": wizard_cantrip_list},
+                    {"rd_choice": warlock_cantrip_list}
+                ]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["using or identifying forbidden magic"]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    ("arcane scar", "a mark left by the forbidden power"),
+                    ("unnatural aura", "the creature gives off a subtle supernatural presence"),
+                    ("glowing veins", "faint supernatural light can be seen beneath the skin")
+                ]}]
+            }
+        }
+    },
+    "Cursed bloodline": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "fire",
+                    "cold",
+                    "necrotic",
+                    "poison",
+                    "psychic"
+                ]}]
+            },
+            "vulnerabilities": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "radiant",
+                    "fire",
+                    "cold"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "cursed eyes: the eyes bear an inherited supernatural trait"
+                    "ancestral mark: a distinctive mark shared by members of the bloodline"
+                    "unnatural hair: hair with an unusual supernatural coloration"
+                ]}]
+            }
+        }
+    },
+    "Chosen vessel": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    wizard_cantrip_list,
+                    cleric_cantrip_list,
+                    warlock_cantrip_list
+                ]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["wisodm saving throws", "arcana"]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr":  [
+                    "supernatural aura: mana sensitive creatures can perceive an unusual presence around the vessel",
+                    "divine mark: a visible mark associated with a deity"
+                ]
+            }
+        }
+    },
+    "Oathbreaker": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["intimidation", "insight"]}]
+            },
+            "weapons": {
+                "apply": "add",
+                "expr": [{"rd_choice": martial_weapon_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "broken oath token",
+                    "defaced insignia",
+                    "piece of former uniform"
+                ]}]
+            },
+            "add_disadvantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["interactions with lawful people"]}]
+            }
+        }
+    },
+    "Former apprentice": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "arcana",
+                    "investigation",
+                    "insight",
+                    "perception"
+                ]}]
+            },
+            "tools": {
+                "apply": "add",
+                "expr": [{"rd_choice": random_toolkit_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old apprenticeship notes",
+                    "unfinished project",
+                    "apprenticeship certificate"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["learning from an experienced teacher", "identifying the work of a trained craftsman"]}]
+            }
+        }
+    },
+    "Forgotten inventor": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["investigation", "arcana"]}]
+            },
+            "tools": {
+                "apply": "add",
+                "expr": [{"rd_choice": random_toolkit_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": random_magical_charms}
+                ]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["repairing objects", "understanding experimental technology"]}]
+            }
+        }
+    },
+    "Forbidden scholar": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "history"]}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.LEARNED},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": [{"rd_choice": first_level_spell}, {"rd_choice": first_level_spell}]
+            },
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": wizard_cantrip_list}]
+            }  
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "forbidden manuscript",
+                    "cursed spellbook",
+                    "encoded research notes"
+                ]}]
+            }
+        }
+    },
+    "Disillusioned hero": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "wisdom_mod"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "survival"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old hero's medal",
+                    "damaged adventurer's badge"
+                ]},
+                {"stat": "weapons"}]
+            }
+        }
+    },
+    "Arcane researcher": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "investigation"]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.LEARNED},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": [{"rd_choice": first_level_spell}, {"rd_choice": first_level_spell}, {"rd_choice": second_level_spell}]
+            },
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}]
+            }
+        },
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    "collection of magical samples",
+                    "detailed spellbook"
+                ]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "arcana"}]
+            }
+        }
+    },
+    "Street prophet": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "persuasion"]}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": cleric_cantrip_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "worn prophetic scroll",
+                    "collection of street prophecies",
+                    "weathered divination tools"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "prophetic intuition (1/day, after observing a creature for at least 1 minute, the prophet can discern whether that creature intends to harm them in the near future)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "attracting a crowd",
+                    "religion"
+                ]}]
+            }
+        }
+    },
+    "Fallen priest/priestess": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["religion", "insight"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": simple_weapon_list}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": cleric_cantrip_list}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": [{"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]},
+                         {"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]},
+                         {"rd_choice": [{"multiply": [cleric_spell_list, second_level_spell]}]}]
+            },
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 1}]}
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "defaced holy symbol",
+                    "old prayer book",
+                    "broken ceremonial staff",
+                    "religious vestments"
+                ]}]
+            }
+        }
+    },
+    "Exiled seer": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 2}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "perception"]}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": cleric_cantrip_list}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": [{"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]},
+                         {"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}]
+            },
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]}
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "oracle's blindfold",
+                    "crystal divination stone",
+                    "weathered divination cards"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "premonition (1/day, when the seer or a creature they can see within 30 feet makes an attack roll, ability check, or saving throw, the seer can change the immediate outcome and add or subtract 1d4 from the roll)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "interpreting omens",
+                    "recognizing supernatural signs"
+                ]}]
+            }
+        }
+    },
+    "Defector spy": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["deception", "stealth", "insight"]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}, {"const": "thieve's tools"}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "forged identity papers",
+                    "coded message"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "dead drop (after observing a location for 1 minute, the spy can identify a reasonably secure place nearby where a Small object could be hidden or retrieved without notice)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "recognizing surveillance",
+                    "identifying secret signals",
+                    "maintaining a false identity in social interactions"
+                ]}]
+            }
+        }
+    },
+    "Witch-kin outcast": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": wizard_cantrip_list},
+                         {"rd_choice": warlock_cantrip_list},
+                         {"rd_choice": warlock_cantrip_list}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": ["witch bolt (3/day)", "hex (1/day)", "witch's mark (at will)", "charm person (3/day)",
+                         "hold person (1/day)", "summon familiar (at will)", "detect magic (at will)",
+                         "invisibility (1/day)", "true seeing (1/day)", "polymorph (1/day)", "fireball (1/day)"]
+                }
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "intimidation"]}]}
+        },
+
+        "other_info": {
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "witch-touched (the outcast can sense the presence of supernatural creatures within 30 feet, although they cannot determine the creature's exact nature)"
+                }]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "black candle",
+                    "small ritual knife"
+                ]},
+                {"rd_choice": random_magical_charms},
+                {"rd_choice": sentient_item_list}]
+            }
+        }
+    },
+    "Mercenary idealist": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion", "survival"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old mercenary contract",
+                    "mercenary company token"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "rallying conviction (once per long rest, when an ally within 30 feet fails a saving throw against being frightened, the mercenary can use a reaction to allow that ally to reroll the saving throw)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "negotiating contracts",
+                    "recognizing mercenary tactics",
+                    "persuasion to uphold an agreement"
+                ]}]
+            }
+        }
+    },
+    "Reluctant hero": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["survival", "insight"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "damaged hero's insignia",
+                    "keepsake from someone they saved",
+                    "worn traveling cloak"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "last resort (once per long rest, when the hero is reduced to 0 HP but not killed outright, they can immediately make one weapon attack before falling unconscious)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "protecting civilians",
+                    "recognizing immediate danger to others"
+                ]}]
+            }
+        }
+    },
+    "Traitor turned savior": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["deception", "insight", "stealth"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old traitor's insignia",
+                    "stolen document from their former faction",
+                    "damaged former uniform",
+                    "keepsake from the person they betrayed"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "redemption (once per long rest, when an ally within 30 feet is reduced to 0 HP, the traitor can use a reaction to move up to half their speed toward that ally without provoking opportunity attacks)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "insight"
+                ]}]
+            }
+        }
+    },
+    "Doom-bound wanderer": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["survival", "perception"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "map covered in ominous markings",
+                    "object associated with a coming disaster",
+                    "journal recording signs of the impending doom"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "doomed resilience (once per long rest, when the wanderer fails a death saving throw, they can turn the failure into a success)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "investigation and insight to search for signs of impending disasters",
+                    "survival",
+                    "identifying places associated with their prophecy"
+                ]}]
+            }
+        }
+    },
+    "Revolution's spark": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion", "deception"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "revolutionary pamphlet",
+                    "coded list of supporters",
+                    "homemade protest banner"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "rallying speech (once per long rest, the revolutionary can spend 1 minute addressing up to 10 willing creatures; for the next hour, those creatures have advantage on saving throws against being frightened)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "persuasion with people to resist an oppressive authority",
+                    "recognizing signs of civil unrest"
+                ]}]
+            }
+        }
+    },
+    "Runaway noble child": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history", "persuasion"]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list},
+                                               {"rd_choice": musical_instrument_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "family signet ring",
+                    "expensive but worn clothing",
+                    "small piece of inherited jewelry"
+                ]},
+                {"rd_choice": [{"stat": "tools"}]}]
+            }
+        }
+    },
+    "Monster in humanoid form": {
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "hp": {"apply": "add", "expr": [{"stat": "strength_mod"}]}
+        },
+
+        "other_info": {
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": lycantrope_natural_weapons_list},
+                         {"rd_choice": [("darkvision", 60, "ft"), ("darkvision", 120, "ft"),
+                                        ("darkvision (underground only)", 180, "ft"), ("tremorsense", 30, "ft"),
+                                        ("blindsight", 10, "ft"), ("blindsight", 30, "ft"), ("truesight", 10, "ft"),
+                                        ("echolocation", 30, "ft"), ("magic sense", 30, "ft"), ("magnetosense", 30, "ft")]}]
+            },
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": random_damage_type_list}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": 
+                    "survival checks done for tracking by scent"
+                }]
+            }
+        }
+    },
+    "Survivor of a fallen city": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["survival", "investigation"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "fragment of a fallen city's map",
+                    "keepsake from a fallen city",
+                    "damaged city insignia",
+                    "piece of masonry from the ruins"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "disaster survivor (the survivor has advantage on saving throws against environmental hazards and natural disasters they have previously experienced)"
+                }]
+            }
+        }
+    },
+    "Bearer of ancestral guilt": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history", "insight"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "ancestral heirloom",
+                    "family record of past deeds",
+                    "portrait of an ancestor"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "burden of the past (the bearer can recognize the family, organization, or culture associated with their ancestors' wrongdoing when confronted with its symbols or records)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "recognizing family histories"
+                ]}]
+            }
+        }
+    },
+    "Last of their order": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history", "perception"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "order insignia",
+                    "last surviving copy of their order's records",
+                    "ceremonial item of their order"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "last tradition (the survivor retains one minor technique of their extinct order; once per long rest, they can use it to gain advantage on one attack roll, ability check, or saving throw)"
+                }]
+            }
+        }
+    },
+    "Haunted war veteran": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["perception", "survival", "intimidation"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "war trophy",
+                    "old military insignia",
+                    "damaged weapon from the war",
+                    "letter/photo from a fallen comrade"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "battle reflexes (the veteran cannot be surprised while conscious unless incapacitated)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "identifying an ambush",
+                    "recognizing the aftermath of battle, skirmish or fight"
+                ]}]}
+            }
+        },
+    "Reformed cultist": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["religion", "deception", "insight"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "defaced cult symbol",
+                    "stolen cult scripture",
+                    "ritual object they kept after leaving",
+                    "coded list of former cult members"
+                ]}]
+            },
+        }
+    },
+    "Seeker of the First Flame": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    {"rd_choice": wizard_cantrip_list},
+                    {"rd_choice": cleric_cantrip_list},
+                    {"rd_choice": warlock_cantrip_list}
+                ]}]
+            }
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "religion", "history"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "fragment of an ancient, broken spell scroll about the First Flame",
+                    "charred relic",
+                    "map marking forgotten ruins",
+                    "ancient text concerning the First Flame"
+                ]},
+                {"rd_choice": random_magical_charms}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "interpreting references to the First Flame"
+                ]}]
+            }
+        }
+    }
+}

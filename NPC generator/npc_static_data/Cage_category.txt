@@ -1,0 +1,65 @@
+
+age_category = { # thoose modifiers are flat modifications to the already existing base stats
+        "child": {
+            "core_combat": {
+                "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]},
+                                "speed.flying": {"apply": "subtract", "expr": [{"const": 5}]},
+                                "speed.climbing": {"apply": "subtract", "expr": [{"const": 10}]}
+                                }, #it's going to be added to the computed speeds
+                "size": {"apply": "replace", "expr": [{"add": [{"stat": "size"}, {"const": -1}]}]}
+            },
+            "ability_scores": {
+                "strength": {"apply": "subtract", "expr": [{"const": 4}]},
+                "dexterity": {"apply": "subtract", "expr": [{"const": 4}]},
+                "constitution": {"apply": "subtract", "expr": [{"const": 4}]},
+                "intelligence": {"apply": "subtract", "expr": [{"const": 4}]},
+                "wisdom": {"apply": "subtract", "expr": [{"const": 2}]},
+                "charisma": {"apply": "add", "expr": [{"const": 4}]}
+            },
+            "proficiencies": {
+                "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list (in this case the two lists that are being multiplied are the simple_weapon_list and thealready existing weapon proficiencies)
+                "armors": {"apply": "replace", "expr": [{"const": ArmorType.UNARMORED}]},
+                "tools": {"apply": "replace", "expr": [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]} # it aims to reduce the number of proficiencies capping them at two
+            }
+        },
+        "teen": {
+            "ability_scores": {
+                "strength": {"apply": "subtract", "expr": [{"const": 2}]},
+                "dexterity": {"apply": "subtract", "expr": [{"const": 1}]},
+                "constitution": {"apply": "subtract", "expr": [{"const": 2}]},
+                "intelligence": {"apply": "subtract", "expr": [{"const": 1}]},
+                "charisma": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "proficiencies": {
+                "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list (in this case the two lists that are being multiplied are the simple_weapon_list and thealready existing weapon proficiencies)
+                "armors": {"apply": "replace", "expr": [{"min": [{"stat": "armors"}, {"const": ArmorType.LIGHT}]}]},
+                "tools": {"apply": "replace", "expr": [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]} # it aims to reduce the number of proficiencies capping them at three
+            }
+        },
+        "adult": {},
+        "middle-aged": {
+            "core_combat": {
+                "speed_bonus": {"speed.climbing": {"apply": "subtract", "expr": [{"const": 5}]}
+                                }, #it's going to be added to the computed speeds
+            },
+            "ability_scores": {
+                "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+            }
+        },
+        "elderly": {
+            "core_combat": {
+                "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]},
+                                "speed.flying": {"apply": "subtract", "expr": [{"const": 5}]},
+                                "speed.climbing": {"apply": "subtract", "expr": [{"const": 10}]}
+                                }, #it's going to be added to the computed speeds
+            },
+            "ability_scores": {
+                "strength": {"apply": "subtract", "expr": [{"const": 3}]},
+                "dexterity": {"apply": "subtract", "expr": [{"const": 3}]},
+                "constitution": {"apply": "subtract", "expr": [{"const": 5}]},
+                "intelligence": {"apply": "subtract", "expr": [{"const": 1}]},
+                "wisdom": {"apply": "subtract", "expr": [{"const": 3}]},
+                "charisma": {"apply": "add", "expr": [{"const": 2}]}
+            }
+        }
+    }

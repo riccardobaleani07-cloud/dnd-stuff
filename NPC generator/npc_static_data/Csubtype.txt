@@ -1,0 +1,491 @@
+
+subtype = {
+        "Shell": {
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "force"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "shell recall (1/day, grant temporary protection for the next minute: any creature within 10ft suffer the effect of the spell Armor of Agathys at lvl 1, yourself included)"
+                ]}]}
+            }
+        },
+        "Lush": {
+            "ability_scores": {
+                "charisma": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "lush recall (1/day, restore vitality in area for the next minute: any object suffers from mending effect, and every creature heal for 1d6 hp if starts the turn within 10 ft from you, you included)"}]}
+            }
+        },
+        "Grace": {
+            "ability_scores": {
+                "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+                "constitution": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "cold"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "frost aura (willingly standing still (it means: not using movement, actions (except for the dodge action), bonus actions or reactions), can freeze up surroundings, up to freezing water and brittle metal in a 5ft radius, every creature within range that starts the turn there, must make a constitution DC 12 or suffer 4d6 cold damage, half on a success; you also have to perform the saving throw, but taking half the damage on success and none on failure)"}]}
+            }
+        },
+        "Ghost": {
+            "core_combat": {
+                "hp_dice": {"apply": "subtract", "expr": [{"min": [{"stat": "proficiency_bonus"}, {"const": 3}]}]},
+                "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
+                "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
+            },
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": -3}]},
+                "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+                "constitution": {"apply": "add", "expr": [{"const": -3}]},
+                "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+                "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+                "charisma": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": ["necrotic", "slashing (nonmagical)", "piercing (nonmagical)", "bludgeoning (nonmagical)"]}]},
+                "vulnerabilities": {"apply": "add", "expr": [{"const": "radiant"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "incorporeal movement (can move through objects as if they're difficult terrain)",
+                    "cannot wear armor"
+                ]}]}
+            }
+        },
+        "Skeleton": {
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": -1}]},
+                "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+                "constitution": {"apply": "add", "expr": [{"const": -1}]},
+                "charisma": {"apply": "add", "expr": [{"const": -1}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "piercing"}]},
+                "vulnerabilities": {"apply": "add", "expr": [{"const": "bludgeoning"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": "does not bleed"}]}
+            }
+        },
+        "Zombie": {
+            "core_combat": {
+                "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "constitution_mod"}, {"stat": "level"}]}]},
+                "initiative": {"apply": "subtract", "expr": [{"stat": "dexterity_mod"}]},
+                "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]}}
+            },
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": 1}]},
+                "dexterity": {"apply": "add", "expr": [{"const": -2}]},
+                "constitution": {"apply": "add", "expr": [{"const": 2}]},
+                "intelligence": {"apply": "add", "expr": [{"const": -1}]},
+                "charisma": {"apply": "add", "expr": [{"const": -1}]}
+            },
+            "other_info": {
+                "vulnerabilities": {"apply": "add", "expr": [{"const": "fire"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "relentless endurance (first time reduced to 0 hp, drop to 1 instead, once per long rest)"}]}
+            }
+        },
+        "Cerberian": {
+            "ability_scores": {"strength": {"apply": "add", "expr": [{"const": 1}]},
+                               "constitution": {"apply": "add", "expr": [{"const": 1}]}},
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "heat aura (willingly standing still (it means: not using movement, actions (except for the dodge action), bonus actions or reactions), can warm surroundings, up to melting metal in a 5ft radius, every creature within range that starts the turn there, must make a dexterity DC 14 or suffer 4d6 fire damage, half on a success; you also have to perform the saving throw, but taking half the damage on success and none on failure)"}]}
+            }
+        },
+        "Blood Beat": {
+            "ability_scores": {"charisma": {"apply": "add", "expr": [{"const": 2}]}},
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "blood manipulation (can control blood in a small area, up to 15ft radius)"}]}
+            }
+        },
+        "Wither": {
+            "ability_scores": {"wisdom": {"apply": "add", "expr": [{"const": 1}]},
+                               "constitution": {"apply": "add", "expr": [{"const": 1}]}},
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "life drain (1/day, can recall powers to drain life in a area of 10ft radius for one minute: any creature that starts its turn there takes 1d6 necrotic damage and you heal for that amount for each creature in the area)"}]}
+            }
+        },
+        "Steam": {
+            "ability_scores": {
+                "constitution": {"apply": "add", "expr": [{"const": 1}]},
+                "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
+                "add_advantage_on": {"apply": "add", "expr": [{"const": "concentration (for maintaining spells)"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "obscuring mist (can lightly obscure a 10ft radius sqare within 60ft once per short rest)"}]}
+            }
+        },
+        "Dust": {
+            "ability_scores": {
+                "dexterity": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "dust cloud body (can impose disadvantage on one ranged (nonmagical) attack against you per turn before after seeing the dice result)"}]}
+            }
+        },
+        "Smoke": {
+            "ability_scores": {
+                "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+                "charisma": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "smoky form (can obscure a 5ft radius around self, once per long rest)",
+                    "choking presence (creatures adjacent have disadvantage on perception checks relying on sight)"]}]}
+            }
+        },
+        "Lava": {
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": 1}]},
+                "charisma": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "core_combat": {
+                "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}]}
+            },
+            "proficiencies": {
+                "skills": {"apply": "add", "expr": [{"const": "intimidation"}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "fire"}]}
+            }
+        },
+        "Ice": {
+            "ability_scores": {
+                "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "immunities": {"apply": "add", "expr": [{"const": "cold"}]},
+                "vulnerabilities": {"apply": "add", "expr": [{"const": "fire"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "frozen skin (you can choose that creature that touch you take 2d6 cold damage as a reaction)"}]}
+            }
+        },
+        "Mud": {
+            "ability_scores": {
+                "constitution": {"apply": "add", "expr": [{"const": 1}]},
+                "strength": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "core_combat": {
+                "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 10}]}}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": ["poison", "bluedgeoning (nonmagical)"]}]},
+                "add_advantage_on": {"apply": "add", "expr": [{"const": ["poisoned", "prone"]}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "difficult terrain affinity (ignores non-magical difficult terrain)"}]}
+            }
+        },
+        "Earth": {
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "proficiencies": {
+                "skills": {"apply": "add", "expr": [{"const": ["animal handling", "nature"]}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    ("tremorsense", 15, "ft"),
+                    ("magnetosense", 60, "ft"),
+                    ("electroreception (sense electrical fields)", 30, "ft")]}]}
+            }
+        },
+        "Wind": {
+            "ability_scores": {
+                "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "core_combat": {
+                "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 5}]}}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "force"}]},
+                "vulnerabilities": {"apply": "add", "expr": [{"const": "slashing"}]},
+                "other_physical_features": [
+                    "flickering form (disadvantage on opportunity attacks against you)",
+                    "lightweight body (can hover 10ft off the ground)"
+                ]
+            }
+        },
+        "Fire": {
+            "ability_scores": {
+                "charisma": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "magic": {
+                "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+                "known_spells": {"apply": "add", "expr": [{"const": ["heat metal (free 1/day)"]}]},
+            },
+            "other_info": {
+                "immunities": {"apply": "add", "expr": [{"const": "fire"}]},
+                "vulnerabilities": {"apply": "add", "expr": [{"const": "cold"}]},
+                "other_physical_features": [
+                    "heated body (you illuminate a 5ft radius with bright light and an additional 5ft with dim light)"
+                ]
+            }
+        },
+        "Water": {
+            "ability_scores": {
+                "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "core_combat": {
+                "speed_bonus": {"speed.swimming": {"apply": "replace", "expr": [{"const": 30}]}}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "cold"}]},
+                "add_advantage_on": {"apply": "add", "expr": [{"const": "stealth (if underwater)"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "amphibious (air and water breathing)",
+                    ("darkvision", 60, "ft")]}]}
+            }
+        },
+        "Flying Mantis": {
+            "core_combat": {
+                "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 20}]}}
+            },
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "acid factory (natural acid secretion, 1d6 acid damage if someone touches it, cannot be spitted)",
+                    "natural weapons (sharp forelimbs, 1d6 slashing damage)"]}]}
+            }
+        },
+        "Hornet": {
+            "core_combat": {
+                "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
+            },
+            "ability_scores": {
+                "constitution": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "honey production (can produce 2 silver worth of honey per day; more of it makes you suffer 1 exhaustion level for each silver of honey you produce)",
+                    "natural stinger (1d4 piercing + poisoned effect (con saving throw DC 14))",
+                    ("electroreception (sense electrical fields)", 15, "ft")]}]}
+            }
+        },
+        "Bumblebee": {
+            "core_combat": {
+                "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 25}]}}
+            },
+            "ability_scores": {
+                "constitution": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "bludgeoning"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "honey production (can produce 2 silver worth of honey per day; more of it makes you suffer 1 exhaustion level for each silver of honey you produce)", 
+                    "natural stinger (1d4 piercing + poisoned effect (con saving throw DC 14); after using it you immediately drop to 0 HP on a failed con saving throw DC 14)",
+                    ("electroreception (sense electrical fields)", 15, "ft")
+                ]}]}
+            }
+        },
+        "Fly": {
+            "core_combat": {
+                "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 35}]}},
+                "size": {"apply": "replace", "expr": [{"const": Size.SMALL}]}
+            },
+            "ability_scores": {
+                "dexterity": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "other_info": {
+                "add_advantage_on": {"apply": "add", "expr": [{"const": 
+                    "dexterity saving throws)"}]}
+            }
+        },
+        "Cockroacher": {
+            "ability_scores": {
+                "constitution": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
+                "add_advantage_on": {"apply": "add", "expr": [{"const": "death effects"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "glider master (can glide up to 20ft)",
+                    "extreme survivability (once per long rest, when drops to 0 hp he can drop to 1 hp instead)"]}]}
+            }
+        },
+        "Antsyote": {
+            "core_combat": {
+                "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}]}
+            },
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "used to pact tacktics (advantage on ability checks when allies are in sight or in 10ft of distance)"}]}
+            }
+        },
+        "Ladybudger": {
+            "core_combat": {
+                "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 20}]}}
+            },
+            "ability_scores": {
+                "constitution": {"apply": "add", "expr": [{"const": 1}]},
+                "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "aposematic coloration (bright warning colors)",
+                    "defensive secretions (creatures that grapple you have disadvantage on ability checks)",
+                    "fortune symbol (once per day, you can reroll a failed saving throw for yourself or an ally within 10ft)",
+                    ("electrosense (can sense electric fields)", 30, "ft")]}]}
+            }
+        },
+        "Mothyel": {
+            "core_combat": {
+                "speed_bonus": {"speed.flying": {"apply": "add", "expr": [{"const": 35}]}}
+            },
+            "ability_scores": {
+                "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+                "charisma": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "add_disadvantage_on": {"apply": "add", "expr": [{"const": ["perception (sight, under direct sunlight)", "attack rolls (if sight is needed under direct sunlight)"]}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "nocturnal affinity (advantage on perception checks in dim light or darkness relying on sight)",
+                    "powdered wings (can use an action and shed scales to automatically escape grapples once per short rest)",
+                    ("termic vision", 30, "ft")]}]}
+            }
+        },
+        "Bebeesner": {
+            "ability_scores": {
+                "dexterity": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "core_combat": {
+                "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 5}]}, "speed.climbing": {"apply": "replace", "expr": [{"const": 25}]}},
+                "size": {"apply": "replace", "expr": [{"const": Size.SMALL}]}
+            }
+        },
+        "Dawg": {
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": 1}]},
+                "charisma": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "proficiencies": {
+                "skills": {"apply": "add", "expr": [{"const": "athletics"}]}
+            },
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "canine loyalty (advantage on saving throws against being frightened when an ally is within 10ft)",
+                    "playful demeanor (advantage on charisma checks when interacting with children and animals)",
+                    "keen smell (advantage on perception checks that rely on smell)"
+                ]}]}
+            }
+        },
+        "Crimson Devil": {
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": 1}]},
+                "charisma": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "proficiencies": {
+                "skills": {"apply": "add", "expr": [{"const": "intimidation"}]}
+            },
+            "other_info": {
+                "add_advantage_on": {"apply": "add", "expr": [{"const": "death effects"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "natural weapons (small horns, 1d4 piercing damage, light, versatile)"
+                }]}
+            }
+        },
+        "Light Blue Devil": {
+            "ability_scores": {
+                "wisdom": {"apply": "add", "expr": [{"const": 2}]},
+                "charisma": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "proficiencies": {
+                "skills": {"apply": "add", "expr": [{"const": "insight"}]}
+            },
+            "other_info": {
+                "add_advantage_on": {"apply": "add", "expr": [{"const": "death effects"}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": 
+                    "natural weapons (small horns, 1d4 piercing damage, light, versatile)"}]}
+            }
+        },
+        "Jaguarfolk": {
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": 2}]},
+                "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "core_combat": {
+                "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 5}]},
+                                "speed.climbing": {"apply": "replace", "expr": [{"const": 30}]},
+                                "speed.swimming": {"apply": "replace", "expr": [{"const": 25}]}}
+            },
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "powerful build (carries/pushes as one size larger)",
+                    "predatory instincts (advantage on perception and survival checks related to hunting/tracking)",
+                    "silent movement (footsteps don't produce noise)"
+                ]}]}
+            }
+        },
+        "Onicronimb": {
+            "ability_scores": {
+                "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+                "constitution": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": ["cold", "fire"]}]},
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "jumping spider heritage (can jump up to 30ft horizontally and 15ft vertically)",
+                    "wall-climbing (can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check)"
+                ]}]}
+            }
+        },
+        "Octolen": {
+            "ability_scores": {
+                "constitution": {"apply": "add", "expr": [{"const": 2}]},
+                "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "tentacled lower body (can use tentacles for manipulation and movement, for 8 limbs total)",
+                    "amphibious (breaths air and water)",
+                    "ink secretion (can release ink to obscure vision in a 10ft radius once per short rest)"
+                ]}]}
+            }
+        },
+        "Browish": {
+            "core_combat": {
+                "ac": {"apply": "add", "expr": [{"const": 2}]},
+                "size": {"apply": "replace", "expr": [{"const": Size.LARGE}]}
+            },
+            "ability_scores": {
+                "strength": {"apply": "add", "expr": [{"const": 2}]},
+                "constitution": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "other_info": {
+                "resistances": {"apply": "add", "expr": [{"const": "cold"}]}
+            }
+        },
+        "Skullywag": {
+            "ability_scores": {
+                "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+                "charisma": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "proficiencies": {
+                "skills": {"apply": "add", "expr": [{"const": ["performance", "sleight of hand"]}]},
+                "tools": {"apply": "add", "expr": [{"const": "disguise kit"}]},
+                "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]}
+            }
+        },
+        "Other": {
+            "ability_scores": {
+                "constitution": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "proficiencies": {
+                "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
+                "skills": {"apply": "add", "expr": [{"rd_choice": random_skill_list}]}
+            }
+        }
+    }
