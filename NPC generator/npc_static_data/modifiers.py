@@ -1992,7 +1992,8 @@ race = { # Common elf contains what a race can modify
             "vulnerabilities": {"apply": "add", "expr": [{"const": []}]},
             "add_advantage_on": {"apply": "add", "expr": [{"const": []}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0}]}
         }
     },
     "Polar Human": {
