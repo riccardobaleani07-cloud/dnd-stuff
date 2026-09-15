@@ -4,7 +4,7 @@ import random
 
 # --- Core combat and progression ---
 hp = 10                   # depends on CON (and maybe race, size, level)
-hp_dice = 4               # depends on occupation, race, size, and level (never used for now)
+hp_dice = 4               # depends on occupation, race, size, and level
 ac = 10                   # base 10, modified by DEX, armor, and possibly race
 initiative = 0            # equals DEX mod (+ race or feats if you add them later)
 speed = {"walking": 30,
@@ -65,7 +65,8 @@ immunities = []              # race
 vulnerabilities = []         # race
 other_physical_features = [] # race
 equipment = []               # occupation, background, wealth level
-overall_cr = 0.125           # manual input or computed later
+coins = 0.00                  # only wealth.. it's referred to the standard gold coin in Qwarry
+overall_cr = 0.25           # baseline at 1/4 because most of the NPCs are going to be this CR, but it can go from 1/8 up to infinity
 
 UPDATE_ORDER = [
 
@@ -140,6 +141,8 @@ UPDATE_ORDER = [
     "add_disadvantage_on",
 
     "other_physical_features",
+
+    "coins",
 
     "overall_cr",
 ]

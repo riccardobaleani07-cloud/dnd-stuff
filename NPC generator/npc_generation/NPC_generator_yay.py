@@ -1013,10 +1013,7 @@ class NPCGenerator:
         subtype_mod = self.get_local_modifier(modifiers.subtype, subtype)
         age_mod = self.get_local_modifier(modifiers.age_category, age_category)
         occupation_mod = self.get_local_modifier(modifiers.jobs, occupation)
-        employment_mod = self.get_local_modifier(
-            modifiers.employment_stages,
-            employment_stage
-        )
+        employment_mod = self.get_local_modifier(modifiers.employment_stages, employment_stage)
         wealth_mod = self.get_local_modifier(modifiers.wealth, wealth)
         backstory_mod = self.get_local_modifier(
             modifiers.backstory_seed,
@@ -1028,9 +1025,9 @@ class NPCGenerator:
             subtype_mod,
             age_mod,
             occupation_mod,
-            employment_mod,
             wealth_mod,
-            backstory_mod
+            backstory_mod,
+            employment_mod
         ]
 
         for stat in update_order:

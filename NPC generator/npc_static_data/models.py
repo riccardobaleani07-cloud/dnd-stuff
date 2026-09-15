@@ -80,14 +80,26 @@ class NPC:
         return str(value)
 
     def _format_list(self, values):
-        """Format lists while grouping identical elements."""
+        """Format lists while grouping identical hashable elements."""
 
         if not values:
             return "None"
 
-        counts = Counter(values)
+        # Separate hashable and unhashable values.
+        hashable = []
+        unhashable = []
+
+        for value in values:
+            try:
+                hash(value)
+                hashable.append(value)
+            except TypeError:
+                unhashable.append(value)
 
         result = []
+
+        # Normal case: group identical values.
+        counts = Counter(hashable)
 
         for value, count in counts.items():
             formatted = self._format_value(value)
@@ -97,6 +109,11 @@ class NPC:
             else:
                 result.append(f"{count} × {formatted}")
 
+        # Unexpected values such as dictionaries.
+        # Don't group them; show them individually so the bug is visible.
+        for value in unhashable:
+            result.append(f"[UNHASHABLE: {self._format_value(value)}]")
+
         return ", ".join(result)
 
     def _format_dict(self, values):
@@ -105,12 +122,38 @@ class NPC:
         lines = []
 
         for key, value in values.items():
+
+            if isinstance(value, (int, float)):
+                value = max(0, value)
+
             formatted_key = key.replace("_", " ").capitalize()
             formatted_value = self._format_value(value)
 
             lines.append(f"{formatted_key}: {formatted_value}")
 
         return "\n".join(lines)
+
+    def _format_cr(self, cr):
+        if abs(cr - 0.125) < 0.000001:
+            return "1/8"
+
+        if abs(cr - 0.25) < 0.000001:
+            return "1/4"
+
+        if abs(cr - 0.5) < 0.000001:
+            return "1/2"
+
+        return str(int(cr))
+
+    def _format_gold(self, gold):
+
+        value = gold*100
+
+        gold_coins = int(value / 100)
+        silver_coins = int((value % 100) / 10)
+        copper_coins = int(value % 10)
+
+        return f" {gold_coins} GP | {silver_coins} SP | {copper_coins} CP"
 
     def _format_stats(self):
         """Format the generated NPC statistics."""
@@ -168,6 +211,7 @@ class NPC:
 
             "Other": [
                 "equipment",
+                "coins",
                 "resistances",
                 "immunities",
                 "vulnerabilities",
@@ -187,6 +231,12 @@ class NPC:
                     continue
 
                 value = self.stats[stat_name]
+
+                if stat_name == "coins":
+                    value = self._format_gold(value)
+
+                if stat_name == "overall_cr":
+                    value = self._format_cr(value)
 
                 # Don't print empty lists
                 if isinstance(value, list) and not value:

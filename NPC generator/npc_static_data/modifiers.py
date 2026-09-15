@@ -50,53 +50,1784 @@ This separation ensures that expressions remain pure calculations, while the "ap
 # These will NOT be merged.
 # WARNING: the measurement unit (third element) is NEVER considered in operations, it is mandatory to keep it consistent for the same perk type to ensure coherence. For now, distances are in ft and times are in minutes.
 
-# Notes on things to post format: darkvision ?ft, breath hold ? min, armor (light <- medium ecc)
-# Notes on list for post format: random_weapon_list, plantfolk_vulnerability_list, random_toolkit_list, random_damage_type_list, lycantrope_natural_weapons_list, aasimar_transformation_list, random_skill_list, giant_element_list, draconic_ancestory_list, musical_instrument_list, wizard_cantrip_list, druid_cantrip_list, martial_weapon_list, simple_weapon_list
 # When any list is mentioned, it means that it should be rolled from the items in that list, because the list name is a placeholder.
 
 
 
-# ToDo: check the list placeholders
-wizard_cantrip_list = ["light", "mage hand", "minor illusion", "prestidigitation", "ray of frost", "shocking grasp", "true strike", "chill touch", "dancing lights", "fire bolt", "poison spray", "resistance", "sacred flame", "thorn whip", "vicious mockery"]
-martial_weapon_list = ["boomerang"]
-druid_cantrip_list = ["boomerang"]
-simple_weapon_list = ["boomerang"]
-random_skill_list = ["boomerang"]
-exotic_weapon_list = ["boomerang"]
-random_weapon_list = [martial_weapon_list, simple_weapon_list, exotic_weapon_list] # needs to be fixed: needs to be a list of strings and NOT a list of lists
-random_toolkit_list = ["boomerang"]
-random_damage_type_list = ["boomerang"]
-musical_instrument_list = ["boomerang"]
-first_level_spell = ["boomerang"]
-second_level_spell = ["boomerang"]
-cleric_cantrip_list = ["boomerang"]
-giant_element_list = ["boomerang"]
-draconic_ancestory_list = ["boomerang"] # (ex: red dragon (fire type))
-plantfolk_vulnerability_list = ["boomerang"]
-aasimar_transformation_list = ["boomerang"] # (ex: transformation name (description))
-lycantrope_natural_weapons_list = ["boomerang"] # (ex: natural weapons (bite, 1d6 piercing damage))
-board_games_list = ["boomerang"]
-cleric_spell_list = ["boomerang"]
-wizard_spell_list = ["boomerang"]
-improvised_weapon_list = ["boomerang"]
-random_gadget = ["boomerang"]
-warlock_spell_list = ["boomerang"]
-warlock_cantrip_list = ["boomerang"]
-random_magical_charms = ["boomerang"] # (ex: charm name (description/effect))
-enchanted_weapon_list = ["boomerang"] # (ex: weapon name (description/effect & damage))
-sentient_item_list = ["boomerang"] # (ex: item name (description/effect))
-random_drug_list = ["boomerang"] # (ex: drug name (description/effect))
-random_dice_list = [4, 6, 6, 8, 8, 10, 12] # (ex: d4, d6, d8, d10, d12, d20) some dice are more common than others, so they appear multiple times in the list to increase their probability of being rolled. The d20 is not included because it is not used for damage rolls.
+# Objects that can plausibly be associated with almost any employment.
+# These represent employment status, identity, authorization, or organization.
+
+retired_employment_equipment_list = [
+    "retirement certificate",
+    "old work identification",
+    "retired rank insignia",
+    "old membership card",
+    "former workplace key",
+    "old professional license",
+    "old work ledger",
+    "old appointment letter",
+    "letter of recommendation",
+    "former employer's seal",
+    "old pay record",
+    "workplace keepsake",
+    "old uniform"
+]
+advisor_equipment_list = [
+    "official appointment letter",
+    "advisor's credentials",
+    "rank insignia",
+    "official seal",
+    "institutional seal",
+    "sealed correspondence",
+    "appointment notice",
+    "official pass",
+    "meeting schedule",
+    "advisory notes",
+    "case files",
+    "recommendation letter",
+    "professional credentials"
+]
+worker_employment_equipment_list = [
+    "employee badge",
+    "workplace key",
+    "locker key",
+    "work uniform",
+    "work apron",
+    "work gloves",
+    "protective goggles",
+    "protective mask",
+    "work satchel",
+    "document folder",
+    "personal work ledger",
+    "work schedule",
+    "pay record",
+    "workplace pass"
+]
+apprentice_equipment_list = [
+    "apprenticeship contract",
+    "student identification",
+    "student handbook",
+    "training notebook",
+    "lesson notes",
+    "practice journal",
+    "master's recommendation",
+    "unfinished training project",
+    "set of practice materials",
+    "school/ guild assignment"
+]
+employment_document_list = [
+    "employement contract",
+    "work identification",
+    "professional license",
+    "work permit",
+    "membership card",
+    "employee badge",
+    "rank insignia",
+    "official appointment letter",
+    "letter of recommendation",
+    "professional certificate",
+    "qualification certificate",
+    "workplace pass",
+    "travel pass",
+    "official seal",
+    "sealed work correspondence",
+    "appointment notice",
+    "work schedule",
+    "pay record",
+    "personal work ledger"
+]
+wizard_cantrip_list = [
+    "acid splash",
+    "chill touch",
+    "dancing lights",
+    "fire bolt",
+    "light",
+    "mage hand",
+    "mending",
+    "message",
+    "minor illusion",
+    "poison spray",
+    "prestidigitation",
+    "ray of frost",
+    "shocking grasp",
+    "thunderclap",
+    "true strike",
+]
+martial_weapon_list = [
+    # Official 2024 Martial weapons
+    "battleaxe",
+    "flail",
+    "glaive",
+    "greataxe",
+    "greatsword",
+    "halberd",
+    "lance",
+    "longsword",
+    "maul",
+    "morningstar",
+    "pike",
+    "rapier",
+    "scimitar",
+    "shortsword",
+    "trident",
+    "warhammer",
+    "war pick",
+    "whip",
+
+    "hand crossbow",
+    "heavy crossbow",
+    "longbow",
+    "musket",
+    "pistol",
+
+    # Ertemisi firearms
+    "scroll pistol II",
+    "scroll pistol III",
+
+    "elemental rifle (fire)",
+    "elemental rifle (cold)",
+    "elemental rifle (lightning)",
+    "elemental rifle (acid)",
+    "elemental rifle (poison)",
+
+    # Specialized but non-exotic weapons
+    "shuriken",
+    "nunchaku",
+    "kama",
+    "tonfa",
+    "kukri",
+    "estoc",
+    "sabre",
+]
+druid_cantrip_list = [
+    "druidcraft",
+    "elementalism",
+    "guidance",
+    "mending",
+    "message",
+    "poison spray",
+    "produce flame",
+    "resistance",
+    "shillelagh",
+    "spare the dying",
+    "starry wisp",
+    "thorn whip",
+    "thunderclap"
+]
+simple_weapon_list = [
+    # Standard D&D
+    "club",
+    "dagger",
+    "greatclub",
+    "handaxe",
+    "javelin",
+    "light hammer",
+    "mace",
+    "quarterstaff",
+    "sickle",
+    "spear",
+    "light crossbow",
+    "shortbow",
+    "sling",
+    "blowgun",
+    "dart",
+    "net",
+
+    # Ertemisi
+    "boomerang",
+    "scroll pistol I",
+]
+random_skill_list = [
+    "acrobatics",
+    "animal handling",
+    "arcana",
+    "athletics",
+    "deception",
+    "history",
+    "insight",
+    "intimidation",
+    "investigation",
+    "medicine",
+    "nature",
+    "perception",
+    "performance",
+    "persuasion",
+    "religion",
+    "sleight of hand",
+    "stealth",
+    "survival",
+]
+exotic_weapon_list = [
+    # Exotic firearms
+    "scroll pistol IV",
+    "scroll pistol V",
+
+    "spellweaver I",
+    "spellweaver II",
+    "spellweaver III",
+
+    "Aegis-Breaker", # Massive weapon, magical barrier breaker
+    "Longreach", # Massive range, good penetration
+    "Blackpiercer", # Military grade precision and penetration
+
+    # Those are less common elemental rifles
+    "elemental rifle (force)",
+    "elemental rifle (necrotic)",
+    "elemental rifle (psychic)",
+    "elemental rifle (radiant)",
+    "elemental rifle (thunder)",
+
+    # Unusual melee weapons
+    "scythe",
+    "chakram",
+    "kusarigama",
+    "meteor hammer",
+    "rope dart",
+    "urumi",
+    "hook sword",
+    "war fan",
+    "shuriken",
+    "chain whip",
+    "chain blade",
+    "ring blade",
+    "saw blade",
+    "drill lance",
+    "tonfa",
+    "nine-section staff",
+    "three-section staff",
+    "bladed yo-yo",
+    "spiked ball-and-chain",
+    "pata",
+    "cestus",
+    "knuckle dusters",
+
+    # Distinctive fictional weapon concepts
+    "lightsaber",
+    "electric whip",
+    "gravity hammer",
+    "magnetic repulsor",
+    "monofilament wire blade",
+    "vibroblade",
+    "sonic weapon",
+    "portable railgun",
+    "plasma caster",
+    "disintegration ray",
+    "energy disc",
+
+    # Weird mechanical weapons
+    "circular saw",
+    "knife launcher",
+    "mechanical claw",
+    "spring blade",
+    "piston hammer",
+    "chain saw",
+    "drill mechanism",
+    "flamethrower",
+    "kinetic gauntlet",
+    "telescoping spear"
+]
+random_weapon_list = (simple_weapon_list + martial_weapon_list + exotic_weapon_list)
+random_toolkit_list = [
+    # Artisan's tools
+    "alchemist's supplies",
+    "brewer's supplies",
+    "calligrapher's supplies",
+    "carpenter's tools",
+    "cartographer's tools",
+    "cobbler's tools",
+    "cook's utensils",
+    "glassblower's tools",
+    "jeweler's tools",
+    "leatherworker's tools",
+    "mason's tools",
+    "painter's supplies",
+    "potter's tools",
+    "smith's tools",
+    "tinker's tools",
+    "weaver's tools",
+    "woodcarver's tools",
+
+    # Other tools/kits
+    "disguise kit",
+    "forgery kit",
+    "herbalism kit",
+    "navigator's tools",
+    "poisoner's kit",
+    "thieves' tools",
+
+    # Vehicles
+    "land vehicles (dependent on the setting)",
+    "water vehicles (dependent on the setting)",
+    "air vehicles (dependent on the setting)"
+]
+random_damage_type_list = [
+    "acid",
+    "bludgeoning",
+    "cold",
+    "fire",
+    "force",
+    "lightning",
+    "necrotic",
+    "piercing",
+    "poison",
+    "psychic",
+    "radiant",
+    "slashing",
+    "thunder"
+]
+musical_instrument_list = [
+    # D&D
+    "bagpipes",
+    "drum",
+    "dulcimer",
+    "flute",
+    "lute",
+    "lyre",
+    "horn",
+    "pan flute",
+    "shawm",
+    "viol",
+
+    # Additional real-world instruments
+    "accordion",
+    "banjo",
+    "clarinet",
+    "harp",
+    "oboe",
+    "organ",
+    "piano",
+    "recorder",
+    "saxophone",
+    "trumpet",
+    "trombone",
+    "tuba",
+    "cello",
+    "double bass",
+    "violin",
+    "mandolin",
+    "guitar",
+    "ukulele",
+    "xylophone",
+]
+first_level_spell = [
+    "alarm",
+    "animal friendship",
+    "armor of agathys",
+    "arms of hadar",
+    "bane",
+    "bless",
+    "burning hands",
+    "charm person",
+    "chromatic orb",
+    "color spray",
+    "command",
+    "compelled duel",
+    "comprehend languages",
+    "create or destroy water",
+    "cure wounds",
+    "detect evil and good",
+    "detect magic",
+    "detect poison and disease",
+    "disguise self",
+    "dissonant whispers",
+    "divine favor",
+    "divine smite",
+    "ensnaring strike",
+    "entangle",
+    "expeditious retreat",
+    "faerie fire",
+    "false life",
+    "feather fall",
+    "find familiar",
+    "fog cloud",
+    "goodberry",
+    "grease",
+    "guiding bolt",
+    "hail of thorns",
+    "healing word",
+    "hellish rebuke",
+    "heroism",
+    "hunter's mark",
+    "ice knife",
+    "identify",
+    "illusory script",
+    "inflict wounds",
+    "jump",
+    "longstrider",
+    "mage armor",
+    "magic missile",
+    "protection from evil and good",
+    "purify food and drink",
+    "ray of sickness",
+    "sanctuary",
+    "searing smite",
+    "shield",
+    "shield of faith",
+    "silent image",
+    "sleep",
+    "speak with animals",
+    "tasha's hideous laughter",
+    "tenser's floating disk",
+    "thunderous smite",
+    "thunderwave",
+    "unseen servant",
+    "witch bolt",
+    "wrathful smite"
+]
+second_level_spell = [
+    "aid",
+    "alter self",
+    "animal messenger",
+    "arcane lock",
+    "arcane vigor",
+    "augury",
+    "barkskin",
+    "beast sense",
+    "blindness/deafness",
+    "blur",
+    "calm emotions",
+    "cloud of daggers",
+    "continual flame",
+    "cordon of arrows",
+    "crown of madness",
+    "darkness",
+    "darkvision",
+    "detect thoughts",
+    "enhance ability",
+    "enlarge/reduce",
+    "enthrall",
+    "find steed",
+    "find traps",
+    "flame blade",
+    "flaming sphere",
+    "gentle repose",
+    "gust of wind",
+    "heat metal",
+    "hold person",
+    "invisibility",
+    "knock",
+    "lesser restoration",
+    "levitate",
+    "locate animals or plants",
+    "locate object",
+    "magic mouth",
+    "magic weapon",
+    "melf's acid arrow",
+    "mirror image",
+    "misty step",
+    "moonbeam",
+    "nystul's magic aura",
+    "pass without trace",
+    "phantasmal force",
+    "prayer of healing",
+    "protection from poison",
+    "ray of enfeeblement",
+    "rope trick",
+    "scorching ray",
+    "see invisibility",
+    "shatter",
+    "shining smite",
+    "silence",
+    "spider climb",
+    "spike growth",
+    "spiritual weapon",
+    "suggestion",
+    "summon beast",
+    "warding bond",
+    "web",
+    "zone of truth"
+]
+cleric_cantrip_list = [
+    "guidance",
+    "light",
+    "mending",
+    "resistance",
+    "sacred flame",
+    "spare the dying",
+    "thaumaturgy",
+    "toll the dead",
+    "word of radiance"
+]
+giant_element_list = [
+    "acid",
+    "cold",
+    "fire",
+    "lightning",
+    "poison",
+    "thunder"
+]
+draconic_ancestory_list = [
+    # Chromatic
+    "black dragon (acid damage)",
+    "blue dragon (lightning damage)",
+    "green dragon (poison damage)",
+    "red dragon (fire damage)",
+    "white dragon (cold damage)",
+
+    # Metallic
+    "brass dragon (fire damage)",
+    "bronze dragon (lightning damage)",
+    "copper dragon (acid damage)",
+    "gold dragon (fire damage)",
+    "silver dragon (cold damage)",
+
+    # Gem
+    "amethyst dragon (force damage)",
+    "crystal dragon (radiant damage)",
+    "emerald dragon (psychic damage)",
+    "sapphire dragon (thunder damage)",
+    "topaz dragon (necrotic damage)",
+]
+plantfolk_vulnerability_list = [
+    "poppy (fire damage)",
+    "blue orchid (cold damage)",
+    "allium (poison damage)",
+    "azure bluet (radiant damage)",
+    "red tulip (fire damage)",
+    "orange tulip (fire damage)",
+    "white tulip (necrotic damage)",
+    "pink tulip (psychic damage)",
+    "oxeye daisy (radiant damage)",
+    "cornflower (cold damage)",
+    "lily of the valley (poison damage)",
+    "dandelion (thunder damage)",
+    "sunflower (radiant damage)",
+    "wither rose (necrotic damage)",
+    "torchflower (fire damage)",
+    "pitcher plant (acid damage)",
+    "spore blossom (poison damage)",
+    "cactus flower (fire damage)",
+    "chorus flower (force damage)"
+]
+aasimar_transformation_list = [
+    "Radiant Soul (Bonus Action; lasts 1 minute; once per Long Rest; gain a flying speed of 30 ft; once on each of your turns when you deal damage to a creature with an attack or spell, deal extra radiant damage equal to your Proficiency Bonus)",
+    
+    "Radiant Consumption (Bonus Action; lasts 1 minute; once per Long Rest; emit bright light in a 10-ft radius and dim light for another 10 ft; once on each of your turns when you deal damage to a creature with an attack or spell, deal extra radiant damage equal to your Proficiency Bonus; at the end of each of your turns, each creature within 10 ft takes radiant damage equal to your Proficiency Bonus)",
+    
+    "Necrotic Shroud (Bonus Action; lasts 1 minute; once per Long Rest; once on each of your turns when you deal damage to a creature with an attack or spell, deal extra necrotic damage equal to your Proficiency Bonus; creatures of your choice within 10 ft that can see you must succeed on a Charisma saving throw against your spell save DC or become Frightened until the end of your next turn)"
+]
+lycantrope_natural_weapons_list = [
+    # Bites
+    "bite (1d6 piercing damage)",
+    "bite (1d8 piercing damage)",
+    "bite (2d6 piercing damage)",
+    "venomous bite (1d6 piercing damage + 1d6 poison damage)",
+    "venomous bite (1d8 piercing damage + 1d8 poison damage)",
+    "frost bite (1d6 piercing damage + 1d4 cold damage)",
+    "necrotic bite (1d8 piercing damage + 1d4 necrotic damage)",
+    "vampiric bite (1d6 piercing damage; regain HP equal to the piercing damage dealt)",
+    "serrated bite (1d8 piercing damage; on hit, grapple the target)",
+    "void bite (1d8 piercing damage + 1d6 psychic damage)",
+    "acid bite (1d6 piercing damage + 1d6 acid damage)",
+
+    # Claws and talons
+    "claw (1d4 slashing damage)",
+    "claw (1d6 slashing damage)",
+    "large claw (1d8 slashing damage)",
+    "talon (1d6 slashing damage)",
+    "razor claw (1d8 slashing damage; on critical hit, deal 1d6 additional slashing damage)",
+    "claw (1d6 piercing damage; on hit, pull the target 5 ft while using your movement)",
+    "talon (1d8 slashing damage)",
+    "venomous claw (1d6 slashing damage + 1d4 poison damage)",
+    "shadow claw (1d6 slashing damage + 1d6 necrotic damage)",
+    "frost claw (1d6 slashing damage + 1d6 cold damage)",
+    "flame claw (1d6 slashing damage + 1d6 fire damage)",
+
+    # Horns, tusks and similar
+    "horns (1d6 piercing damage)",
+    "horns (2d6 piercing damage)",
+    "tusks (1d8 piercing damage)",
+    "gore (1d10 piercing damage; on hit, push the target 5 ft)",
+    "horn (1d10 piercing damage; after moving 15 ft straight toward the target, deal 1d6 additional piercing damage on hit)",
+    "antlers (1d8 piercing damage)",
+    "spectral horn (1d8 piercing damage + 1d6 force damage)",
+
+    # Tails
+    "tail (1d6 bludgeoning damage)",
+    "tail (1d8 bludgeoning damage)",
+    "long tail (1d6 bludgeoning damage; reach 10 ft)",
+    "hammered tail (1d6 bludgeoning damage; on hit, knock the target prone)",
+    "spiked tail (1d8 piercing damage)",
+    "spiked tail (1d10 piercing damage)",
+    "venomous tail (1d6 piercing damage + 1d6 poison damage)",
+    "barbed tail (1d8 piercing damage; on hit, deal 1d4 additional piercing damage if the creature moves away from you)",
+
+    # Stingers
+    "stinger (1d4 piercing damage)",
+    "stinger (1d6 piercing damage + 1d4 poison damage)",
+    "stinger (1d6 piercing damage + 1d6 poison damage, reach 10ft)",
+    "paralyzing stinger (1d6 piercing damage; on hit, paralyze until the start of your next turn)",
+
+    # Beaks and jaws
+    "beak (1d6 piercing damage)",
+    "beak (1d8 piercing damage)",
+    "razor beak (1d8 piercing damage; on critical hit, deal 1d6 additional piercing damage)",
+
+    # Tentacles and appendages
+    "tentacle (1d6 bludgeoning damage)",
+    "tentacle (1d8 bludgeoning damage)",
+    "tentacle (1d6 bludgeoning damage; on hit, grapple the target)",
+    "large tentacle (1d6 bludgeoning damage; on hit, grapple the target; if target is already grappled by the tentacle, at the start of your turn deal extra 1d6 bludgeoning damage)",
+
+    # Hooves and headbutts
+    "hoof (1d6 bludgeoning damage)",
+    "hoof (1d8 bludgeoning damage)",
+    "stomp (1d8 bludgeoning damage; reach 10 ft (shockwave); on hit, knock the target prone)",
+    "ramming head (1d8 bludgeoning damage; on hit, push the target 5 ft)",
+    "massive headbutt (1d10 bludgeoning damage; on hit, push the target 10 ft or knock them prone)",
+
+    # Strange anatomical weapons
+    "pseudopod (1d6 bludgeoning damage; on hit, reduce the target's speed to 0)",
+    "razor tendril (1d6 slashing damage; on hit, drag around the target 5 ft using movement)",
+    "bone blade (1d8 slashing damage)",
+    "crystalline emitter (1d6 force damage; range 20/60; on hit, push the target 5 ft)"
+    "sonic shriek (1d6 thunder damage; range 30/90)",
+    "spit (1d4 bludgeoning damage; range 10/30)",
+    "acid spit (1d4 bludgeoning damage + 1d6 acid damage; range 10/30)",
+    "acid spray (1d6 acid damage; range 15/30)",
+    "biological harpoon (1d6 piercing damage; range 20/60; on hit, pull the target 5 ft toward you)",
+    "quill shot (1d6 piercing damage; range 20/60)",
+    "web shot (1 bludgeoning damage; range 30/60; on hit, target's speed becomes 0)",
+    "ink jet (1 bludgeoning damage; range 15/30; on hit, obscure the target's vision until the start of your next turn)",
+    "mind-numbing spit (1d4 bludgeoning damage + 1d6 psychic damage; on hit, target has disadvantage on its next attack roll)"
+]
+board_games_list = [
+    # D&D
+    "dragonchess",
+    "three-dragon ante",
+
+    # Classic / traditional games
+    "chess",
+    "checkers",
+    "backgammon",
+    "go",
+    "xiangqi",
+    "shogi",
+    "mahjong",
+    "dominoes",
+    "mancala",
+    "nine men's morris",
+    "reversi",
+    "tic-tac-toe",
+
+    # Card / tabletop games
+    "playing cards",
+    "dice game",
+    "dice poker",
+    "war",
+    "blackjack",
+
+    # Strategy / tavern-style games
+    "carrom",
+    "connect four",
+    "battleship",
+    "draughts",
+]
+cleric_spell_list = [
+    # Cantrips
+    # "guidance",
+    # "light",
+    # "mending",
+    # "resistance",
+    # "sacred flame",
+    # "spare the dying",
+    # "thaumaturgy",
+    # "toll the dead",
+    # "word of radiance",
+
+    # 1st level
+    "bane",
+    "bless",
+    "command",
+    "create or destroy water",
+    "cure wounds",
+    "detect evil and good",
+    "detect magic",
+    "detect poison and disease",
+    "guiding bolt",
+    "healing word",
+    "inflict wounds",
+    "protection from evil and good",
+    "purify food and drink",
+    "sanctuary",
+    "shield of faith",
+
+    # 2nd level
+    "aid",
+    "augury",
+    "blindness/deafness",
+    "calm emotions",
+    "continual flame",
+    "enhance ability",
+    "find traps",
+    "gentle repose",
+    "hold person",
+    "lesser restoration",
+    "locate object",
+    "prayer of healing",
+    "protection from poison",
+    "silence",
+    "spiritual weapon",
+    "warding bond",
+    "zone of truth",
+
+    # 3rd level
+    "animate dead",
+    "aura of vitality",
+    "beacon of hope",
+    "bestow curse",
+    "clairvoyance",
+    "create food and water",
+    "daylight",
+    "dispel magic",
+    "feign death",
+    "glyph of warding",
+    "magic circle",
+    "mass healing word",
+    "meld into stone",
+    "protection from energy",
+    "remove curse",
+    "revivify",
+    "sending",
+    "speak with dead",
+    "spirit guardians",
+    "tongues",
+    "water walk",
+
+    # 4th level
+    "aura of life",
+    "aura of purity",
+    "banishment",
+    "control water",
+    "death ward",
+    "divination",
+    "freedom of movement",
+    "guardian of faith",
+    "locate creature",
+    "stone shape",
+
+    # 5th level
+    "commune",
+    "contagion",
+    "dispel evil and good",
+    "flame strike",
+    "geas",
+    "greater restoration",
+    "hallow",
+    "insect plague",
+    "legend lore",
+    "mass cure wounds",
+    "planar binding",
+    "raise dead",
+    "scrying",
+    "summon celestial",
+
+    # 6th level
+    "blade barrier",
+    "create undead",
+    "find the path",
+    "forbiddance",
+    "harm",
+    "heal",
+    "heroes' feast",
+    "planar ally",
+    "sunbeam",
+    "true seeing",
+    "word of recall",
+
+    # 7th level
+    "conjure celestial",
+    "divine word",
+    "etherealness",
+    "fire storm",
+    "plane shift",
+    "regenerate",
+    "resurrection",
+    "symbol",
+
+    # 8th level
+    "antimagic field",
+    "control weather",
+    "earthquake",
+    "holy aura",
+    "sunburst",
+
+    # 9th level
+    "astral projection",
+    "gate",
+    "mass heal",
+    "true resurrection"
+]
+wizard_spell_list = [
+    # Cantrips
+    # "acid splash",
+    # "chill touch",
+    # "dancing lights",
+    # "fire bolt",
+    # "light",
+    # "mage hand",
+    # "mending",
+    # "message",
+    # "minor illusion",
+    # "poison spray",
+    # "prestidigitation",
+    # "ray of frost",
+    # "shocking grasp",
+    # "thunderclap",
+    # "true strike",
+
+    # 1st level
+    "alarm",
+    "burning hands",
+    "charm person",
+    "color spray",
+    "comprehend languages",
+    "detect magic",
+    "disguise self",
+    "expeditious retreat",
+    "false life",
+    "feather fall",
+    "find familiar",
+    "fog cloud",
+    "grease",
+    "identify",
+    "illusory script",
+    "jump",
+    "longstrider",
+    "mage armor",
+    "magic missile",
+    "protection from evil and good",
+    "shield",
+    "silent image",
+    "sleep",
+    "thunderwave",
+    "unseen servant",
+
+    # 2nd level
+    "alter self",
+    "arcane lock",
+    "augury",
+    "blindness/deafness",
+    "blur",
+    "continual flame",
+    "darkness",
+    "darkvision",
+    "detect thoughts",
+    "enhance ability",
+    "enlarge/reduce",
+    "flaming sphere",
+    "gentle repose",
+    "gust of wind",
+    "hold person",
+    "invisibility",
+    "knock",
+    "levitate",
+    "locate object",
+    "magic mouth",
+    "magic weapon",
+    "mirror image",
+    "misty step",
+    "ray of enfeeblement",
+    "rope trick",
+    "scorching ray",
+    "see invisibility",
+    "shatter",
+    "spider climb",
+    "suggestion",
+    "web",
+
+    # 3rd level
+    "animate dead",
+    "bestow curse",
+    "blink",
+    "clairvoyance",
+    "counterspell",
+    "dispel magic",
+    "fear",
+    "fireball",
+    "fly",
+    "gaseous form",
+    "glyph of warding",
+    "haste",
+    "hypnotic pattern",
+    "lightning bolt",
+    "magic circle",
+    "major image",
+    "nondetection",
+    "phantom steed",
+    "protection from energy",
+    "remove curse",
+    "sending",
+    "sleet storm",
+    "slow",
+    "speak with dead",
+    "stinking cloud",
+    "tongues",
+    "vampiric touch",
+    "water breathing",
+
+    # 4th level
+    "arcane eye",
+    "banishment",
+    "blight",
+    "confusion",
+    "conjure minor elementals",
+    "control water",
+    "dimension door",
+    "divination",
+    "fabricate",
+    "fire shield",
+    "greater invisibility",
+    "hallucinatory terrain",
+    "ice storm",
+    "locate creature",
+    "phantasmal killer",
+    "polymorph",
+    "stone shape",
+    "stoneskin",
+    "wall of fire",
+
+    # 5th level
+    "animate objects",
+    "cloudkill",
+    "cone of cold",
+    "conjure elemental",
+    "contact other plane",
+    "creation",
+    "dominate person",
+    "dream",
+    "geas",
+    "hold monster",
+    "legend lore",
+    "mislead",
+    "modify memory",
+    "passwall",
+    "planar binding",
+    "scrying",
+    "seeming",
+    "telekinesis",
+    "teleportation circle",
+    "wall of force",
+    "wall of stone",
+
+    # 6th level
+    "chain lightning",
+    "circle of death",
+    "contingency",
+    "create undead",
+    "disintegrate",
+    "eyebite",
+    "flesh to stone",
+    "globe of invulnerability",
+    "guards and wards",
+    "magic jar",
+    "mass suggestion",
+    "move earth",
+    "programmed illusion",
+    "sunbeam",
+    "true seeing",
+    "wall of ice",
+
+    # 7th level
+    "delayed blast fireball",
+    "etherealness",
+    "finger of death",
+    "forcecage",
+    "mirage arcane",
+    "plane shift",
+    "prismatic spray",
+    "project image",
+    "reverse gravity",
+    "sequester",
+    "simulacrum",
+    "symbol",
+    "teleport",
+
+    # 8th level
+    "antimagic field",
+    "antipathy/sympathy",
+    "clone",
+    "control weather",
+    "demiplane",
+    "dominate monster",
+    "incendiary cloud",
+    "maze",
+    "mind blank",
+    "power word stun",
+    "sunburst",
+
+    # 9th level
+    "astral projection",
+    "foresight",
+    "gate",
+    "imprisonment",
+    "meteor swarm",
+    "power word kill",
+    "prismatic wall",
+    "shapechange",
+    "time stop",
+    "true polymorph",
+    "weird",
+    "wish"
+]
+improvised_weapon_list = [
+    # Heavy / melee objects
+    "crowbar (1d6 bludgeoning damage; versatile 1d8)",
+    "pickaxe (1d8 piercing damage; two-handed)",
+    "sledgehammer (1d10 bludgeoning damage; heavy, two-handed)",
+    "shovel (1d6 bludgeoning damage; versatile 1d8)",
+    "hoe (1d6 slashing damage; versatile 1d8)",
+    "pitchfork (1d8 piercing damage; two-handed)",
+    "iron shovel (1d8 bludgeoning damage; two-handed)",
+    "blacksmith hammer (1d8 bludgeoning damage)",
+    
+    # Long / reach objects
+    "staff (1d6 bludgeoning damage; versatile 1d8)",
+    "iron pole (1d8 bludgeoning damage; reach)",
+    "reinforced broom (1d6 bludgeoning damage; reach)",
+    "walking cane (1d6 bludgeoning damage; light)",
+    
+    # Cutting / specialized objects
+    "cleaver (1d6 slashing damage; light)",
+    "butcher knife (1d6 piercing damage; light, thrown 20/60)",
+    "meat hook (1d6 piercing damage; reach)",
+    "scissors (1d6 piercing damage; light)",
+    
+    # Particularly strange but believable
+    "iron frying pan (1d6 bludgeoning damage, thrown 15/40)",
+    "cast-iron pot (1d8 bludgeoning damage; versatile 1d10)",
+    "strange wooden piece (1d6 bludgeoning damage; two-handed)",
+    "strange iron piece (1d8 bludgeoning damage; heavy, two-handed)",
+
+    # Strange thrown objects
+    "weighted brick (1d6 bludgeoning damage; thrown 20/60)",
+    "iron horseshoe (1d6 bludgeoning damage; thrown 20/60)",
+    "metal toolbox (1d8 bludgeoning damage; thrown 10/30; heavy)",
+    "wooden mallet (1d6 bludgeoning damage; thrown 20/60)",
+]
+random_gadget = [
+    # Mundane utility
+    "pouch of marbles (20 marbles)",
+    "ball bearings (20)",
+    "chalk set",
+    "folding ruler",
+    "compact mirror",
+    "magnifying lens",
+    "small hourglass",
+    "signal whistle",
+    "mechanical timer",
+    "lock picks",
+    "grappling hook",
+    "10 ft. silk cord",
+    "collapsible cup",
+    "waterproof container",
+    "oil flask",
+    "smoke pellet",
+    "iron spikes (5)",
+    "sealing wax kit",
+    "small hand bell",
+    "colored signal flags",
+
+    # Practical adventuring gadgets
+    "string alarm (30 ft. tripwire)",
+    "spring-loaded snare",
+    "hooded lantern shutter",
+    "portable ink stamp",
+    "wind-up compass",
+    "folding caltrop strip",
+    "miniature spyglass",
+    "self-lighting matchbox",
+
+    # Mechanical / magical gadgets
+    "luminescent pendant (sheds dim light for 8 hours)",
+    "arcane compass (points toward the nearest source of magic)",
+    "whispering coins (transmits a short message to its paired coin)",
+    "memory bead (records and reproduces a short sound)",
+    "self-heating stone (keeps a small container warm)",
+    "clockwork messenger beetle (travels a short distance and returns)",
+    "magnetic retrieval disk (pulls small metallic objects toward itself)",
+    "mechanical lock analyzer (indicates whether a lock is trapped)",
+    "one-use barrier charm (briefly creates a hand-sized magical barrier)",
+    "pocket fogger (releases a small cloud of harmless mist)",
+]
+warlock_spell_list = [
+    # Cantrips
+    # "blade ward",
+    # "chill touch",
+    # "eldritch blast",
+    # "friends",
+    # "mage hand",
+    # "mind sliver",
+    # "minor illusion",
+    # "poison spray",
+    # "prestidigitation",
+    # "thunderclap",
+    # "toll the dead",
+    # "true strike",
+
+    # 1st level
+    "armor of agathys",
+    "arms of hadar",
+    "bane",
+    "charm person",
+    "comprehend languages",
+    "detect magic",
+    "expeditious retreat",
+    "hellish rebuke",
+    "hex",
+    "illusory script",
+    "protection from evil and good",
+    "speak with animals",
+    "tasha's hideous laughter",
+    "unseen servant",
+    "witch bolt",
+
+    # 2nd level
+    "cloud of daggers",
+    "crown of madness",
+    "darkness",
+    "enthrall",
+    "hold person",
+    "invisibility",
+    "mind spike",
+    "mirror image",
+    "misty step",
+    "ray of enfeeblement",
+    "spider climb",
+    "suggestion",
+
+    # 3rd level
+    "counterspell",
+    "dispel magic",
+    "fear",
+    "fly",
+    "gaseous form",
+    "hunger of hadar",
+    "hypnotic pattern",
+    "magic circle",
+    "major image",
+    "remove curse",
+    "summon fey",
+    "summon undead",
+    "tongues",
+    "vampiric touch",
+
+    # 4th level
+    "banishment",
+    "blight",
+    "charm monster",
+    "dimension door",
+    "hallucinatory terrain",
+    "summon aberration",
+
+    # 5th level
+    "contact other plane",
+    "dream",
+    "hold monster",
+    "jallarzi's storm of radiance",
+    "mislead",
+    "planar binding",
+    "scrying",
+    "synaptic static",
+    "teleportation circle",
+
+    # 6th level
+    "arcane gate",
+    "circle of death",
+    "create undead",
+    "eyebite",
+    "summon fiend",
+    "tasha's bubbling cauldron",
+    "true seeing",
+
+    # 7th level
+    "etherealness",
+    "finger of death",
+    "forcecage",
+    "plane shift",
+
+    # 8th level
+    "befuddlement",
+    "demiplane",
+    "dominate monster",
+    "glibness",
+    "power word stun",
+
+    # 9th level
+    "astral projection",
+    "foresight",
+    "gate",
+    "imprisonment",
+    "power word kill",
+    "true polymorph",
+    "weird"
+]
+warlock_cantrip_list = [
+    "blade ward",
+    "chill touch",
+    "eldritch blast",
+    "friends",
+    "mage hand",
+    "mind sliver",
+    "minor illusion",
+    "poison spray",
+    "prestidigitation",
+    "thunderclap",
+    "toll the dead",
+    "true strike"
+]
+random_magical_charms = [
+
+    # ============================================================
+    # DEFENSIVE
+    # ============================================================
+
+    "ironheart pendant (+1 AC while below half HP)",
+    "warding charm (+1 AC against the first attack made against you each round)",
+    "ember necklace (resistance to fire damage)",
+    "frostbound ring (resistance to cold damage)",
+    "stormglass pendant (resistance to lightning damage)",
+    "venom ward (advantage on saving throws against poison)",
+    "shadow veil (advantage on Dexterity (Stealth) checks made in dim light)",
+    "guardian's eye (advantage on saving throws against being frightened)",
+    "last breath charm (once per long rest, when reduced to 0 HP, drop to 1 HP instead)",
+    "stoneheart ring (advantage on checks and saves against being moved against your will)",
+
+    # ============================================================
+    # MOVEMENT
+    # ============================================================
+
+    "windstep anklet (+5 ft walking speed)",
+    "swiftstep charm (+10 ft walking speed while not wearing heavy armor)",
+    "feather pendant (reduce falling damage by 20)",
+    "spider's ring (advantage on checks made to climb)",
+    "deepwater charm (gain a swimming speed equal to your walking speed)",
+    "leaping charm (increase your jump distance by 50%)",
+    "phantom anklet (once per short rest, ignore difficult terrain for 1 minute)",
+    "hollow step ring (once per long rest, you can move through one creature's space without provoking opportunity attacks)",
+
+    # ============================================================
+    # SKILLS / EXPLORATION
+    # ============================================================
+
+    "scholar's monocle (advantage on Intelligence checks involving written information)",
+    "hunter's fang (advantage on Wisdom (Survival) checks to track creatures)",
+    "silver tongue pendant (advantage on one Charisma (Persuasion) check per short rest)",
+    "watcher's eye (advantage on Wisdom (Perception) checks relying on sight)",
+    "whispering charm (advantage on Wisdom (Perception) checks relying on hearing)",
+    "lockpicker's ring (advantage on checks made to pick locks)",
+    "traveler's compass (always know which direction is north and cannot become lost by nonmagical means)",
+    "memory pendant (advantage on checks made to recall information you have previously encountered)",
+    "dreamer's charm (you need 1 fewer hour of sleep to gain the benefits of a long rest)",
+    "merchant's coin (you instinctively know whether a mundane object is worth significantly more or less than its asking price)",
+
+    # ============================================================
+    # COMBAT
+    # ============================================================
+
+    "berserker's charm (+1 damage while below half HP)",
+    "hunter's mark pendant (+1 damage against a creature you have already hit this turn)",
+    "duelist's ring (+1 AC while wielding a single one-handed weapon and no shield)",
+    "warrior's tooth (+1 to initiative)",
+    "executioner's charm (once per turn, as part of an attack action, deal +1d4 damage against a creature below half HP)",
+    "bloodletter ring (when you score a critical hit, gain temporary HP equal to your proficiency bonus)",
+    "predator's eye (advantage on the first attack roll you make against a creature that has not acted yet)",
+    "counterstrike charm (when a creature misses you with a melee attack, you gain +1 to your next attack against it)",
+    "thunderheart pendant (once per turn, when you move at least 10 ft before hitting with a melee attack, deal +1d4 thunder damage)",
+    "last stand ring (+5 to attack rolls while you have 4 or fewer total HP and temporary HP)"
+
+    # ============================================================
+    # MAGIC
+    # ============================================================
+
+    "spellbinder's ring (+1 to spell attack rolls for one chosen spell)",
+    "mana crystal pendant (once per long rest, regain a small amount of expended spellcasting material components)",
+    "arcane focus charm (advantage on one concentration check per short rest)",
+    "spellweaver's eye (you can sense whether a creature is currently concentrating on a spell)",
+    "silent casting charm (once per short rest, cast a spell without verbal components)",
+    "echo pendant (once per long rest, repeat the effect of a cantrip immediately after casting it)",
+    "spellmirror ring (once per long rest, gain advantage on a saving throw against a spell)",
+    "elemental charm (choose one damage type when the charm is created; once per turn, deal +1 damage of that type with a spell)",
+
+    # ============================================================
+    # INTERESTING / CONDITIONAL EFFECTS
+    # ============================================================
+
+    "thief's luck charm (once per long rest, reroll a failed Dexterity check)",
+    "gambling coin (once per long rest, after rolling a d20, choose to reroll it; you must use the new result)",
+    "mirror pendant (once per short rest, when a creature misses you, you can briefly create a visual duplicate of yourself until your next turn)",
+    "moon charm (gain advantage on Wisdom and Dexterity checks made at night, but disadvantage on them during bright daylight)",
+    "sun charm (gain advantage on saving throws against effects caused by undead)",
+    "hunger charm (when you reduce a hostile creature to 0 HP, gain temporary HP equal to your proficiency bonus)",
+    "dreamcatcher necklace (you cannot be magically put to sleep)",
+    "echoing bell (once per long rest, repeat the last sentence spoken within 30 ft in the speaker's voice)",
+    "truth pendant (the wearer knows when they personally speak a perfect truth, works on not seen events, but the truth must be precise)",
+    "lucky rabbit charm (once per long rest, add 1d4 to a failed ability check after seeing the result)",
+    "danger sense charm (the charm becomes warm when a hostile creature you cannot currently see is within 30 ft)",
+    "grudge ring (choose one creature after it damages you; gain +1 to attack rolls against that creature until the end of your next turn)",
+    "kindness charm (when you restore HP to another creature, you regain HP equal to your proficiency bonus)",
+    "wanderer's pendant (you always know the approximate distance and direction of the place where you last slept)",
+    "grave charm (advantage on death saving throws)",
+    "nameless ring (creatures have difficulty remembering your appearance after you leave their presence)",
+    "clockwork charm (once per long rest, add a 1d4 and your proficiency bonus to an initiative roll after seeing the result)",
+    "mirror shard (once per long rest, when you fail a saving throw, you may roll again but must use the second result)",
+    "void charm (once per long rest, when you would take damage from a spell, reduce that damage by 1d10)",
+    "tiny crown (you gain advantage on one Charisma check against a creature that considers itself socially inferior to you)",
+    "glass heart (+2 to Persuasion; -1 to saves against being frightened)"
+]
+enchanted_weapon_list = [
+
+    # ============================================================
+    # SWORDS
+    # ============================================================
+
+    "flame sword (+1 any sword; deals 1d6 additional fire damage on hit)",
+    "frost sword (+1 any sword; deals 1d6 additional cold damage on hit)",
+    "thunder sword (+1 any sword; deals 1d6 additional thunder damage on hit)",
+    "venom sword (+1 any sword; deals 1d6 additional poison damage on hit)",
+    "vampiric sword (+1 any sword; regain HP equal to 1d4 of the damage dealt once per turn)",
+    "keen sword (+1 any sword; critical hit on a natural 19 or 20)",
+    "executioner's sword (+2 any sword; deals 1d6 additional damage against creatures below half HP)",
+    "duelist's sword (+1 any sword; gain +1 AC while wielding it and no other weapon)",
+    "returning sword (+1 any sword; can be thrown and magically returns to your hand after the attack)",
+    "phantom sword (+1 any sword; attacks can partially ignore nonmagical physical barriers)",
+
+    # ============================================================
+    # GREAT WEAPONS
+    # ============================================================
+
+    "flame greatsword (+1 weapon; deals 2d6 additional fire damage on hit)",
+    "cleaving greatsword (+1 weapon; once per turn, excess damage can carry to an adjacent creature)",
+    "executioner's greatsword (+2 weapon; deals 1d8 additional damage against creatures below half HP)",
+    "heavy dagger (+2 weapon; deals 2d4 additional damage but loses the Light property)",
+    "frost greataxe (+1 weapon; deals 1d6 additional cold damage on hit)",
+    "thunder greataxe (+1 weapon; on a critical hit, the target is pushed 5 ft)",
+
+    # ============================================================
+    # DAGGERS / LIGHT WEAPONS
+    # ============================================================
+
+    "assassin's dagger (+1 weapon; deals 1d6 additional damage against creatures that have not acted yet)",
+    "poisoned dagger (+1 weapon; deals 1d4 additional poison damage on hit)",
+    "shadow dagger (+1 weapon; advantage on attacks while lightly obscured)",
+    "returning dagger (+1 weapon; magically returns to your hand after being thrown)",
+    "keen dagger (+1 weapon; critical hit on a natural 19 or 20)",
+    "bleeding dagger (+1 weapon; on hit, target takes 1d4 damage at the start of its next turn)",
+    "frost dagger (+1 weapon; deals 1d4 additional cold damage on hit)",
+
+    # ============================================================
+    # AXES / HAMMERS / BLUDGEONING
+    # ============================================================
+
+    "throwing handaxe (+1 weapon; returns to the wielder after being thrown)",
+    "berserker's greataxe (+1 weapon; deals 1d6 additional damage while below half HP)",
+    "keen battleaxe (+1 weapon; critical hit on a natural 19 or 20)",
+    "flame battleaxe (+1 weapon; deals 1d6 additional fire damage on hit)",
+    "thunder warhammer (+1 weapon; on hit, push the target 5 ft once per turn)",
+    "crusher warhammer (+1 weapon; on a critical hit, knock the target prone)",
+    "earth maul (+1 weapon; deals 1d6 additional bludgeoning damage and cannot be disarmed)",
+    "returning hammer (+1 weapon; returns to the wielder after being thrown)",
+
+    # ============================================================
+    # POLEARMS
+    # ============================================================
+
+    "guardian spear (+1 weapon; gain +1 AC while wielding it)",
+    "thunder spear (+1 weapon; on a critical hit, push the target 10 ft)",
+    "flame spear (+1 weapon; deals 1d6 additional fire damage on hit)",
+    "vicious halberd (+1 weapon; deals 1d6 additional damage on a critical hit)",
+    "sentinel halberd (+1 weapon; creatures provoke opportunity attacks even when using Disengage)",
+    "frost glaive (+1 weapon; deals 1d6 additional cold damage on hit)",
+
+    # ============================================================
+    # BOWS
+    # ============================================================
+
+    "flame bow (+1 any bow; arrows deal 1d6 additional fire damage on hit)",
+    "frost bow (+1 any bow; arrows deal 1d6 additional cold damage on hit)",
+    "thunder bow (+1 any bow; on a critical hit, the target is pushed 10 ft)",
+    "keen bow (+1 any bow; critical hit on a natural 19 or 20)",
+    "hunter's bow (+1 any bow; advantage on attacks against creatures you have tracked for at least 10 minutes)",
+    "piercing bow (+2 any bow; attacks ignore nonmagical cover unless it's total)",
+    "seeking bow (+1 any bow; once per turn, ignore disadvantage caused by distance or poor visibility)",
+
+    # ============================================================
+    # CROSSBOWS
+    # ============================================================
+
+    "flame crossbow (+1 any crossbow; bolts deal 1d6 additional fire damage on hit)",
+    "frost crossbow (+1 any crossbow; bolts deal 1d6 additional cold damage on hit)",
+    "piercing crossbow (+2 any crossbow; attacks ignore half cover and arrows can pierce and hit the enemy behind if in trajectory, dealing hald the damage on hit)",
+    "repeating crossbow (+1 any crossbow; ignores the Loading property)",
+    "seeking crossbow (+1 any crossbow; once per turn, ignore disadvantage from long range)",
+    "assassin's crossbow (+1 any crossbow; deals 1d6 additional damage against creatures that have not acted yet)",
+
+    # ============================================================
+    # SPECIAL / FAMOUS WEAPON TYPES
+    # ============================================================
+
+    "silvered sword (+1 any sword; attacks count as silvered and deal 1d4 additional radiant damage to undead)",
+    "sunblade (+2 longsword; deals 1d8 additional radiant damage to undead and fiends)",
+    "lifestealing sword (+2 any sword; on a critical hit, regain 2d6 HP)",
+    "bane weapon (+1 weapon; choose one creature type; deals 1d6 additional damage against that type)",
+    "disarming weapon (+1 weapon; on a critical hit, target must succeed on a Strength save or drop one held item)",
+    "crippling weapon (+1 weapon; on a critical hit, target's speed is reduced by 10 ft until the end of its next turn)",
+    "wounding weapon (+1 weapon; critical hits inflict a bleeding wound dealing 1d4 damage at the start of the target's next turn)",
+    "arcane weapon (+1 weapon; can be used as a spellcasting focus)",
+    "spellbreaker weapon (+1 weapon; deals 1d6 additional force damage to creatures concentrating on a spell)",
+    "soulbound weapon (+1 weapon; cannot be willingly dropped or disarmed while its wielder is conscious)",
+
+    # ============================================================
+    # HIGHER-POWER ENCHANTMENTS
+    # ============================================================
+
+    "masterwork sword (+2 any sword; deals 1d4 additional damage on every hit)",
+    "masterwork bow (+2 any bow; attacks ignore half cover)",
+    "masterwork crossbow (+2 any crosbow; attacks ignore half cover)",
+    "masterwork axe (+2 any axe; critical hits deal one additional weapon die)",
+    "masterwork spear (+2 any spear; opportunity attacks made with it have advantage)",
+
+    "greater flame sword (+3 any sword; deals 1d6 additional fire damage on hit)",
+    "greater frost sword (+3 any sword; deals 1d6 additional cold damage on hit)",
+    "greater thunder hammer (+3 any hammer; deals 1d6 additional thunder damage and pushes the target 5 ft on hit)",
+    "greater keen weapon (+3 weapon; critical hit on a natural 19 or 20)",
+]
+sentient_item_list = [
+
+    # ============================================================
+    # CLASSIC SENTIENT WEAPONS
+    # ============================================================
+
+    "sentient sword (can communicate telepathically; has its own personality and preferences)",
+    "sentient greatsword (can communicate telepathically; seeks worthy opponents)",
+    "sentient dagger (speaks aloud; enjoys manipulation and deception)",
+    "sentient axe (speaks aloud; constantly urges its wielder toward violence)",
+    "sentient bow (communicates telepathically; refuses to shoot at targets it considers innocent)",
+    "sentient spear (can communicate telepathically; values discipline and honor)",
+
+    "possessive weapon (sentient weapon that becomes jealous when its wielder uses another weapon)",
+    "cowardly weapon (sentient weapon that attempts to avoid dangerous fights)",
+    "bloodthirsty weapon (sentient weapon that demands combat and grows excited when it draws blood)",
+    "protective weapon (sentient weapon that attempts to defend its wielder from danger)",
+    "treacherous weapon (sentient weapon that occasionally attempts to sabotage its wielder)",
+
+    # ============================================================
+    # CLASSIC D&D-STYLE SENTIENT ITEMS
+    # ============================================================
+
+    "sentient magic item (communicates telepathically and can refuse to activate its abilities)",
+    "sentient shield (can communicate telepathically; automatically warns its wielder of danger)",
+    "sentient armor (can communicate telepathically; has its own opinions about how its wearer behaves)",
+    "sentient spellbook (can communicate telepathically; refuses to reveal some of its spells)",
+    "sentient wand (speaks aloud; has its own preferences regarding which spells are cast)",
+    "sentient staff (communicates telepathically; possesses knowledge unknown to its wielder)",
+    "sentient ring (communicates telepathically; attempts to influence its wearer's decisions)",
+    "sentient amulet (can communicate telepathically; senses nearby magical creatures)",
+
+    # ============================================================
+    # LIVING / ORGANIC ITEMS
+    # ============================================================
+
+    "living cloak (breathes and moves slightly on its own; can communicate through gestures)",
+    "living backpack (has a small mouth and can complain about what is placed inside it)",
+    "living boots (can move their feet independently and refuse to walk toward danger)",
+    "living gloves (can move independently and occasionally interact with nearby objects)",
+    "living rope (can move like a small snake and obey simple commands)",
+    "living belt (tightens or loosens itself and can communicate through movement)",
+    "living hat (can move its brim and communicates through exaggerated gestures)",
+    "living lantern (has a personality and can control the intensity of its own light)",
+    "living mirror (can communicate through images reflected on its surface)",
+    "living key (can move toward the lock it belongs to and refuses to open certain doors)",
+
+    # ============================================================
+    # CREATURE-LIKE OBJECTS
+    # ============================================================
+
+    "mimic trinket (small object capable of disguising itself as another mundane object)",
+    "living coin (moves by itself and attempts to return to its owner)",
+    "living dice (rolls itself and appears to possess a personality)",
+    "living marble (moves unpredictably and reacts to nearby creatures)",
+    "living music box (plays itself and changes its melody according to its mood)",
+    "living book (can turn its own pages and communicate through written words)",
+    "living painting (can move inside its own frame and interact with its depicted environment)",
+    "living doll (small animated creature that can communicate and perform simple tasks)",
+    "living toy soldier (tiny animated construct that obeys simple commands)",
+    "living chess piece (can move independently and communicates with other pieces)",
+
+    # ============================================================
+    # MAGICAL / STRANGE SENTIENT OBJECTS
+    # ============================================================
+
+    "whispering orb (floating orb that speaks constantly and knows fragments of forgotten information)",
+    "hungry pouch (sentient pouch that demands particular objects as food)",
+    "memory crystal (stores memories and can communicate them to whoever touches it)",
+    "dream catcher (sentient magical object that absorbs dreams and can replay them)",
+    "fortune coin (speaks cryptic predictions when flipped)",
+    "compass of opinions (sentient compass that gives unsolicited advice instead of simply pointing north)",
+    "argumentative teapot (brews itself and constantly argues with anyone nearby)",
+    "jealous necklace (becomes hostile toward other magical jewelry)",
+    "curious magnifying glass (moves toward anything it finds interesting and reveals hidden details)",
+    "wandering candle (a candle that floats around its owner and refuses to extinguish itself)",
+
+    # ============================================================
+    # PARASITIC / LIVING MAGIC ITEMS
+    # ============================================================
+
+    "symbiotic weapon (living weapon that forms a bond with its wielder and grows alongside them)",
+    "parasitic armor (living armor that feeds on its wearer's vitality)",
+    "symbiotic cloak (living cloak that protects its wearer instinctively)",
+    "living gauntlet (organic gauntlet that attaches itself to its wielder)",
+    "sentient familiar trinket (small magical object capable of scouting independently)",
+]
+random_drug_list = [
+    # Mild / socially common
+    "tobacco (mild stimulant; dependence-forming)",
+    "khat (stimulant; increases alertness but causes restlessness)",
+    "opium (strong sedative and painkiller; highly addictive)",
+    "cannabis (mild intoxicant; alters perception and coordination)",
+
+    # Recreational / potent
+    "cocaine (powerful stimulant; causes heightened energy and confidence)",
+    "amphetamine (strong stimulant; suppresses fatigue and appetite)",
+    "MDMA (euphoric stimulant; heightens sociability and emotional intensity)",
+    "LSD (powerful hallucinogen; dramatically alters perception)",
+
+    # Severe / dangerous
+    "heroin (powerful opioid; intense euphoria and sedation; highly addictive)",
+    "methamphetamine (extremely potent stimulant; severe dependence potential)",
+    "fentanyl (extremely potent opioid; dangerous overdose risk)",
+    "crack cocaine (rapid-acting stimulant; highly addictive)",
+
+    # D&D / fantasy substances
+    "dreamlily (Eberron narcotic; induces euphoria and dreamlike relaxation)",
+    "shiver (Eberron narcotic; produces intense euphoria and heightened sensation)",
+    "zzar (strong intoxicating beverage; causes drunkenness and impaired judgment)",
+]
+random_luxury_item = [
+    "fine clothing",
+    "silk scarf",
+    "ornamental cloak",
+    "silver hairpin",
+    "golden brooch",
+    "decorative ring",
+    "perfume vial",
+    "fine shaving kit",
+    "silver grooming set",
+    "ornamental mirror",
+    "fine pocket watch",
+    "decorated walking cane",
+    "ivory comb",
+    "engraved flask",
+    "silver drinking cup",
+    "fine wine bottle",
+    "jewelry box",
+    "small jewelry collection",
+    "ornamental snuffbox",
+    "gold-plated cutlery",
+    "fine writing set",
+    "ornamental inkpot",
+    "quality parchment",
+    "personal seal",
+    "engraved signet ring",
+    "calling-card case",
+    "fine musical instrument",
+    "decorative statuette",
+    "small painting",
+    "expensive book",
+    "rare book",
+    "collection of curiosities",
+    "silk handkerchief",
+    "embroidered gloves",
+    "fine leather gloves",
+    "luxury travel case",
+    "decorated lantern",
+    "ornamental key",
+    "small gemstone",
+    "commemorative medal",
+]
+apostle_divine_spell_list = [
+    # Sin / destructive manifestations
+    "bane (at will)",
+    "command (1/long rest)",
+    "inflict wounds (3/long rest)",
+    "hellish rebuke (at will)",
+    "dissonant whispers (2/long rest)",
+    "ray of sickness (at will)",
+
+    # Virtue / protective manifestations
+    "bless (at will)",
+    "healing word (3/long rest)",
+    "sanctuary (upcasted at level 3; 1/long rest)",
+    "heroism (1/long rest)",
+    "protection from evil and good (upcasted at level 3; 1/long rest)",
+
+    # More mysterious divine manifestations
+    "detect evil and good (at will)",
+    "detect magic (at will)",
+
+    # Stronger manifestations"
+    "guiding bolt (1/short rest)",
+    "lesser restoration (1/long rest)",
+    "darkness (1/long rest)",
+    "hold person (1/long rest)",
+    "spiritual weapon (1/long rest)",
+    "misty step (3/short rest)",
+    "divine smite (upcasted at level 3; 1/short rest)"
+]
+random_apostle_weapon = [
+    
+    "Halberd of Foresight (+3 halberd)", # justice
+    "The Safe Blade (+3 longsword)", # prudence
+    "The Even Edge (+3 rapier)", # temperance
+    "Spear of the Unfaltering (+3 spear)", # courage
+    "The Beacon (+3 AC charm)", # faith
+    "Dawn's Promise (+3 shortbow)", # hope
+    "The Giver's Hand (+3 kinetic gauntlet)", # charity
+
+    
+    "Crown of the Unbowed (+3 longbow)", # pride
+    "The Gilded Hand (+3 trident)", # greed
+    "Heartseeker (+3 musket)", # lust
+    "The Borrowed Edge (+3 dagger)", # envy
+    "The Devouring Maw (+3 scythe)", # gluttony
+    "Bloodwaker (+3 battleaxe)", # wrath
+    "The Sleeper's Doom (+3 spiked ball-and-chains)" # sloth
+]
+random_dice_list = [4, 6, 6, 8, 8, 10, 12] # (ex: d4, d6, d8, d10, d12, d20) some dice are more common than others, so they appear multiple times in the list to increase their probability of being rolled. The d20 is not included because it is not used for normal hp pools.
 
 
-#ToDo
+
 wealth = {
-        Wealth.OPULENT: {},
-        Wealth.RICH: {},
-        Wealth.WEALTHY: {},
-        Wealth.MODEST: {},
-        Wealth.POOR: {}
+    Wealth.OPULENT: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 6.00},
+                    {"rd_choice": [2.00, 4.00, 6.00, 8.00, 24.00]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": random_luxury_item},
+                    {"rd_choice": random_luxury_item},
+                    {"rd_choice": [{"rd_choice": random_luxury_item}, []]},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": enchanted_weapon_list},
+                    {"rd_choice": [{"rd_choice": enchanted_weapon_list}, []]}
+                ]
+            }
+        }
+    },
+
+    Wealth.RICH: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 3.00},
+                    {"rd_choice": [1.00, 2.00, 3.00, 4.00, 12.00]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": random_luxury_item},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": [{"rd_choice": enchanted_weapon_list}, []]}
+                ]
+            }
+        }
+    },
+
+    Wealth.WEALTHY: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 0.90},
+                    {"rd_choice": [0.30, 0.60, 0.90, 1.20, 3.60]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": random_luxury_item},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": [
+                        [],
+                        {"rd_choice": [{"rd_choice": enchanted_weapon_list}, [], []]},
+                        {"rd_choice": random_luxury_item},
+                        {"rd_choice": random_gadget}
+                    ]}
+                ]
+            }
+        }
+    },
+
+    Wealth.MODEST: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 0.30},
+                    {"rd_choice": [0.10, 0.20, 0.30, 0.40, 1.20]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": [
+                        [],
+                        [],
+                        [],
+                        {"rd_choice": random_gadget},
+                        {"rd_choice": random_luxury_item}
+                    ]},
+                    {"rd_choice": [
+                        [],
+                        [],
+                        [],
+                        {"rd_choice": random_gadget},
+                        {"rd_choice": [{"rd_choice": enchanted_weapon_list}, [], [], [], [], []]}
+                    ]}
+                ]
+            }
+        }
+    },
+
+    Wealth.POOR: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 0.03},
+                    {"rd_choice": [0.01, 0.02, 0.03, 0.04, 0.12]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": [
+                        [],
+                        [],
+                        [],
+                        [],
+                        {"rd_choice": random_gadget}
+                    ]}
+                ]
+            }
+        }
     }
+}
 
 base = { # This one is used to define the base dependecy of some stats, like proficiency bonus, ability_mod, or others
     # Formula: proficiency_bonus = 2 + ((level - 1) / 4)
@@ -906,8 +2637,7 @@ race = { # Common elf contains what a race can modify
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"rd_choice": draconic_ancestory_list}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": ["breath weapon (15ft cone or 30ft line, 2d6 damage (same type as the ancestory type), DC 12 dex save for half)",
-                                                                {"rd_choice": draconic_ancestory_list}]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["breath weapon (15ft cone or 30ft line, 2d6 damage (same type as the ancestory type), DC 12 dex save for half)"]}]}
         }
     },
     "Half-Dragon": {
@@ -962,8 +2692,7 @@ race = { # Common elf contains what a race can modify
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 120, "ft"),
                                         "breath weapon (30ft cone or 60ft line, 4d6 damage (same type as the ancestory), DC 15 dex save for half)",
                                         "trasformation (can polymorph into dragonish (and back) form gaining flight 60ft, the huge size, natural weapons (bite 2d10 piercing damage, claw 2d6 slashing damage))",
-                                        "legendary resistance (3/rest, can choose to succeed a failed saving throw)",
-                                        {"rd_choice": draconic_ancestory_list}]}]}
+                                        "legendary resistance (3/rest, can choose to succeed a failed saving throw)"]}]}
         }
     },
     "Kobold": {
@@ -1667,7 +3396,7 @@ race = { # Common elf contains what a race can modify
             "charisma": {"apply": "add", "expr": [{"const": 1}]}
         },
         "proficiencies": {
-            "weapons": {"apply": "add", "expr": [{"const": ["heavy crossbow", "spear", "hand fans"]}, {"rd_choice": random_weapon_list}]},
+            "weapons": {"apply": "add", "expr": [{"const": ["heavy crossbow", "spear", "war fan"]}, {"rd_choice": random_weapon_list}]},
             "skills": {"apply": "add", "expr": [{"const": ["stealth", "insight"]}]}
         },
         "magic": {
@@ -2704,7 +4433,8 @@ jobs = { #Monarch contains the max possible template for occupations
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}, {"rd_choice": martial_weapon_list}]},
             "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
-            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]},
+                                                {"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]},
             "skills": {"apply": "add", "expr": []},
             "saving_throws": {"apply": "add", "expr": [{"const": ["charisma"]}]}
         },
@@ -2733,7 +4463,8 @@ jobs = { #Monarch contains the max possible template for occupations
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}, {"rd_choice": martial_weapon_list}]},
             "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
-            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]},
+                                               {"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]},
             "saving_throws": {"apply": "add", "expr": [{"const": ["charisma"]}]}
         },
         "other_info": {
@@ -2786,7 +4517,7 @@ jobs = { #Monarch contains the max possible template for occupations
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"const": ["longsword","shortsword","longbow","shortbow"]}, {"rd_choice": martial_weapon_list}, {"rd_choice": random_weapon_list}]},
             "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
-            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list]}]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [board_games_list, musical_instrument_list, random_toolkit_list]}]}]},
             "skills": {"apply": "add", "expr": [{"const": "persuasion"}, {"rd_choice": random_skill_list}]},
             "saving_throws": {"apply": "add", "expr": [{"const": ["constitution"]}]}
         },
@@ -2803,7 +4534,7 @@ jobs = { #Monarch contains the max possible template for occupations
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
             "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]},
-            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [musical_instrument_list, board_games_list]}]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": [{"rd_choice": [musical_instrument_list, "healer's kit"]}]}]},
             "skills": {"apply": "add", "expr": [{"const": "religion"}, {"rd_choice": random_skill_list}]},
             "saving_throws": {"apply": "add", "expr": [{"const": ["wisdom"]}]}
         },
@@ -3785,6 +5516,7 @@ jobs = { #Monarch contains the max possible template for occupations
             "equipment": {"apply": "add", "expr": [
                 {"const": ["tinker's tools"]},
                 {"rd_choice": [{"rd_choice": random_gadget}, "mechanical parts"]},
+                {"rd_choice": [{"rd_choice": random_gadget}, "mechanical parts"]},
                 {"rd_choice": [{"stat": "weapons"}]}
             ]}
         }
@@ -3846,6 +5578,7 @@ jobs = { #Monarch contains the max possible template for occupations
         },
         "other_info": {
             "equipment": {"apply": "add", "expr": [
+                {"rd_choice": [{"rd_choice": sentient_item_list}, {"rd_choice": enchanted_weapon_list}]},
                 {"rd_choice": [{"rd_choice": sentient_item_list}, {"rd_choice": enchanted_weapon_list}]},
                 {"const": ["coin pouch", {"rd_choice": random_magical_charms}]}
             ]}
@@ -4107,20 +5840,1700 @@ jobs = { #Monarch contains the max possible template for occupations
 }
 
 employment_stages = {
-    "Unemployed": {},
-    "Apprentice/Student": {},
-    "Minor Worker": {},
-    "Full-time Occupation": {},
-    "Retired": {},
-    "Advisor": {},
-    "Minor Duties": {}
+    "Unemployed": {
+        "other_info": {
+            "coins": {
+                "apply": "multiply",
+                "expr": [{"const": 0.50}]
+            }
+        }
+    },
+
+    "Apprentice/Student": {
+        "other_info": {
+            "coins": {
+                "apply": "multiply",
+                "expr": [{"const": 0.70}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": apprentice_equipment_list},
+                         {"rd_choice": [[], {"rd_choice": employment_document_list}]}]
+            }
+        }
+    },
+
+    "Minor Worker": {
+        "other_info": {
+            "coins": {
+                "apply": "multiply",
+                "expr": [{"const": 0.85}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": worker_employment_equipment_list},
+                         {"rd_choice": [[], {"rd_choice": employment_document_list}]}]
+            }
+        }
+    },
+
+    "Full-time Occupation": {
+        "other_info": {
+            "coins": {
+                "apply": "multiply",
+                "expr": [{"const": 1.00}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": worker_employment_equipment_list},
+                         {"rd_choice": employment_document_list}]
+            }
+        }
+    },
+
+    "Retired": {
+        "other_info": {
+            "coins": {
+                "apply": "multiply",
+                "expr": [{"const": 0.80}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": retired_employment_equipment_list}]
+            }
+        }
+    },
+
+    "Advisor": {
+        "other_info": {
+            "coins": {
+                "apply": "multiply",
+                "expr": [{"const": 1.25}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": advisor_equipment_list},
+                         {"rd_choice": employment_document_list}]
+            }
+        }
+    },
+
+    "Minor Duties": {
+        "other_info": {
+            "coins": {
+                "apply": "multiply",
+                "expr": [{"const": 1.10}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": employment_document_list},
+                         {"rd_choice": [[], [], [], {"rd_choice": worker_employment_equipment_list}]}]
+            }
+        }
+    }
 }
 
-#ToDo
 backstory_seed = {
-        "Runaway noble child": {},
-        "Former slave": {}
+    "Lost heir": {
+        "core_combat": {
+            "hp": {"apply": "add", "expr": [{"const": 0}]},
+            "hp_dice": {"apply": "add", "expr": [{"const": 0}]},
+            "ac": {"apply": "add", "expr": [{"const": 0}]},
+            "initiative": {"apply": "add", "expr": [{"const": 0}]},
+            "speed_bonus": {"apply": "add", "expr": [{"const": 0}]}
+        },
+
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 0}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 0}]},
+            "constitution": {"apply": "add", "expr": [{"const": 0}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 0}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": []}]},
+            "armors": {"apply": "add", "expr": [{"const": 0}]},
+            "tools": {"apply": "add", "expr": [{"const": []}]},
+            "skills": {"apply": "add", "expr": [{"const": ["history", "persuasion"]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": []}]}
+        },
+
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"const": 0}]},
+            "spellcasting_ability": {"apply": "add", "expr": [{"const": 0}]},
+            "spell_slots": {"apply": "add", "expr": [{"const": 0}]},
+            "known_spells": {"apply": "add", "expr": [{"const": 0}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": 0}]}
+        },
+
+        "other_info": {
+            "coins": {"apply": "add", "expr": [{"multiply": [
+                                                            {"rd_choice": [1.00, 2.00, 3.00]},
+                                                            {"rd_choice": [1.00, 2.00, 3.00]},
+                                                            {"rd_choice": [1.00, 2.00, 3.00]}
+                                                            ]}]},
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [
+                                                        "family signet",
+                                                        "heirloom jewelry",
+                                                        "old family document",
+                                                        "noble insignia"
+                                                    ]}]},
+            "resistances": {"apply": "add", "expr": [{"const": []}]},
+            "immunities": {"apply": "add", "expr": [{"const": []}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": []}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const":  "checks related to formal etiquette"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": []}]}
+        }
+    },
+    "Exiled noble": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "persuasion"]}]}
+        },
+
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [
+                                                        "family signet",
+                                                        "noble insignia",
+                                                        "sealed letter of lineage",
+                                                        "old ceremonial garment"
+                                                    ]}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": [{"const": "recognizing noble customs"}]}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": ["social interactions with nobles"]}]}
+        }
+    },
+    "Former soldier": {
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["intimidation", "survival", "athletics"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [
+                                                        "old military insignia",
+                                                        "campaign medal",
+                                                        "old military ID",
+                                                        "old uniform piece"
+                                                    ]}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": [{"const": "social interaction with army members"}]}]}
+        }
+    },
+    "Wandering scholar": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history", "investigation"]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": ["calligrapher's supplies", "cartographer's tools"]}]}
+        },
+
+        "other_info": {
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [
+                                                            "research journal",
+                                                            "collection of annotated maps",
+                                                            "scholarly reference book",
+                                                            "bundle of research notes"
+                                                        ]}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "recalling historical information"}]}
+        }
+    },
+    "Cursed individual": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "survival"]}]}
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": ["necrotic", "psychic", "poison"]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "identifying supernatural curses"}]
+            },
+            "add_disadvantage_on": {
+                "apply": "add",
+                "expr": [{"const": "interactions related to the curse"}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "cursed mark: visible mark associated with the curse",
+                    "unnatural eyes: eyes visibly altered by the curse",
+                    "shadow distortion: shadow behaves unnaturally"
+                ]}]
+            }
+        }
+    },
+    "Plague survivor": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["medicine", "survival"]}]}
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"const": ["poison"]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "resisting diseses"}]
+            }
+        }
+    },
+    "Refugee from the North/South/East/West": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["survival", "perception"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "finding shelter and food in survival checks"}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old regional keepsake",
+                    "worn travel map",
+                    "family photograph or portrait",
+                    "small bundle of belongings"
+                ]}]
+            }
+        }
+    },
+    "Escaped experiment": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["arcana", "survival"]}]
+            }
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "fire",
+                    "cold",
+                    "lightning",
+                    "acid",
+                    "poison",
+                    "psychic"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "unnatural scarification: strange scars left by experimentation",
+                    "arcane implant: a foreign mechanism or magical object embedded in the body",
+                    "altered eyes: eyes visibly altered by experiments",
+                    "unnatural markings: patterns appeared on the body after the experiments"
+                ]}]
+            }
+        }
+    },
+    "Disgraced knight": {
+        "core_combat": {
+            "ac": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "ability_scores": {
+            "strenght": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "weapons": {
+                "apply": "add",
+                "expr": [{"const": ["longsword", "lance", "shield"]}]
+            },
+            "armors": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": ArmorType.MEDIUM},
+                    {"stat": "armors"}
+                ]}]
+            },
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["athletics", "persuasion"]}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "damaged heraldic shield",
+                    "old knightly insignia",
+                    "worn ceremonial cloak",
+                    "broken family crest"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "recognizing military and noble etiquette"}]
+            },
+            "add_disadvantage_on": {
+                "apply": "add",
+                "expr": [{"const": "interactions with people"}]
+            }
+        }
+    },
+    "Amnesiac drifter": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["perception", "insight"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "dream interpretation"}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "mysterious scar: a prominent scar with an unknown origin",
+                    "unknown tattoo: a symbol whose meaning the character does not remember",
+                    "familiar accent: speech patterns suggesting an unknown place of origin"
+                ]}]
+            }
+        }
+    },
+    "Former slave": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["survival", "insight"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["constitution checks against exhaustion"]}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old identification tag",
+                    "keepsake from their former life as a slave",
+                    "small personal memento",
+                    "worn piece of clothing from their former owner"
+                ]}]
+            }
+        }
+    },
+    "Treasure hunter": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["perception", "investigation", "survival"]}]
+            },
+            "tools": {
+                "apply": "add",
+                "expr": [{"const": ["thieves' tools"]}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old treasure map",
+                    "compass",
+                    "set of excavation tools",
+                    "magnifying glass",
+                    "collection of unidentified relics"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "checks to estimate the value of an object",
+                    "spotting hidden compartments"
+                ]}]
+            }
+        }
+    },
+    "Fugitive from the law": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["stealth", "survival", "deception"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "hiding/blending against city guards",
+                    "recognizing signs of surveillance"
+                ]}]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "false identification papers",
+                    "disguise kit",
+                    "stolen map",
+                    "hooded traveling cloak"
+                ]}]
+            }
+        }
+    },
+    "Dream-chaser": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["insight", "persuasion"]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["inspiring others"]}]
+            }
+        }
+    },
+    "Wandering artist": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["performance", "persuasion", "sleight of hand"]}]
+            },
+            "tools": {
+                "apply": "add",
+                "expr": [{"rd_choice": musical_instrument_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "artist's sketchbook",
+                    "traveling paint set",
+                    "collection of sketches",
+                    "personal instrument case"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["performing for an audience", "reading an audience"]}]
+            }
+        }
+    },
+    "Apostle of a Witch of Sin or Angel of Virtue": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "religion",
+                    "insight",
+                    "persuasion",
+                    "intimidation"
+                ]}]
+            },
+            "weapons": {
+                "apply": "add",
+                    "expr": [{"rd_choice": random_apostle_weapon}]
+            }
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    cleric_cantrip_list,
+                    warlock_cantrip_list
+                ]}]
+            },
+            "known_spells": {
+                "apply": "add",
+                    "expr": [{"rd_choice": apostle_divine_spell_list}, {"rd_choice": apostle_divine_spell_list}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["recognizing other's power level", "recognizing divine influence"]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "divine mark: a visible mark associated with the deity",
+                    "unnatural aura: a supernatural presence surrounding the creature",
+                    "distinctive clothing: wears something proper only to an apostle"
+                ]},
+                {"stat": "proficiencies"}]
+            }
+        }
+    },
+    "Former pirate": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "speed_bonus": {
+                "speed.walking": {
+                    "apply": "add",
+                    "expr": [{"const": 5}]
+                }
+            }
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["acrobatics", "athletics", "deception"]}]
+            },
+            "weapons": {
+                "apply": "add",
+                "expr": [{"const": ["scimitar", "dagger", "hand crossbow"]}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old pirate insignia",
+                    "weathered nautical map",
+                    "lucky coin",
+                    "old ship's compass",
+                    "treasure's map"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["navigation at sea", "recognizing pirate customs"]}]
+            }
+        }
+    },
+    "Marked by the gods": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    {"rd_choice": cleric_cantrip_list},
+                    {"rd_choice": wizard_cantrip_list},
+                    {"rd_choice": warlock_cantrip_list}
+                ]}]
+            }
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "radiant",
+                    "necrotic",
+                    "force",
+                    "psychic",
+                    "thunder"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "divine birthmark: a supernatural mark associated with an unknown deity",
+                    "glowing eyes: the eyes emit a faint supernatural light",
+                    "holy scar: a mysterious symbol appeared on the body",
+                    "moving sigil: a magical symbol subtly changes over time"
+                ]}]
+            }
+        }
+    },
+    "Bearer of a forbidden gift": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    {"rd_choice": wizard_cantrip_list},
+                    {"rd_choice": warlock_cantrip_list}
+                ]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["using or identifying forbidden magic"]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    ("arcane scar", "a mark left by the forbidden power"),
+                    ("unnatural aura", "the creature gives off a subtle supernatural presence"),
+                    ("glowing veins", "faint supernatural light can be seen beneath the skin")
+                ]}]
+            }
+        }
+    },
+    "Cursed bloodline": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "other_info": {
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "fire",
+                    "cold",
+                    "necrotic",
+                    "poison",
+                    "psychic"
+                ]}]
+            },
+            "vulnerabilities": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "radiant",
+                    "fire",
+                    "cold"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "cursed eyes: the eyes bear an inherited supernatural trait"
+                    "ancestral mark: a distinctive mark shared by members of the bloodline"
+                    "unnatural hair: hair with an unusual supernatural coloration"
+                ]}]
+            }
+        }
+    },
+    "Chosen vessel": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    wizard_cantrip_list,
+                    cleric_cantrip_list,
+                    warlock_cantrip_list
+                ]}]
+            }
+        },
+
+        "other_info": {
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["wisodm saving throws", "arcana"]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr":  [
+                    "supernatural aura: mana sensitive creatures can perceive an unusual presence around the vessel",
+                    "divine mark: a visible mark associated with a deity"
+                ]
+            }
+        }
+    },
+    "Oathbreaker": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["intimidation", "insight"]}]
+            },
+            "weapons": {
+                "apply": "add",
+                "expr": [{"rd_choice": martial_weapon_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "broken oath token",
+                    "defaced insignia",
+                    "piece of former uniform"
+                ]}]
+            },
+            "add_disadvantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["interactions with lawful people"]}]
+            }
+        }
+    },
+    "Former apprentice": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "arcana",
+                    "investigation",
+                    "insight",
+                    "perception"
+                ]}]
+            },
+            "tools": {
+                "apply": "add",
+                "expr": [{"rd_choice": random_toolkit_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old apprenticeship notes",
+                    "unfinished project",
+                    "apprenticeship certificate"
+                ]}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["learning from an experienced teacher", "identifying the work of a trained craftsman"]}]
+            }
+        }
+    },
+    "Forgotten inventor": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]}
+        },
+
+        "proficiencies": {
+            "skills": {
+                "apply": "add",
+                "expr": [{"const": ["investigation", "arcana"]}]
+            },
+            "tools": {
+                "apply": "add",
+                "expr": [{"rd_choice": random_toolkit_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": random_magical_charms}
+                ]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": ["repairing objects", "understanding experimental technology"]}]
+            }
+        }
+    },
+    "Forbidden scholar": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "history"]}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.LEARNED},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": [{"rd_choice": first_level_spell}, {"rd_choice": first_level_spell}]
+            },
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": wizard_cantrip_list}]
+            }  
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "forbidden manuscript",
+                    "cursed spellbook",
+                    "encoded research notes"
+                ]}]
+            }
+        }
+    },
+    "Disillusioned hero": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "wisdom_mod"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "survival"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old hero's medal",
+                    "damaged adventurer's badge"
+                ]},
+                {"stat": "weapons"}]
+            }
+        }
+    },
+    "Arcane researcher": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "investigation"]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.LEARNED},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": [{"rd_choice": first_level_spell}, {"rd_choice": first_level_spell}, {"rd_choice": second_level_spell}]
+            },
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 1}]}
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}]
+            }
+        },
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    "collection of magical samples",
+                    "detailed spellbook"
+                ]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": "arcana"}]
+            }
+        }
+    },
+    "Street prophet": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "persuasion"]}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": cleric_cantrip_list}]
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "worn prophetic scroll",
+                    "collection of street prophecies",
+                    "weathered divination tools"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "prophetic intuition (1/day, after observing a creature for at least 1 minute, the prophet can discern whether that creature intends to harm them in the near future)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "attracting a crowd",
+                    "religion"
+                ]}]
+            }
+        }
+    },
+    "Fallen priest/priestess": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["religion", "insight"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": simple_weapon_list}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": cleric_cantrip_list}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": [{"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]},
+                         {"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]},
+                         {"rd_choice": [{"multiply": [cleric_spell_list, second_level_spell]}]}]
+            },
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 1}]}
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "defaced holy symbol",
+                    "old prayer book",
+                    "broken ceremonial staff",
+                    "religious vestments"
+                ]}]
+            }
+        }
+    },
+    "Exiled seer": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 2}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "perception"]}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": cleric_cantrip_list}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": [{"rd_choice": [{"multiply": [wizard_spell_list, first_level_spell]}]},
+                         {"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}]
+            },
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 2}]}
+            }
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "oracle's blindfold",
+                    "crystal divination stone",
+                    "weathered divination cards"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "premonition (1/day, when the seer or a creature they can see within 30 feet makes an attack roll, ability check, or saving throw, the seer can change the immediate outcome and add or subtract 1d4 from the roll)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "interpreting omens",
+                    "recognizing supernatural signs"
+                ]}]
+            }
+        }
+    },
+    "Defector spy": {
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["deception", "stealth", "insight"]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list}, {"const": "thieve's tools"}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "forged identity papers",
+                    "coded message"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "dead drop (after observing a location for 1 minute, the spy can identify a reasonably secure place nearby where a Small object could be hidden or retrieved without notice)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "recognizing surveillance",
+                    "identifying secret signals",
+                    "maintaining a false identity in social interactions"
+                ]}]
+            }
+        }
+    },
+    "Witch-kin outcast": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": wizard_cantrip_list},
+                         {"rd_choice": warlock_cantrip_list},
+                         {"rd_choice": warlock_cantrip_list}]
+            },
+            "known_spells": {
+                "apply": "add",
+                "expr": ["witch bolt (3/day)", "hex (1/day)", "witch's mark (at will)", "charm person (3/day)",
+                         "hold person (1/day)", "summon familiar (at will)", "detect magic (at will)",
+                         "invisibility (1/day)", "true seeing (1/day)", "polymorph (1/day)", "fireball (1/day)"]
+                }
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "intimidation"]}]}
+        },
+
+        "other_info": {
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "witch-touched (the outcast can sense the presence of supernatural creatures within 30 feet, although they cannot determine the creature's exact nature)"
+                }]
+            },
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "black candle",
+                    "small ritual knife"
+                ]},
+                {"rd_choice": random_magical_charms},
+                {"rd_choice": sentient_item_list}]
+            }
+        }
+    },
+    "Mercenary idealist": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion", "survival"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old mercenary contract",
+                    "mercenary company token"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "rallying conviction (once per long rest, when an ally within 30 feet fails a saving throw against being frightened, the mercenary can use a reaction to allow that ally to reroll the saving throw)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "negotiating contracts",
+                    "recognizing mercenary tactics",
+                    "persuasion to uphold an agreement"
+                ]}]
+            }
+        }
+    },
+    "Reluctant hero": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["survival", "insight"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "damaged hero's insignia",
+                    "keepsake from someone they saved",
+                    "worn traveling cloak"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "last resort (once per long rest, when the hero is reduced to 0 HP but not killed outright, they can immediately make one weapon attack before falling unconscious)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "protecting civilians",
+                    "recognizing immediate danger to others"
+                ]}]
+            }
+        }
+    },
+    "Traitor turned savior": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["deception", "insight", "stealth"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "old traitor's insignia",
+                    "stolen document from their former faction",
+                    "damaged former uniform",
+                    "keepsake from the person they betrayed"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "redemption (once per long rest, when an ally within 30 feet is reduced to 0 HP, the traitor can use a reaction to move up to half their speed toward that ally without provoking opportunity attacks)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "insight"
+                ]}]
+            }
+        }
+    },
+    "Doom-bound wanderer": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["survival", "perception"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "map covered in ominous markings",
+                    "object associated with a coming disaster",
+                    "journal recording signs of the impending doom"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "doomed resilience (once per long rest, when the wanderer fails a death saving throw, they can turn the failure into a success)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "investigation and insight to search for signs of impending disasters",
+                    "survival",
+                    "identifying places associated with their prophecy"
+                ]}]
+            }
+        }
+    },
+    "Revolution's spark": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["persuasion", "deception"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "revolutionary pamphlet",
+                    "coded list of supporters",
+                    "homemade protest banner"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "rallying speech (once per long rest, the revolutionary can spend 1 minute addressing up to 10 willing creatures; for the next hour, those creatures have advantage on saving throws against being frightened)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "persuasion with people to resist an oppressive authority",
+                    "recognizing signs of civil unrest"
+                ]}]
+            }
+        }
+    },
+    "Runaway noble child": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history", "persuasion"]}]},
+            "tools": {"apply": "add", "expr": [{"rd_choice": random_toolkit_list},
+                                               {"rd_choice": musical_instrument_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "family signet ring",
+                    "expensive but worn clothing",
+                    "small piece of inherited jewelry"
+                ]},
+                {"rd_choice": [{"stat": "tools"}]}]
+            }
+        }
+    },
+    "Monster in humanoid form": {
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "hp": {"apply": "add", "expr": [{"stat": "strength_mod"}]}
+        },
+
+        "other_info": {
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{"rd_choice": lycantrope_natural_weapons_list},
+                         {"rd_choice": [("darkvision", 60, "ft"), ("darkvision", 120, "ft"),
+                                        ("darkvision (underground only)", 180, "ft"), ("tremorsense", 30, "ft"),
+                                        ("blindsight", 10, "ft"), ("blindsight", 30, "ft"), ("truesight", 10, "ft"),
+                                        ("echolocation", 30, "ft"), ("magic sense", 30, "ft"), ("magnetosense", 30, "ft")]}]
+            },
+            "resistances": {
+                "apply": "add",
+                "expr": [{"rd_choice": random_damage_type_list}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": 
+                    "survival checks done for tracking by scent"
+                }]
+            }
+        }
+    },
+    "Survivor of a fallen city": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["survival", "investigation"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "fragment of a fallen city's map",
+                    "keepsake from a fallen city",
+                    "damaged city insignia",
+                    "piece of masonry from the ruins"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "disaster survivor (the survivor has advantage on saving throws against environmental hazards and natural disasters they have previously experienced)"
+                }]
+            }
+        }
+    },
+    "Bearer of ancestral guilt": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history", "insight"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "ancestral heirloom",
+                    "family record of past deeds",
+                    "portrait of an ancestor"
+                ]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "burden of the past (the bearer can recognize the family, organization, or culture associated with their ancestors' wrongdoing when confronted with its symbols or records)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "recognizing family histories"
+                ]}]
+            }
+        }
+    },
+    "Last of their order": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["history", "perception"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "order insignia",
+                    "last surviving copy of their order's records",
+                    "ceremonial item of their order"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "last tradition (the survivor retains one minor technique of their extinct order; once per long rest, they can use it to gain advantage on one attack roll, ability check, or saving throw)"
+                }]
+            }
+        }
+    },
+    "Haunted war veteran": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["perception", "survival", "intimidation"]}]},
+            "weapons": {"apply": "add", "expr": [{"rd_choice": martial_weapon_list}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "war trophy",
+                    "old military insignia",
+                    "damaged weapon from the war",
+                    "letter/photo from a fallen comrade"
+                ]},
+                {"rd_choice": [{"stat": "weapons"}]}]
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": [{
+                    "const": "battle reflexes (the veteran cannot be surprised while conscious unless incapacitated)"
+                }]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "identifying an ambush",
+                    "recognizing the aftermath of battle, skirmish or fight"
+                ]}]}
+            }
+        },
+    "Reformed cultist": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["religion", "deception", "insight"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "defaced cult symbol",
+                    "stolen cult scripture",
+                    "ritual object they kept after leaving",
+                    "coded list of former cult members"
+                ]}]
+            },
+        }
+    },
+    "Seeker of the First Flame": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+
+        "magic": {
+            "magic_source": {
+                "apply": "replace",
+                "expr": [{"max": [
+                    {"const": MagicSource.INNATE},
+                    {"stat": "magic_source"}
+                ]}]
+            },
+            "known_cantrips": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    {"rd_choice": wizard_cantrip_list},
+                    {"rd_choice": cleric_cantrip_list},
+                    {"rd_choice": warlock_cantrip_list}
+                ]}]
+            }
+        },
+
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "religion", "history"]}]}
+        },
+
+        "other_info": {
+            "equipment": {
+                "apply": "add",
+                "expr": [{"rd_choice": [
+                    "fragment of an ancient, broken spell scroll about the First Flame",
+                    "charred relic",
+                    "map marking forgotten ruins",
+                    "ancient text concerning the First Flame"
+                ]},
+                {"rd_choice": random_magical_charms}]
+            },
+            "add_advantage_on": {
+                "apply": "add",
+                "expr": [{"const": [
+                    "interpreting references to the First Flame"
+                ]}]
+            }
+        }
     }
+}
 
 
 # debugger list
