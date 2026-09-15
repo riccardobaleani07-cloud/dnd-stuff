@@ -1,0 +1,132 @@
+
+wealth = {
+    Wealth.OPULENT: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 6.00},
+                    {"rd_choice": [2.00, 4.00, 6.00, 8.00, 24.00]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": random_luxury_item},
+                    {"rd_choice": random_luxury_item},
+                    {"rd_choice": [{"rd_choice": random_luxury_item}, []]},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": enchanted_weapon_list},
+                    {"rd_choice": [{"rd_choice": enchanted_weapon_list}, []]}
+                ]
+            }
+        }
+    },
+
+    Wealth.RICH: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 3.00},
+                    {"rd_choice": [1.00, 2.00, 3.00, 4.00, 12.00]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": random_luxury_item},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": [{"rd_choice": enchanted_weapon_list}, []]}
+                ]
+            }
+        }
+    },
+
+    Wealth.WEALTHY: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 0.90},
+                    {"rd_choice": [0.30, 0.60, 0.90, 1.20, 3.60]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": random_luxury_item},
+                    {"rd_choice": random_gadget},
+                    {"rd_choice": [
+                        [],
+                        {"rd_choice": [{"rd_choice": enchanted_weapon_list}, [], []]},
+                        {"rd_choice": random_luxury_item},
+                        {"rd_choice": random_gadget}
+                    ]}
+                ]
+            }
+        }
+    },
+
+    Wealth.MODEST: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 0.30},
+                    {"rd_choice": [0.10, 0.20, 0.30, 0.40, 1.20]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": [
+                        [],
+                        [],
+                        [],
+                        {"rd_choice": random_gadget},
+                        {"rd_choice": random_luxury_item}
+                    ]},
+                    {"rd_choice": [
+                        [],
+                        [],
+                        [],
+                        {"rd_choice": random_gadget},
+                        {"rd_choice": [{"rd_choice": enchanted_weapon_list}, [], [], [], [], []]}
+                    ]}
+                ]
+            }
+        }
+    },
+
+    Wealth.POOR: {
+        "other_info": {
+            "coins": {
+                "apply": "add",
+                "expr": [
+                    {"const": 0.03},
+                    {"rd_choice": [0.01, 0.02, 0.03, 0.04, 0.12]}
+                ]
+            },
+
+            "equipment": {
+                "apply": "add",
+                "expr": [
+                    {"rd_choice": [
+                        [],
+                        [],
+                        [],
+                        [],
+                        {"rd_choice": random_gadget}
+                    ]}
+                ]
+            }
+        }
+    }
+}
