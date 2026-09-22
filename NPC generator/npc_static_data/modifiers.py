@@ -2003,7 +2003,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "add_advantage_on": {"apply": "add", "expr": [{"const": []}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0}]}
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
         }
     },
     "Polar Human": {
@@ -2096,7 +2096,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "immunities": {"apply": "add", "expr": [{"const": ["charmed (magic-induced sleep)"]}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
         }
     },
     "Plasmoid": {
@@ -2110,7 +2111,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 ("darkvision", 60, "ft"), ("hold breath", 15, "minutes"),
                 "amorphous form (can squeeze through 1-inch gaps)",
-                "fatural pseudopods (can manipulate objects without hands)"]}]}
+                "fatural pseudopods (can manipulate objects without hands)"]}]},
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
         }
     },
     "Spirit": {
@@ -2139,7 +2141,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "incorporeal movement (can move through creatures and objcts as if they're difficult terrain)",
                 ("true sight", 15, "ft"),
                 ("spectral sense (sense living creatures)", 60, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0.5}]}
         }
     },
     "Lopunnie": {
@@ -2161,7 +2164,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 ("darkvision", 60, "ft"),
                 "keen hearing",
-                "keen smell"]}]}
+                "keen smell"]}]},
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0.125}]}
         }
     },
     "Common Birdling": {
@@ -2180,7 +2184,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "skills": {"apply": "add", "expr": [{"const": "perception"}]}
         },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": "keen sight"}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "keen sight"}]},
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0.5}]}
         }
     },
     "Hybrid": {
@@ -2197,7 +2202,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "other_physical_features": {"apply": "add", "expr": [{"const": 
-                "adaptive physiology (once per long rest, gain advantage on one saving throw of choice for the day)"}]}
+                "adaptive physiology (once per long rest, gain advantage on one saving throw of choice for the day)"}]},
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
             
         }
     },
@@ -2222,7 +2228,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": [{"add": [wizard_cantrip_list, druid_cantrip_list, cleric_cantrip_list]}]}]}
         },
         "other_info": {
-            "resistances": {"apply": "add", "expr": [{"rd_choice": random_damage_type_list}]}
+            "resistances": {"apply": "add", "expr": [{"rd_choice": random_damage_type_list}]},
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0.25}]}
         }
     },
     "Dark Elf": {
@@ -2236,12 +2243,13 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
-            "known_spells": {"apply": "add", "expr": [{"const": ["Dancing Lights", "Faerie Fire", "Darkness"]}]}
+            "known_spells": {"apply": "add", "expr": [{"const": ["Dancing Lights (1/day)", "Faerie Fire (1/day)", "Darkness (1/day)"]}]}
         },
         "other_info": {
             "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": "sunlight sensitivity"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 120, "ft")}]},
+            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
         }
     },
     "Wood Elf": {
@@ -2378,7 +2386,9 @@ race = { # Common elf contains what a race can modify, being some sort of templa
     },
     "Elementalfolk": {
         "ability_scores": {
-            "constitution": {"apply": "add", "expr": [{"const": 2}]}
+            "constitution": {"apply": "add", "expr": [{"const": 4}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
         },
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
