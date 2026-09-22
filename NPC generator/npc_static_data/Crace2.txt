@@ -1,0 +1,918 @@
+
+race = {
+    "Kling": {
+        "core_combat": {
+            "speed_bonus": {"speed.swimming": {"apply": "replace", "expr": [{"const": 20}]}},
+            "size": {"apply": "replace", "expr": [{"const": Size.SMALL}]}
+        },
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": "tinkers tools"}]},
+            "skills": {"apply": "add", "expr": [{"const": ["sleight_of_hand", "survival"]}]}
+        },
+        "other_info": {
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 60, "ft"),
+                "amphibious (can breathe air and water)",
+                "scavenger culture (advantage on checks to find usable materials)"
+            ]}]}
+        }
+    },
+    "Halfling": {
+        "core_combat": {
+            "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]}},
+            "size": {"apply": "add", "expr": [{"const": Size.SMALL}]}
+        },
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": "stealth"}]}
+        },
+        "other_info": {
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["lucky (reroll a nat 1 on a d20)",
+                                                                            "nimbleness (you can move through a creature bigger than you)"]}]}
+        }
+    },
+    "Orc": {
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 2}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["greataxe", "javelin"]}]}
+        },
+        "other_info": {
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"),
+                                                                            "powerful build (counts as one size larger for carrying capacity and push/drag/lift"]}]}
+        }
+    },
+    "Plantfolk": {
+        "core_combat": {
+            "speed_bonus": {"speed.climbing": {"apply": "replace", "expr": [{"const": 10}]}}
+        },
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 2}]},
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["dagger", "quarterstaff", "sickle"]}]},
+            "tools": {"apply": "add", "expr": [{"const": ["herbalism kit", "alchemist supplies"]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["nature", "perception", "survival"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["entangle (free at will)", "goodberry (free 1/day)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "druidcraft"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"rd_choice": plantfolk_vulnerability_list}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": ["nature", "herbalism kit", "prone", "stealth (in foliage)"]}]}
+        }
+    },
+    "Tiefling": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "thaumaturgy"}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["disguise self (free 1/day)", "hellish rebuke (free 1/day)"]}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]}
+        }
+    },
+    "Demonoid": {
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
+            "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 15}]}}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["dagger", "longsword", "shortsword"]}, {"rd_choice": exotic_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["intimidation", "arcana"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": "hellish rebuke (free 1/day)"}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "thaumaturgy"}, {"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "demonic heritage (can recall demonic powers, manifests as luminescent horns, wings or tail)",
+                ("darkvision", 60, "ft")
+            ]}]}
+        },
+    },
+    "Yuan-Ti": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "poison spray"}]},
+            "known_spells": {"apply": "add", "expr": [{"const": "suggestion (free 1/day)"}]}
+        },
+        "other_info": {
+            "immunities": {"apply": "add", "expr": [{"const": "poison"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "magic resistance (advantage vs spells that force a saving throw)"]}]}
+        }
+    },
+    "Demon": {
+        "core_combat": {
+            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}, {"const": 2}]}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
+            "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 2}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["dagger", "longsword", "shortsword"]}, {"rd_choice": exotic_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["intimidation", "arcana"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["darkness (free 1/day)", "teleport (free 1/day)", "hellish rebuke (free 1/day)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": ["thaumaturgy", "wizard_cantrip_list", "message"]}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": ["fire", "cold", "lightning", "force"]}]},
+            "immunities": {"apply": "add", "expr": [{"const": ["charmed", "frightened"]}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": ["radiant", "necrotic"]}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 120, "ft"),
+                                        "regeneration (regain 5 HP at the start of its turn if it has at least 1 HP)",
+                                        "demonic taunt (once per turn, can deal extra 7 (2d6) necrotic damage to a creature it hits with a weapon attack)",
+                                        ("true sight", 45, "ft")]}]}
+        }
+    },
+    "Salamanderman": {
+        "core_combat": {
+            "speed_bonus": {"speed.swimming": {"apply": "replace", "expr": [{"const": 20}]}}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["dagger", "shortsword"]}, {"rd_choice": simple_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["survival", "nature"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "athletics (when balance is needed)"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "regenerative skin (heals minor wounds faster for 1d4 HP at the start of its turn)",
+                "tail can be used for balance or minor attacks (1d4 bludgeoning)",
+                ("darkvision", 60, "ft")
+            ]}]}
+        }
+    },
+    "Oni": {
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 2}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword", "katana", "shortsword"]}, {"rd_choice": martial_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": "intimidation"}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "fire bolt"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 60, "ft"),
+                "horns (natural weapons, 1d6 piercing damage)",
+                "innate flame affinity (fire generate by your spells is deep red or purple)"
+            ]}]}
+        }
+    },
+    "Kijin": {
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}, {"const": 2}]},
+            "size": {"apply": "replace", "expr": [{"const": Size.MEDIUM}]}
+        },
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["longsword", "katana", "longbow"]}, {"rd_choice": martial_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": "arcana"}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["mage armor (free at will)", "detect magic (free at will)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 60, "ft"),
+                "magic vision (can see magic energy and auras)",
+                "innate fire affinity (fire created by your spells is a colour of your choice)"
+            ]}]}
+        }
+    },
+    "Majin": {
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "dexterity_mod"}, {"const": 5}]},
+            "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 2}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["perception", "intimidation"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["mage armor (free at will)", "detect magic (free at will)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": ["fire", "necrotic"]}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 60, "ft"),
+                ("thermal vision", 10, "ft"),
+                ("tremorsense", 10, "ft"),
+                "heightened senses (advantage on perception checks involving smell, sight, or hearing)",
+                "overwhelming presence (once per day, force all creatures within 30ft that can see you to make a DC 15 wisdom saving throw or be frightened for 1 minute)"
+            ]}]}
+        }
+    },
+    "Strix": {
+        "ability_scores": {
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": -1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "arcana"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "psychic"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": ["charmed", "frightened"]}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "tentacle manifestation (can grow/absorb grown tentacles from the back)",
+                "grown tentacles can manipulate objects but cannot wield weapons",
+                "self-replication capable (rare, slow process)"
+            ]}]}
+        }
+    },
+    "Nightmare": {
+        "core_combat": {
+            "hp": {"apply": "divide", "expr": [{"const": 2}]},
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": -1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["deception", "insight"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "charisma"}]},
+            "spell_slots": {"spell_slots.1": 2,
+                            "spell_slots.2": 2},
+            "known_spells": {"apply": "add", "expr": [{"const": ["sleep (free 1/day)", "cause fear (free 1/day)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": ["minor illusion", "friendship"]}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "psychic"}]},
+            "immunities": {"apply": "add", "expr": [{"const": "magical sleep"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "feared"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "shapeshifter (humanoid forms only, still a shadowy halo remains)",
+                "nightmare induction (creatures that sleep within 30ft may suffer disturbing dreams and not gain benefits of a long rest at your discrection)",
+                "dream-feeding (regain 2d6 hp after inducing a nightmare)"
+            ]}]}
+        }
+    },
+    "Celestial": {
+        "core_combat": {
+            "initiative": {"apply": "add", "expr": [{"stat": "wisdom_mod"}]},
+            "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 15}]}}
+        },
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"rd_choice": simple_weapon_list}, {"rd_choice": martial_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": "insight"}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["cure wounds (free 3/day)", "protection from evil and good (free 1/day)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": ["thaumaturgy", "light"]}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "radiant"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "feared"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "celestial heritage (can manifest wings of light, halo and/or radiant tail)",
+                ("darkvision", 60, "ft"),
+                ("true sight", 30, "ft")
+            ]}]}
+        }
+    },
+    "Angel": {
+        "core_combat": {
+            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}, {"const": 3}]}]},
+            "ac": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
+            "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 2}]},
+            "constitution": {"apply": "add", "expr": [{"const": 2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["spear", "longsword", "longbow"]}, {"rd_choice": random_weapon_list}]},
+            "armors": {"apply": "add", "expr": [{"max": [{"const": ArmorType.HEAVY}, {"stat": "armors"}]}]},
+            "skills": {"apply": "add", "expr": [{"const": ["insight", "arcana"]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["wisdom", "charisma"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["shield of faith (free at will)", "lesser restoration (free 1/day)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": ["light", "thaumaturgy"]}, {"rd_choice": cleric_cantrip_list}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": ["radiant", "necrotic"]}]},
+            "immunities": {"apply": "add", "expr": [{"const": ["charmed", "frightened"]}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": ["fire", "cold", "lightning", "force"]}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "divine regeneration (regain 5 hp at the start of its turn if it has at least 1 hp)",
+                "angelic touch (heals a creature or mends an object for 2d4 + 3 hp as an action, on touch)",
+                ("darkvision", 120, "ft"),
+                ("true sight", 30, "ft")
+            ]}]}
+        }
+    },
+    "Aarakocra": {
+        "core_combat": {
+            "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 50}]}} #it's going to be added to the base speed (speed.walking is 30ft others are 0) of the specified type
+        },
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "other_info": {
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["keen sight (advantage on perception checks that rely on sight)", "talons (natural weapons, 1d4 slashing)"]}]}
+        }
+    },
+    "Aasimar": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "light"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": ["radiant", "necrotic"]}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 60, "ft"),
+                {"rd_choice": aasimar_transformation_list}
+            ]}]}
+        }
+    },
+    "Moonling": {
+        "core_combat": {
+            "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]}},
+            "size": {"apply": "replace", "expr": [{"const": Size.SMALL}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": -1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["survival", "perception"]}]}
+        },
+        "other_info": {
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "light-perception vision (cannot see shapes or colors, only light intensity; blinded by magical darkness)",
+                ("tremorsense", 30, "ft"),
+                ("magnetosense", 60, "ft"),
+                "keen hunter (advantage on survival checks to track creatures)",
+                "generational grudge (once a Moonling has been harmed by a creature, that creature has disadvantage on charisma checks against Moonlings of the same community)"
+            ]}]}
+        }
+    },
+    "Foxling": {
+        "core_combat": {
+            "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 5}]}}
+        },
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["heavy crossbow", "spear", "war fan"]}, {"rd_choice": random_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": ["stealth", "insight"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "minor illusion"}]}
+        },
+        "other_info": {
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"),
+                "fox senses (recognizes individuals by scent and magical trace: has advantage on uncovering true identity)",
+                ("termic vision (can detect warm creatures)", 15, "ft"),
+                "natural agility (advantage on dexterity saving throws against effects you can see)"
+            ]}]}
+        }
+    },
+    "Shadowkin": {
+        "core_combat": {
+            "ac": {"apply": "add", "expr": [{"const": 4}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "armors": {"apply": "add", "expr": [{"max": [{"const": ArmorType.HEAVY}, {"stat": "armors"}]}]},
+            "weapons": {"apply": "add", "expr": [{"const": "shield"}, {"rd_choice": simple_weapon_list}, {"rd_choice": random_weapon_list}]},
+            "skills": {"apply": "add", "expr": [{"const": "intimidation"}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "necrotic"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 60, "ft"),
+                "armor shell (can inhabit incomplete or abandoned armor that drops if defeated)"
+            ]}]}
+        }
+    },
+    "Wisp": {
+        "core_combat": {
+            "ac": {"apply": "add", "expr": [{"const": +5}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
+            "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}},
+            "size": {"apply": "replace", "expr": [{"const": Size.TINY}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": -2}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "constitution": {"apply": "add", "expr": [{"const": -1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "stealth"]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["dexterity", "wisdom"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "charisma"}]},
+            "spell_slots": {"spell_slots.1": 2},
+            "known_spells": {"apply": "add", "expr": [{"const": ["light (free 1/day)", "mage hand (free 2/day)", "minor illusion (free 1/day)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": ["lightning", "poison"]}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": ["bludgeoning (nonmagical)", "piercing (nonmagical)", "slashing (nonmagical)"]}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "stealth (in dim light or darkness)"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "incorporeal form (can pass through small openings, 1 inch wide, cannot wear armor or carry objects)",
+                "glowing body (light radius 10ft, can dim at will)",
+                "possessive ability (can attempt to possess a willing or incontious humanoid once per short rest, duration 1 minute)",
+                "hovering flight (hovers and flyes)"
+            ]}]}
+        }
+    },
+    "Voidling": {
+        "core_combat": {
+            "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]}},
+            "size": {"apply": "replace", "expr": [{"const": Size.SMALL}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": -2}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["dagger", "rapier"]}, {"rd_choice": simple_weapon_list}]},
+            "tools": {"apply": "add", "expr": [{"const": ["tinkers tools", "jewelers tools"]}]},
+            "skills": {"apply": "add", "expr": [{"const": "stealth"}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "necrotic"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": ["perception (sight, under direct sunlight)", "attack rolls (if sight is needed under direct sunlight)"]}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 60, "ft"),
+                ("telepathy (only in Voshedi)", 60, "ft"),
+                "dark sustenance (does not need to eat or drink normally)",
+                "darknesssynthesis (inverted photosynthesis)",
+                "mute (doesn't speak normally)"
+            ]}]}
+        }
+    },
+    "Lycanthrope": {
+        "core_combat": {
+            "ac": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 2}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": "perception"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": ["bludgeoning (nonmagical)", "piercing (nonmagical)", "slashing (nonmagical)"]}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": ["silvered weapons"]}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": ["perception (smell)"]}]},
+            "other_physical_features": [
+                "hybrid nightime transformation (can transform into hybrid form only at night; transformation is more severe the more the moon is visible)",
+                {"rd_choice": lycantrope_natural_weapons_list}
+            ]
+        }
+    },
+    "Sentient Undead": {
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": -1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": "history"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "necrotic"}]},
+            "immunities": {"apply": "add", "expr": [{"const": ["poison", "disease"]}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": "radiant"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "feared"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": "charisma checks (dealing with the living)"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": "does not need food or air" }]}
+        }
+    },
+    "Starborn": {
+        "core_combat": {
+            "hp": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}, {"const": 20}]},
+            "hp_dice": {"apply": "replace", "expr": [{"const": 7}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "proficiency_bonus"}]},
+            "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 10}]},
+                            "speed.flying": {"apply": "replace", "expr": [{"const": 20}]}},
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": -1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "constitution": {"apply": "add", "expr": [{"const": -1}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 4}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "history", "persuasion"]}]},
+            "saving_throws": {"apply": "add", "expr": [{"const": ["intelligence", "charisma", "constitution"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
+            "spell_slots": {
+                "spell_slots.1": {"apply": "add", "expr": [{"const": 4}]},
+                "spell_slots.2": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.3": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.4": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.5": {"apply": "add", "expr": [{"const": 3}]},
+                "spell_slots.6": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.7": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.8": {"apply": "add", "expr": [{"const": 2}]},
+                "spell_slots.9": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "known_spells": {"apply": "add", "expr": [{"const": ["wish", "meteor swarm", "plane shift", "disintegrate", "magic missle", "counterspell", "detect magic"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": ["light", "fire bolt"]}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": ["radiant", "force"]}]},
+            "immunities": {"apply": "add", "expr": [{"const": ["diseased", "exhaustion (nonmagical)"]}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": "psychic"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "stellar core (no need for air, food or sleep)",
+                "energy dependency (at 16 spell slots or less, cannot fly and all the resistances are lost; at 5 spell slots or less gains mortal needs and looses immunity to exaustion effects; at 0 suffer from 1d8 + 2 damage for every half hour without sleep)",
+                "slow recharge (regain spell slots only up to the 4th level after a long rest, plus 2 additional slot of the lowest level spent over 5th)",
+                "half-familiar (you can bond with an other humanoid with a ritual: Stellar Covenant, 9th-level transmutation (ritual), Casting Time: 24 hours, Range: Touch, Components: V, S, M (a focus attuned to stellar energy worth at least 10,000 gp, consumed), Duration: Until broken, Description: this ritual forges a one-way metaphysical bond between a Starborn and a single willing creature, designating that creature as the Starborn's Chosen. In exchange of a predefined thing, the Chosen can order the Starborn to act. The pact can be broken by both if one is not fullfilling the pact's terms. The pact is exclusive.)",
+                "bond-relyant caster (can cast spells above the 4th level only for a chosen bonded creature)",
+                "restricted attunement (only one weapon (that act as focus) or focus of choice)",
+                "fatigue sensitivity (disadvantage on constitution saving throws against exhaustion effects)",
+                ("darkvision", 120, "ft"),
+                ("termic vision", 30, "ft"),
+                ("tremorsense", 30, "ft"),
+                ("true sight", 15, "ft")
+            ]}]}
+        }
+    },
+    "Crystalborn": {
+        "core_combat": {
+            "size": {"apply": "replace", "expr": [{"const": Size.SMALL}]}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": -2}]},
+            "constitution": {"apply": "add", "expr": [{"const": 2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 2}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": "artisan tools"}]},
+            "skills": {"apply": "add", "expr": [{"const": ["arcana", "perception"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "light"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "psychic"}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": "thunder"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "arcana"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": "stealth"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]}
+        }
+    },
+    "Changeling": {
+        "ability_scores": {
+            "charisma": {"apply": "add", "expr": [{"const": 2}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": "deception"}]}
+        },
+        "other_info": {
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "deception (related to identity manouvers)"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": "shapechanger (humanoid appearance only)"}]}
+        }
+    },
+    "True Vampire": {
+        "core_combat": {
+            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "constitution_mod"}, {"stat": "level"}]}, {"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}]}]},
+            "hp_dice": {"apply": "replace", "expr": [{"const": 9}]},
+            "ac": {"apply": "add", "expr": [{"const": 1}]},
+            "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
+            "speed_bonus": {
+                "speed.walking": {"apply": "add", "expr": [{"const": 5}]},
+                "speed.flying": {"apply": "replace", "expr": [{"const": 30}]}
+            }
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "tools": {"apply": "add", "expr": [{"const": "brewer supplies"}]},
+            "skills": {"apply": "add", "expr": [{"const": ["perception", "persuasion"]}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "necrotic"}]},
+            "immunities": {"apply": "add", "expr": [{"const": ["diseases", "poison", "exhaustion (non-magical)", "aging effects"]}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "death effects"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": "perception (when garlic is in 10ft)"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                ("darkvision", 120, "ft"),
+                "enhanced senses (advantage on perception checks relying on smell, taste, or hearing)",
+                "no heartbeat",
+                "does not need to breathe",
+                "regeneration (regain hit points equal to proficiency bonus at the start of turn if at least 1 HP and has consumed blood in the last 24 hours)",
+                "phase step (can move through solid objects up to 10ft as difficult terrain)",
+                "flight (hover; cannot wear heavy armor)",
+                "mist form (once per short rest, transform into mist for 1 minute; cannot attack or cast spells, can pass through tiny openings, speed becomes flying 40ft)",
+                "no reflection (mirrors and reflective surfaces do not show the creature)"
+            ]}]}
+        }
+    },
+    "Spectre": {
+        "core_combat": {
+            "hp_dice": {"apply": "subtract", "expr": [{"min": [{"stat": "proficiency_bonus"}, {"const": 3}]}]},
+            "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": -2}]},
+            "dexterity": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": -2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["perception", "stealth"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "thaumaturgy"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": ["necrotic", "psychic"]}]},
+            "immunities": {"apply": "add", "expr": [{"const": ["poison", "diseased", "poisoned"]}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": "radiant"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "stealth"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "incorporeal movement (can move through solid objects as if they're difficult terrain)",
+                ("darkvision", 60, "ft"),
+                ("spectral sense (sense living creatures)", 60, "ft")
+            ]}]}
+        }
+    },
+    "Triton": {
+        "core_combat": {
+            "speed_bonus": {"speed.swimming": {"apply": "replace", "expr": [{"const": 30}]}}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": 1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["trident", "spear"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": "fog cloud (free 1/day)"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "cold"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "amphibious (breathe air and water)",
+                "aquatic adaptation (water contact reveals scale skin, gills, webbed fingers/toes)",
+                ("darkvision", 120, "ft")
+            ]}]}
+        }
+    },
+    "Mermaid": {
+        "core_combat": {
+            "speed_bonus": {"speed.walking": {"apply": "remove", "expr": [{"const": 20}]},
+                            "speed.swimming": {"apply": "replace", "expr": [{"const": 45}]}}
+        },
+        "ability_scores": {
+            "constitution": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "shape water"}]},
+            "known_spells": {"apply": "add", "expr": [{"const": "water breathing (free at will)"}]}
+        },
+        "other_info": {
+            "other_physical_features": {"apply": "add", "expr": [{"const": "amphibious (breath air and water)"}]}
+        }
+    },
+    "Nymph": {
+        "ability_scores": {
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 2}]}
+        },
+        "proficiencies": {
+            "saving_throws": {"apply": "add", "expr": [{"const": "dexterity"}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["charm person (free 3/day)", "entangle (free at will)"]}]}
+        },
+        "other_info": {
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "charmed"}]}
+        }
+    },
+    "Turtoid": {
+        "core_combat": {
+            "ac": {"apply": "add", "expr": [{"const": 1}]},
+            "initiative": {"apply": "subtract", "expr": [{"stat": "dexterity_mod"}]},
+            "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 5}]},
+                            "speed.swimming": {"apply": "replace", "expr": [{"const": 20}]}}
+        },
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": -1}]},
+            "constitution": {"apply": "add", "expr": [{"const": 2}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+        },
+        "proficiencies": {
+            "weapons": {"apply": "add", "expr": [{"const": ["club", "spear"]}]},
+            "skills": {"apply": "add", "expr": [{"const": "survival"}]},
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": "cold"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "strength (carrying or pushing)"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": "dexterity saving throws"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "tough shell (can retract as a bonus action to increase AC by 3)",
+                ("hold breath", 15, "minutes")
+            ]}]}
+        }
+    },
+    "Gooba": {
+        "core_combat": {
+            "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 10}]},
+                            "speed.swimming": {"apply": "replace", "expr": [{"const": 30}]}}
+        },
+        "ability_scores": {
+            "dexterity": {"apply": "add", "expr": [{"const": 2}]},
+            "constitution": {"apply": "add", "expr": [{"const": 2}]},
+            "intelligence": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": -1}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["stealth", "athletics"]}]}
+        },
+        "other_info": {
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": ["perception (sight, under direct sunlight)", "attack rolls (if sight is needed under direct sunlight)"]}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "amphibious (can breathe air and water)",
+                "dehydration weakness (after 24 hours without at least 2 hours submerged in water, gain one level of exhaustion per day)",
+                "tentacular limbs (can interact with objects, grapple, or climb using tentacles; advantage on grapple checks)",
+                "chromatic shift (using an action it can change skin color briefly to hide; gains advantage on the stealth check)",
+                "ink burst (once per short rest, release ink in a 10ft radius underwater, heavily obscured for 1 minute)",
+                ("darkvision", 60, "ft")
+            ]}]}
+        }
+    },
+    "Banshee": {
+        "core_combat": {
+            "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
+        },
+        "ability_scores": {
+            "strength": {"apply": "add", "expr": [{"const": -1}]},
+            "constitution": {"apply": "add", "expr": [{"const": -1}]},
+            "wisdom": {"apply": "add", "expr": [{"const": 1}]},
+            "charisma": {"apply": "add", "expr": [{"const": 3}]}
+        },
+        "proficiencies": {
+            "skills": {"apply": "add", "expr": [{"const": ["intimidation", "performance"]}]}
+        },
+        "magic": {
+            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["fear (free 1/day)", "silent image (free 1/day)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "vicious mockery"}]}
+        },
+        "other_info": {
+            "resistances": {"apply": "add", "expr": [{"const": ["necrotic", "psychic"]}]},
+            "immunities": {"apply": "add", "expr": [{"const": ["poison", "charmed", "poisoned", "frightened"]}]},
+            "vulnerabilities": {"apply": "add", "expr": [{"const": "radiant"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "intimidation"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": "concentration (for maintaining spells)"}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": [
+                "incorporeal movement (can move through solid objects as if they're difficult terrain)",
+                "wail resonance (once per long rest, emit a wail causing all creatures within 30ft to make a DC 15 constitution saving throw or take 4d6 psychic damage and be frightened for 1 minute; half damage and no fright on successful save)",
+                ("darkvision", 60, "ft"),
+                ("spectral sense (sense living creatures)", 60, "ft")
+            ]}]}
+        }
+    }
+}
