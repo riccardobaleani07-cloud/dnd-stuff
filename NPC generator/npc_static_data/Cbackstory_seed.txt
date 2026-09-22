@@ -1390,7 +1390,7 @@ backstory_seed = {
                 "expr": [{"rd_choice": lycantrope_natural_weapons_list},
                          {"rd_choice": [("darkvision", 60, "ft"), ("darkvision", 120, "ft"),
                                         ("darkvision (underground only)", 180, "ft"), ("tremorsense", 30, "ft"),
-                                        ("blindsight", 10, "ft"), ("blindsight", 30, "ft"), ("truesight", 10, "ft"),
+                                        ("blindsight", 10, "ft"), ("blindsight", 30, "ft"), ("true sight", 10, "ft"),
                                         ("echolocation", 30, "ft"), ("magic sense", 30, "ft"), ("magnetosense", 30, "ft")]}]
             },
             "resistances": {

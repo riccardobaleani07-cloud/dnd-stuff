@@ -173,7 +173,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 ("darkvision", 60, "ft"),
                 ("hold breath", 10, "minutes"),
                 "incorporeal movement (can move through creatures and objcts as if they're difficult terrain)",
-                ("truesight", 15, "ft"),
+                ("true sight", 15, "ft"),
                 ("spectral sense (sense living creatures)", 60, "ft")
             ]}]}
         }

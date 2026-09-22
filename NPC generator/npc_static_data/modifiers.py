@@ -1696,6 +1696,8 @@ random_apostle_weapon = [
 random_dice_list = [4, 6, 6, 8, 8, 10, 12] # (ex: d4, d6, d8, d10, d12, d20) some dice are more common than others, so they appear multiple times in the list to increase their probability of being rolled. The d20 is not included because it is not used for normal hp pools.
 
 
+# "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
+
 
 wealth = {
     Wealth.OPULENT: {
@@ -1719,7 +1721,9 @@ wealth = {
                     {"rd_choice": enchanted_weapon_list},
                     {"rd_choice": [{"rd_choice": enchanted_weapon_list}, []]}
                 ]
-            }
+            },
+
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
         }
     },
 
@@ -1741,7 +1745,9 @@ wealth = {
                     {"rd_choice": random_gadget},
                     {"rd_choice": [{"rd_choice": enchanted_weapon_list}, []]}
                 ]
-            }
+            },
+
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
 
@@ -1767,7 +1773,9 @@ wealth = {
                         {"rd_choice": random_gadget}
                     ]}
                 ]
-            }
+            },
+
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
 
@@ -1799,7 +1807,9 @@ wealth = {
                         {"rd_choice": [{"rd_choice": enchanted_weapon_list}, [], [], [], [], []]}
                     ]}
                 ]
-            }
+            },
+
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.03125}]}
         }
     },
 
@@ -2127,7 +2137,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 ("darkvision", 60, "ft"),
                 ("hold breath", 10, "minutes"),
                 "incorporeal movement (can move through creatures and objcts as if they're difficult terrain)",
-                ("truesight", 15, "ft"),
+                ("true sight", 15, "ft"),
                 ("spectral sense (sense living creatures)", 60, "ft")
             ]}]}
         }
@@ -4371,6 +4381,9 @@ age_category = { # thoose modifiers are flat modifications to the already existi
                 "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list (in this case the two lists that are being multiplied are the simple_weapon_list and thealready existing weapon proficiencies)
                 "armors": {"apply": "replace", "expr": [{"const": ArmorType.UNARMORED}]},
                 "tools": {"apply": "replace", "expr": [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]} # it aims to reduce the number of proficiencies capping them at two
+            },
+            "other_info": {
+                "overall_cr": {"apply": "subtract", "expr": [{"const": 0.25}]}
             }
         },
         "teen": {
@@ -4385,6 +4398,9 @@ age_category = { # thoose modifiers are flat modifications to the already existi
                 "weapons": {"apply": "multiply", "expr": [{"const": simple_weapon_list}]}, # Multipling two lists means taking only the values that appears in both, Dividing two lists means taking only the values that are exlusive of one of the two list (in this case the two lists that are being multiplied are the simple_weapon_list and thealready existing weapon proficiencies)
                 "armors": {"apply": "replace", "expr": [{"min": [{"stat": "armors"}, {"const": ArmorType.LIGHT}]}]},
                 "tools": {"apply": "replace", "expr": [{"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}, {"rd_choice": [{"stat": "tools"}]}]} # it aims to reduce the number of proficiencies capping them at three
+            },
+            "other_info": {
+                "overall_cr": {"apply": "subtract", "expr": [{"const": 0.125}]}
             }
         },
         "adult": {},
@@ -4411,9 +4427,13 @@ age_category = { # thoose modifiers are flat modifications to the already existi
                 "intelligence": {"apply": "subtract", "expr": [{"const": 1}]},
                 "wisdom": {"apply": "subtract", "expr": [{"const": 3}]},
                 "charisma": {"apply": "add", "expr": [{"const": 2}]}
+            },
+            "other_info": {
+                "overall_cr": {"apply": "subtract", "expr": [{"const": 0.125}]}
             }
         }
     }
+
 
 jobs = { #Monarch contains the max possible template for occupations
     "Monarch": {
@@ -4524,7 +4544,8 @@ jobs = { #Monarch contains the max possible template for occupations
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"rd_choice": ["slashing", "piercing", "bludgeoning", "force"]}]},
-            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}, {"const": ["longsword","shortsword"]}, {"rd_choice": ["longbow","shortbow"]}, {"multiply": [{"const": 6}, {"const": "javelin"}]}, {"multiply": [{"const": 20}, {"const": "arrow"}]}]}]}
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}, {"const": ["longsword","shortsword"]}, {"rd_choice": ["longbow","shortbow"]}, {"multiply": [{"const": 6}, {"const": "javelin"}]}, {"multiply": [{"const": 20}, {"const": "arrow"}]}]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.25}]}
         }
     },
     "High Priest": {
@@ -4577,7 +4598,18 @@ jobs = { #Monarch contains the max possible template for occupations
         },
         "other_info": {
             "add_advantage_on": {"apply": "add", "expr": [{"const": ["religion"]}]},
-            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"const": "holy symbol"}, {"const": "ceremonial robes"}, {"rd_choice": [{"stat": "tools"}]}]}]}
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"const": "holy symbol"}, {"const": "ceremonial robes"}, {"rd_choice": [{"stat": "tools"}]}]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.00},
+                                        {"multiply": [{"stat": "spell_slots.1"}, 0.03125]},
+                                        {"multiply": [{"stat": "spell_slots.2"}, 0.0625]},
+                                        {"multiply": [{"stat": "spell_slots.3"}, 0.5]},
+                                        {"multiply": [{"stat": "spell_slots.4"}, 0.125]},
+                                        {"multiply": [{"stat": "spell_slots.5"}, 0.25]},
+                                        {"multiply": [{"stat": "spell_slots.6"}, 0.375]},
+                                        {"multiply": [{"stat": "spell_slots.7"}, 0.5]},
+                                        {"multiply": [{"stat": "spell_slots.8"}, 0.75]},
+                                        {"multiply": [{"stat": "spell_slots.9"}, 1]}
+                                        ]}
         }
     },
     "Royal Advisor": {
@@ -4602,7 +4634,8 @@ jobs = { #Monarch contains the max possible template for occupations
         },
         "other_info": {
             "add_advantage_on": {"apply": "add", "expr": [{"const": ["insight"]}]},
-            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"const": "scrolls and documents"}, {"rd_choice": [{"stat": "tools"}]}]}]}
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}, {"const": "scrolls and documents"}, {"rd_choice": [{"stat": "tools"}]}]}]},
+            "overall_cr": {"appkly": "add", "expr": [{"const": 0.5}]}
         }
     },
 
@@ -4633,7 +4666,10 @@ jobs = { #Monarch contains the max possible template for occupations
             "saving_throws": {"apply": "add", "expr": [{"const": ["strength"]}]}
         },
         "other_info": {
-            "equipment": {"apply": "add", "expr": [{"const": ["longsword", "shield", "lance"]}, {"rd_choice": random_weapon_list}]}
+            "equipment": {"apply": "add", "expr": [{"const": ["longsword", "shield", "lance"]}, {"rd_choice": random_weapon_list}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["action surge (can make a second attack as part of an attack action)",
+                                                                            "mounted combatant (has advantage to hit unmounted creatures)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.5}]}
         }
     },
     "Merchant Lord": {
@@ -4696,6 +4732,13 @@ jobs = { #Monarch contains the max possible template for occupations
             },
             "known_spells": {"apply": "add", "expr": [{"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [cleric_spell_list, first_level_spell]}]}, {"rd_choice": [{"multiply": [cleric_spell_list, second_level_spell]}]}]},
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": cleric_cantrip_list}]}
+        },
+        "other_info": {
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5},
+                                        {"multiply": [{"stat": "spell_slots.1"}, 0.03125]},
+                                        {"multiply": [{"stat": "spell_slots.2"}, 0.0625]}
+                                    ]
+                                }
         }
     },
     "Temple Keeper": {
@@ -4748,7 +4791,18 @@ jobs = { #Monarch contains the max possible template for occupations
         },
         "other_info": {
             "add_advantage_on": {"apply": "add", "expr": [{"const": ["arcana"]}]},
-            "equipment": {"apply": "add", "expr": [{"const": ["spellbook"]}, {"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}]}]}
+            "equipment": {"apply": "add", "expr": [{"const": ["spellbook"]}, {"rd_choice": [{"stat": "weapons"}, {"rd_choice": [{"stat": "tools"}]}]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.25},
+                                        {"multiply": [{"stat": "spell_slots.1"}, 0.03125]},
+                                        {"multiply": [{"stat": "spell_slots.2"}, 0.0625]},
+                                        {"multiply": [{"stat": "spell_slots.3"}, 0.5]},
+                                        {"multiply": [{"stat": "spell_slots.4"}, 0.125]},
+                                        {"multiply": [{"stat": "spell_slots.5"}, 0.25]},
+                                        {"multiply": [{"stat": "spell_slots.6"}, 0.375]},
+                                        {"multiply": [{"stat": "spell_slots.7"}, 0.5]},
+                                        {"multiply": [{"stat": "spell_slots.8"}, 0.75]},
+                                        {"multiply": [{"stat": "spell_slots.9"}, 1]}
+                                        ]}
         }
     },
     "Architect": {
@@ -4839,7 +4893,8 @@ jobs = { #Monarch contains the max possible template for occupations
             "skills": {"apply": "add", "expr": [{"const": ["survival"]}]}
         },
         "other_info": {
-            "equipment": {"apply": "add", "expr": [{"const": ["longbow"]}, {"rd_choice": random_weapon_list}, {"const": "hunting trap"}]}
+            "equipment": {"apply": "add", "expr": [{"const": ["longbow"]}, {"rd_choice": random_weapon_list}, {"const": "hunting trap"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Artist": {
@@ -4913,7 +4968,9 @@ jobs = { #Monarch contains the max possible template for occupations
             "saving_throws": {"apply": "add", "expr": [{"const": ["constitution"]}]}
         },
         "other_info": {
-            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}]}, {"multiply": [6, "javelin"]}]}
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}]}, {"multiply": [6, "javelin"]}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["tactical training (can use the Help, or Attack action as a bonus action)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
         }
     },
     "Merchant": {
@@ -5061,7 +5118,8 @@ jobs = { #Monarch contains the max possible template for occupations
             "skills": {"apply": "add", "expr": [{"const": ["survival"]}]}
         },
         "other_info": {
-            "equipment": {"apply": "add", "expr": [{"multiply": [4, "hunting trap"]}, {"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}, {"multiply": [20, "arrow"]}]}
+            "equipment": {"apply": "add", "expr": [{"multiply": [4, "hunting trap"]}, {"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}, {"multiply": [20, "arrow"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Teacher/Tutor": {
@@ -5076,12 +5134,21 @@ jobs = { #Monarch contains the max possible template for occupations
             "skills": {"apply": "add", "expr": [{"rd_choice": random_skill_list}]}
         },
         "other_info": {
-            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}]}
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}, {"rd_choice": [{"stat": "weapons"}]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]},
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["tactical training (can use the Help, or Attack action as a bonus action)"]}]}
         }
     },
     "Beggar/Vagrant": {
+        "ability_scores": {
+            "constitution": {"apply": "subtract", "expr": [{"const": 1}]}
+        },
         "other_info": {
-            "equipment": {"apply": "add", "expr": [{"rd_choice": [improvised_weapon_list, {"const": ["begging bowl"]}]}]}
+            "equipment": {"apply": "add", "expr": [{"rd_choice": [improvised_weapon_list, {"const": ["begging bowl"]}]}]},
+            "overall_cr": {
+                "apply": "add",
+                "expr": [{"const": -0.125}]
+            }
         }
     },
     "Mage": {
@@ -5125,7 +5192,22 @@ jobs = { #Monarch contains the max possible template for occupations
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}]}
         },
         "other_info": {
-            "equipment": {"apply": "add", "expr": [{"const": ["arcane focus"]}]}
+            "equipment": {"apply": "add", "expr": [{"const": ["arcane focus"]}]},
+            "overall_cr": {
+                "apply": "add",
+                "expr": [
+                    {"const": 1.25},
+                    {"multiply": [{"stat": "spell_slots.1"}, 0.03125]},
+                    {"multiply": [{"stat": "spell_slots.2"}, 0.0625]},
+                    {"multiply": [{"stat": "spell_slots.3"}, 0.125]},
+                    {"multiply": [{"stat": "spell_slots.4"}, 0.1875]},
+                    {"multiply": [{"stat": "spell_slots.5"}, 0.25]},
+                    {"multiply": [{"stat": "spell_slots.6"}, 0.375]},
+                    {"multiply": [{"stat": "spell_slots.7"}, 0.5]},
+                    {"multiply": [{"stat": "spell_slots.8"}, 0.75]},
+                    {"multiply": [{"stat": "spell_slots.9"}, 1.0]}
+                ]
+            }
         }
     },
     "Courier": {
@@ -5311,7 +5393,8 @@ jobs = { #Monarch contains the max possible template for occupations
                                       {"rd_choice": [{"const": ["poisoner's kit", "pocket knife"]}]}
                                       ]}]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
 
@@ -5335,7 +5418,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"multiply": [4, "hunting trap"]},
                 {"multiply": [20, "arrow"]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"appkly": "add", "expr": [{"const": 0.75}]}
         }
     },
     "Witch/Warlock": {
@@ -5392,7 +5476,22 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"const": ["arcane focus"]},
                 {"rd_choice": ["large pointy hat", "herbalist's kit", "bone charms"]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {
+                "apply": "add",
+                "expr": [
+                    {"const": 1.0},
+                    {"multiply": [{"stat": "spell_slots.1"}, 0.03125]},
+                    {"multiply": [{"stat": "spell_slots.2"}, 0.0625]},
+                    {"multiply": [{"stat": "spell_slots.3"}, 0.125]},
+                    {"multiply": [{"stat": "spell_slots.4"}, 0.1875]},
+                    {"multiply": [{"stat": "spell_slots.5"}, 0.25]},
+                    {"multiply": [{"stat": "spell_slots.6"}, 0.375]},
+                    {"multiply": [{"stat": "spell_slots.7"}, 0.5]},
+                    {"multiply": [{"stat": "spell_slots.8"}, 0.75]},
+                    {"multiply": [{"stat": "spell_slots.9"}, 1.0]}
+                ]
+            }
         }
     },
     "Necromancer": {
@@ -5445,6 +5544,17 @@ jobs = { #Monarch contains the max possible template for occupations
             "equipment": {"apply": "add", "expr": [
                 {"const": ["arcane focus"]},
                 {"rd_choice": ["bone cage", "animal's skull", "grave dust pouch"]}
+                ]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 1.00},
+                                        {"multiply": [{"stat": "spell_slots.1"}, 0.03125]},
+                                        {"multiply": [{"stat": "spell_slots.2"}, 0.0625]},
+                                        {"multiply": [{"stat": "spell_slots.3"}, 0.5]},
+                                        {"multiply": [{"stat": "spell_slots.4"}, 0.125]},
+                                        {"multiply": [{"stat": "spell_slots.5"}, 0.25]},
+                                        {"multiply": [{"stat": "spell_slots.6"}, 0.375]},
+                                        {"multiply": [{"stat": "spell_slots.7"}, 0.5]},
+                                        {"multiply": [{"stat": "spell_slots.8"}, 0.75]},
+                                        {"multiply": [{"stat": "spell_slots.9"}, 1]}
             ]}
         }
     },
@@ -5463,7 +5573,8 @@ jobs = { #Monarch contains the max possible template for occupations
         "other_info": {
             "equipment": {"apply": "add", "expr": [
                 {"rd_choice": ["tarot cards", "crystal ball", "unholy symbol"]}
-            ]}
+                ]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.0325}]}
         }
     },
     "Beast Tamer": {
@@ -5476,7 +5587,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"const": ["whip", "hunting trap"]},
                 {"rd_choice": ["feed bag", "fur cloak", "beast whistle"]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Familiar Keeper": {
@@ -5491,7 +5603,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"const": ["arcane focus"]},
                 {"rd_choice": ["small cage", "hunting trap", "beast whistle"]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Artifact Collector": {
@@ -5519,7 +5632,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"rd_choice": [{"rd_choice": random_gadget}, "mechanical parts"]},
                 {"rd_choice": [{"rd_choice": random_gadget}, "mechanical parts"]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0325}]}
         }
     },
     "Pirate": {
@@ -5538,7 +5652,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"rd_choice": [{"stat": "weapons"}]},
                 {"rd_choice": [{"stat": "weapons"}]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.35}]}
         }
     },
     "Gravekeeper": {
@@ -5570,7 +5685,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"multiply": [2, "dagger"]},
                 {"rd_choice": [{"stat": "weapons"}]},
                 {"stat": "tools"}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.50}]}
         }
     },
     "Magical Item Broker": {
@@ -5582,7 +5698,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"rd_choice": [{"rd_choice": sentient_item_list}, {"rd_choice": enchanted_weapon_list}]},
                 {"rd_choice": [{"rd_choice": sentient_item_list}, {"rd_choice": enchanted_weapon_list}]},
                 {"const": ["coin pouch", {"rd_choice": random_magical_charms}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
         }
     },
     "Rune Engraver/Enchanter": {
@@ -5598,7 +5715,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"const": ["tinker's tools","smith's tools"]},
                 {"rd_choice": [{"stat": "weapons"}]},
                 {"rd_choice": [enchanted_weapon_list]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
         }
     },
     "Wyvern Keeper": {
@@ -5610,7 +5728,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"const": ["whip", "hunting trap", "rope", "wyvern shield (fire immunity)"]},
                 {"rd_choice": ["heavy chains", "feed bag", "beast whistle"]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.50}]}
         }
     },
     "Demonologist": {
@@ -5638,7 +5757,19 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"const": ["arcane focus"]},
                 {"rd_choice": ["unholy symbol", {"rd_choice": sentient_item_list}]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {
+                "apply": "add",
+                "expr": [
+                    {"const": 0.75},
+                    {"multiply": [{"stat": "spell_slots.1"}, 0.03125]},
+                    {"multiply": [{"stat": "spell_slots.2"}, 0.0625]},
+                    {"multiply": [{"stat": "spell_slots.3"}, 0.125]},
+                    {"multiply": [{"stat": "spell_slots.4"}, 0.1875]},
+                    {"multiply": [{"stat": "spell_slots.5"}, 0.25]},
+                    {"multiply": [{"stat": "spell_slots.6"}, 0.375]}
+                ]
+            }
         }
     },
     "Traveler": {
@@ -5673,7 +5804,18 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"const": ["arcane focus"]},
                 {"rd_choice": random_magical_charms},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {
+                "apply": "add",
+                "expr": [
+                    {"const": 0.75},
+                    {"multiply": [{"stat": "spell_slots.1"}, 0.03125]},
+                    {"multiply": [{"stat": "spell_slots.2"}, 0.0625]},
+                    {"multiply": [{"stat": "spell_slots.3"}, 0.125]},
+                    {"multiply": [{"stat": "spell_slots.4"}, 0.1875]},
+                    {"multiply": [{"stat": "spell_slots.5"}, 0.25]}
+                ]
+            }
         }
     },
     "Chronomancer": {
@@ -5714,8 +5856,9 @@ jobs = { #Monarch contains the max possible template for occupations
                                                                           }]}
             },
             "known_spells": {"apply": "add", "expr": [
-                {"rd_choice": ["haste", "slow", "time stop", "misty step"]},
-                {"rd_choice": ["haste", "slow", "time stop", "misty step"]}
+                {"rd_choice": ["slow", "hold person", "silvery barbs"]},
+                {"rd_choice": ["haste", "misty step", "blink (1/day)"]},
+                {"const": "time stop (1/day)"}
             ]},
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": ["mage hand", "minor illusion", "prestidigitation"]}]}
         },
@@ -5724,7 +5867,22 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"const": ["arcane focus"]},
                 {"rd_choice": ["cursed timeline map", "pocket watch", "hourglass"]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {
+                "apply": "add",
+                "expr": [
+                    {"const": 1.25},
+                    {"multiply": [{"stat": "spell_slots.1"}, 0.03125]},
+                    {"multiply": [{"stat": "spell_slots.2"}, 0.0625]},
+                    {"multiply": [{"stat": "spell_slots.3"}, 0.125]},
+                    {"multiply": [{"stat": "spell_slots.4"}, 0.1875]},
+                    {"multiply": [{"stat": "spell_slots.5"}, 0.25]},
+                    {"multiply": [{"stat": "spell_slots.6"}, 0.375]},
+                    {"multiply": [{"stat": "spell_slots.7"}, 0.5]},
+                    {"multiply": [{"stat": "spell_slots.8"}, 0.75]},
+                    {"multiply": [{"stat": "spell_slots.9"}, 1.0]}
+                ]
+            }
         }
     },
     "Portal Keeper": {
@@ -5762,7 +5920,8 @@ jobs = { #Monarch contains the max possible template for occupations
         "other_info": {
             "equipment": {"apply": "add", "expr": [
                 {"const": ["first aid tools", "feed bag"]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.50}]}
         }
     },
     "Arms Dealer/Drug Dealer": {
@@ -5783,7 +5942,8 @@ jobs = { #Monarch contains the max possible template for occupations
                     {"rd_choice": random_drug_list}
                 ]}]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Slave Trader": {
@@ -5812,7 +5972,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"rd_choice": ["coin pouch", "jewelry", "cigar", "goblet of wine"]},
                 {"const": ["fine clothes"]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Gangster": {
@@ -5825,7 +5986,8 @@ jobs = { #Monarch contains the max possible template for occupations
                 {"rd_choice": [{"stat": "weapons"}]},
                 {"rd_choice": ["coin pouch", "cloak", "hood", "cigarette"]},
                 {"rd_choice": [{"stat": "weapons"}]}
-            ]}
+            ]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Other": {
@@ -6083,7 +6245,8 @@ backstory_seed = {
                     "unnatural eyes: eyes visibly altered by the curse",
                     "shadow distortion: shadow behaves unnaturally"
                 ]}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Plague survivor": {
@@ -6213,7 +6376,12 @@ backstory_seed = {
             "add_disadvantage_on": {
                 "apply": "add",
                 "expr": [{"const": "interactions with people"}]
-            }
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": ["action surge (can make a second attack as part of his attack action, 1/day)"]
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Amnesiac drifter": {
@@ -6330,7 +6498,7 @@ backstory_seed = {
             "add_advantage_on": {
                 "apply": "add",
                 "expr": [{"const": [
-                    "hiding/blending against city guards",
+                    "stealth",
                     "recognizing signs of surveillance"
                 ]}]
             },
@@ -6342,7 +6510,11 @@ backstory_seed = {
                     "stolen map",
                     "hooded traveling cloak"
                 ]}]
-            }
+            },
+            "other_physical_features": {
+                "apply": "add",
+                "expr": ["outlaw's cunning (can be used to reroll a failed stealth or deception check, 1/day, must use the new roll)"]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Dream-chaser": {
@@ -6453,8 +6625,9 @@ backstory_seed = {
                     "unnatural aura: a supernatural presence surrounding the creature",
                     "distinctive clothing: wears something proper only to an apostle"
                 ]},
-                {"stat": "proficiencies"}]
-            }
+                {"const": ["divine blessing: can cast bless on themselves, 3/day, by performing a prayer"]}]
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 15.00}]}
         }
     },
     "Former pirate": {
@@ -6541,8 +6714,10 @@ backstory_seed = {
                     "glowing eyes: the eyes emit a faint supernatural light",
                     "holy scar: a mysterious symbol appeared on the body",
                     "moving sigil: a magical symbol subtly changes over time"
-                ]}]
-            }
+                ]},
+                {"const": ("true sight", 60, "ft")}]
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Bearer of a forbidden gift": {
@@ -6602,8 +6777,8 @@ backstory_seed = {
                 "apply": "add",
                 "expr": [{"rd_choice": [
                     "radiant",
-                    "fire",
-                    "cold"
+                    "force",
+                    "thunder"
                 ]}]
             },
             "other_physical_features": {
@@ -6650,7 +6825,8 @@ backstory_seed = {
                     "supernatural aura: mana sensitive creatures can perceive an unusual presence around the vessel",
                     "divine mark: a visible mark associated with a deity"
                 ]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Oathbreaker": {
@@ -6752,7 +6928,8 @@ backstory_seed = {
             "add_advantage_on": {
                 "apply": "add",
                 "expr": [{"const": ["repairing objects", "understanding experimental technology"]}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Forbidden scholar": {
@@ -6793,7 +6970,8 @@ backstory_seed = {
                     "cursed spellbook",
                     "encoded research notes"
                 ]}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Disillusioned hero": {
@@ -6863,7 +7041,8 @@ backstory_seed = {
             "add_advantage_on": {
                 "apply": "add",
                 "expr": [{"const": "arcana"}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Street prophet": {
@@ -6910,7 +7089,8 @@ backstory_seed = {
                     "attracting a crowd",
                     "religion"
                 ]}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Fallen priest/priestess": {
@@ -6956,7 +7136,8 @@ backstory_seed = {
                     "broken ceremonial staff",
                     "religious vestments"
                 ]}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
         }
     },
     "Exiled seer": {
@@ -7011,7 +7192,8 @@ backstory_seed = {
                     "interpreting omens",
                     "recognizing supernatural signs"
                 ]}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Defector spy": {
@@ -7098,7 +7280,8 @@ backstory_seed = {
                 ]},
                 {"rd_choice": random_magical_charms},
                 {"rd_choice": sentient_item_list}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.75}]}
         }
     },
     "Mercenary idealist": {
@@ -7137,7 +7320,8 @@ backstory_seed = {
                     "recognizing mercenary tactics",
                     "persuasion to uphold an agreement"
                 ]}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Reluctant hero": {
@@ -7176,7 +7360,8 @@ backstory_seed = {
                     "protecting civilians",
                     "recognizing immediate danger to others"
                 ]}]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Traitor turned savior": {
@@ -7325,7 +7510,7 @@ backstory_seed = {
                 "expr": [{"rd_choice": lycantrope_natural_weapons_list},
                          {"rd_choice": [("darkvision", 60, "ft"), ("darkvision", 120, "ft"),
                                         ("darkvision (underground only)", 180, "ft"), ("tremorsense", 30, "ft"),
-                                        ("blindsight", 10, "ft"), ("blindsight", 30, "ft"), ("truesight", 10, "ft"),
+                                        ("blindsight", 10, "ft"), ("blindsight", 30, "ft"), ("true sight", 10, "ft"),
                                         ("echolocation", 30, "ft"), ("magic sense", 30, "ft"), ("magnetosense", 30, "ft")]}]
             },
             "resistances": {
@@ -7337,7 +7522,8 @@ backstory_seed = {
                 "expr": [{"const": 
                     "survival checks done for tracking by scent"
                 }]
-            }
+            },
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Survivor of a fallen city": {
@@ -7463,7 +7649,8 @@ backstory_seed = {
                 "expr": [{"const": [
                     "identifying an ambush",
                     "recognizing the aftermath of battle, skirmish or fight"
-                ]}]}
+                ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
     "Reformed cultist": {
