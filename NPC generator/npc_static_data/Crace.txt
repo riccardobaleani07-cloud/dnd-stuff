@@ -39,7 +39,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "add_advantage_on": {"apply": "add", "expr": [{"const": []}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0}]}
         }
     },
     "Polar Human": {
@@ -731,7 +731,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "charisma"}]},
-            "known_spells": {"apply": "add", "expr": [{"const": ["fear (free 1/day)", "telepathy (at will)"]}]}
+            "known_spells": {"apply": "add", "expr": [{"const": ["fear (free 1/day)", "telepathy (free at will)"]}]}
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "diseases"}]},

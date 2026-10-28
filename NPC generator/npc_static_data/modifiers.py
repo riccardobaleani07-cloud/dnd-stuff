@@ -1647,23 +1647,23 @@ random_luxury_item = [
 ]
 apostle_divine_spell_list = [
     # Sin / destructive manifestations
-    "bane (at will)",
+    "bane (free at will)",
     "command (1/long rest)",
     "inflict wounds (3/long rest)",
-    "hellish rebuke (at will)",
+    "hellish rebuke (free at will)",
     "dissonant whispers (2/long rest)",
-    "ray of sickness (at will)",
+    "ray of sickness (free at will)",
 
     # Virtue / protective manifestations
-    "bless (at will)",
+    "bless (free at will)",
     "healing word (3/long rest)",
     "sanctuary (upcasted at level 3; 1/long rest)",
     "heroism (1/long rest)",
     "protection from evil and good (upcasted at level 3; 1/long rest)",
 
     # More mysterious divine manifestations
-    "detect evil and good (at will)",
-    "detect magic (at will)",
+    "detect evil and good (free at will)",
+    "detect magic (free at will)",
 
     # Stronger manifestations"
     "guiding bolt (1/short rest)",
@@ -2003,7 +2003,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "add_advantage_on": {"apply": "add", "expr": [{"const": []}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": []}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Polar Human": {
@@ -2097,7 +2097,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "other_info": {
             "immunities": {"apply": "add", "expr": [{"const": ["charmed (magic-induced sleep)"]}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Plasmoid": {
@@ -2112,7 +2112,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 ("darkvision", 60, "ft"), ("hold breath", 15, "minutes"),
                 "amorphous form (can squeeze through 1-inch gaps)",
                 "fatural pseudopods (can manipulate objects without hands)"]}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Spirit": {
@@ -2142,7 +2142,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 ("true sight", 15, "ft"),
                 ("spectral sense (sense living creatures)", 60, "ft")
             ]}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0.5}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
         }
     },
     "Lopunnie": {
@@ -2165,7 +2165,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 ("darkvision", 60, "ft"),
                 "keen hearing",
                 "keen smell"]}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0.125}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Common Birdling": {
@@ -2185,7 +2185,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "other_physical_features": {"apply": "add", "expr": [{"const": "keen sight"}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0.5}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
         }
     },
     "Hybrid": {
@@ -2203,7 +2203,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "other_info": {
             "other_physical_features": {"apply": "add", "expr": [{"const": 
                 "adaptive physiology (once per long rest, gain advantage on one saving throw of choice for the day)"}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
             
         }
     },
@@ -2229,7 +2229,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"rd_choice": random_damage_type_list}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0.25}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Dark Elf": {
@@ -2243,13 +2243,13 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
-            "known_spells": {"apply": "add", "expr": [{"const": ["Dancing Lights (1/day)", "Faerie Fire (1/day)", "Darkness (1/day)"]}]}
+            "known_spells": {"apply": "add", "expr": [{"const": ["Dancing Lights (free 1/day)", "Faerie Fire (free 1/day)", "Darkness (free 1/day)"]}]}
         },
         "other_info": {
             "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": "sunlight sensitivity"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 120, "ft")}]},
-            "overall_cr": {"apply": "replace", "expr": [{"const": 0.0625}]}
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Wood Elf": {
@@ -2312,6 +2312,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "resistances": {"apply": "add", "expr": [{"const": "suffocation (it makes you drop to half your hp first, then to 0 hp as normal)"}]},
             "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}, {"const": ("hold breath", 10, "minutes")}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Pixie": {
@@ -2335,6 +2336,9 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "charisma"}]},
             "known_spells": {"apply": "add", "expr": [{"const": "invisibility (free 1/day)"}]},
             "known_cantrips": {"apply": "add", "expr": [{"const": "druidcraft"}]}
+        },
+        "other_info": {
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
         }
     },
     "Fairy": {
@@ -2358,7 +2362,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "known_cantrips": {"apply": "add", "expr": [{"const": "light"}]}
         },
         "other_info": {
-            "add_advantage_on": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]}
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Firbolg": {
@@ -2381,7 +2386,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": ["hidden step (free invisibility 1/rest)", ("darkvision", 60, "ft")]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["hidden step (free invisibility 1/rest)", ("darkvision", 60, "ft")]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
         }
     },
     "Elementalfolk": {
@@ -2393,6 +2399,9 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
             "known_spells": {"apply": "add", "expr": [{"const": "mage armor (free 1/day)"}]}
+        },
+        "other_info": {
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Sylph": {
@@ -2415,7 +2424,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": ["thunder", "lightning"]}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": "slow fall (reduce fall damage by 20ft)"}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "slow fall (reduce fall damage by 20ft)"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
         }
     },
     "Dryad": {
@@ -2433,6 +2443,9 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
             "known_spells": {"apply": "add", "expr": [{"const": "entangle (free 1/day)"}]},
             "known_cantrips": {"apply": "add", "expr": [{"const": "druidcraft"}]}
+        },
+        "other_info": {
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Gnome": {
@@ -2455,7 +2468,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Dwarf": {
@@ -2492,7 +2506,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "other_info": {
             "immunities": {"apply": "add", "expr": [{"const": "charmed (magic-induced sleep)"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ["feline agility (free dash 1/rest)", ("darkvision", 60, "ft"),
-                                        "cat's claws (natural weapons, 1d4 slashing damage)"]}]}
+                                        "cat's claws (natural weapons, 1d4 slashing damage)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Kenku": {
@@ -2505,7 +2520,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "skills": {"apply": "add", "expr": [{"const": ["stealth", "sleight of hand"]}]}
         },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "mimicry"]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "mimicry"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Goliath": {
@@ -2523,7 +2539,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "cold"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": "stone's endurance (free stone skin 1/rest)"}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "stone's endurance (free stone skin 1/rest)"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
         }
     },
     "Beastfolk": {
@@ -2535,7 +2552,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "skills": {"apply": "add", "expr": [{"const": "perception"}]}
         },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": "enhanced senses (advantage on perception checks involving smell, sight, or hearing)"}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "enhanced senses (advantage on perception checks involving smell, sight, or hearing)"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Satyr": {
@@ -2555,7 +2573,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "known_cantrips": {"apply": "add", "expr": [{"const": "minor illusion"}]}
         },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": "horns (natural weapons, 1d4 bludgeoning damage)"}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "horns (natural weapons, 1d4 bludgeoning damage)"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
         }
     },
     "Bugbear": {
@@ -2576,7 +2595,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "other_physical_features": {"apply": "add", "expr": [{"const": ["long-limbed (reach increased by 5ft)",
-                                        "sneaky (advantage on stealth checks in dim light or darkness)"]}]}
+                                        "sneaky (advantage on stealth checks in dim light or darkness)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Sentient Construct": {
@@ -2605,7 +2625,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
             "immunities": {"apply": "add", "expr": [{"const": "diseased"}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": "cold"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": ["does not need to eat, drink, breathe, or sleep", "can concentrate on spells even while incapacitated"]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["does not need to eat, drink, breathe, or sleep", "can concentrate on spells even while incapacitated"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
         }
     },
     "Giant": {
@@ -2625,7 +2646,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"rd_choice": giant_element_list}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": "enlarged reach (reach increased by 5ft)"}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "enlarged reach (reach increased by 5ft)"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
         }
     },
     "Wolfang": {
@@ -2645,7 +2667,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "resistances": {"apply": "add", "expr": [{"const": "diseases"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "keen hearing", "keen smell",
                                         "pack tactics (advantage on attack rolls against a creature if at least one of your allies is within 5ft of it and isn't incapacitated)",
-                                        "natural weapons (claws 1d4 slashing damage, bite 1d6 piercing damage)"]}]}
+                                        "natural weapons (claws 1d4 slashing damage, bite 1d6 piercing damage)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
         }
     },
     "Dragonborn": {
@@ -2658,7 +2681,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"rd_choice": draconic_ancestory_list}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": ["breath weapon (15ft cone or 30ft line, 2d6 damage (same type as the ancestory type), DC 12 dex save for half)"]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["breath weapon (15ft cone or 30ft line, 2d6 damage (same type as the ancestory type), DC 12 dex save for half)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Half-Dragon": {
@@ -2683,7 +2707,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "immunities": {"apply": "add", "expr": [{"rd_choice": draconic_ancestory_list}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ["breath weapon (15ft cone or 30ft line, 2d6 damage (same type as the ancestory type), DC 12 dex save for half)",
                                         "natural weapons (bite 1d8 piercing damage)",
-                                        {"rd_choice": draconic_ancestory_list}]}]}
+                                        {"rd_choice": draconic_ancestory_list}]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.25}]}
         }
     },
     "True Dragon": {
@@ -2705,7 +2730,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "charisma"}]},
-            "known_spells": {"apply": "add", "expr": [{"const": ["fear (free 1/day)", "telepathy (at will)"]}]}
+            "known_spells": {"apply": "add", "expr": [{"const": ["fear (free 1/day)", "telepathy (free at will)"]}]}
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "diseases"}]},
@@ -2713,7 +2738,9 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 120, "ft"),
                                         "breath weapon (30ft cone or 60ft line, 4d6 damage (same type as the ancestory), DC 15 dex save for half)",
                                         "trasformation (can polymorph into dragonish (and back) form gaining flight 60ft, the huge size, natural weapons (bite 2d10 piercing damage, claw 2d6 slashing damage))",
-                                        "legendary resistance (3/rest, can choose to succeed a failed saving throw)"]}]}
+                                        "legendary resistance (3/rest, can choose to succeed a failed saving throw)",
+                                        "Legendary actions (can take 3 legendary actions at the end of another creature's turn: can use claw, or cast a spell)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 10.0}]}
         }
     },
     "Kobold": {
@@ -2731,7 +2758,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "other_info": {
             "vulnerabilities": {"apply": "add", "expr": [{"const": "sunlight sensitivity"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"),
-                                        "pack tactics (advantage on attack rolls against a creature if at least one of your allies is within 5ft of it and isn't incapacitated)"]}]}
+                                        "pack tactics (advantage on attack rolls against a creature if at least one of your allies is within 5ft of it and isn't incapacitated)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
         }
     },
     "Lizardfolk": {
@@ -2748,7 +2776,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "skills": {"apply": "add", "expr": [{"const": ["survival","perception"]}]}
         },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": [("hold breath", 15, "minutes"), "natural weapons (bite 1d6 piercing damage)"]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("hold breath", 15, "minutes"), "natural weapons (bite 1d6 piercing damage)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Firefly": {
@@ -2766,22 +2795,23 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "skills": {"apply": "add", "expr": [{"const": "stealth"}]}
         },
         "magic": {
-            "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
+            "magic_source": {"apply": "replace", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "charisma"}]},
-            "known_spells": {"apply": "add", "expr": [{"const": "produce flame (free at will)"}]},
-            "known_cantrips": {"apply": "add", "expr": [{"const": "faerie fire"}]}
+            "known_spells": {"apply": "add", "expr": [{"const": "faerie fire (free at will)"}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": "produce flame"}]}
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": "cold"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "bioluminescence (can emit bright light in 10ft radius and dim light for additional 10ft)"]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "bioluminescence (can emit bright light in 10ft radius and dim light for additional 10ft)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Pale Knight": {
         "core_combat": {
             "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}]},
-            "initiative": {"apply": "divide", "expr": [{"stat": "dexterity_mod"}]},
-            "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 10}]}},  # 20 ft base
+            "initiative": {"apply": "divide", "expr": [{"max": [{"stat": "dexterity_mod"}, {"const": 0}]}]},
+            "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 10}]}},  # from 30 ft base
             "size": {"apply": "replace", "expr": [{"const": Size.SMALL}]}
         },
         "ability_scores": {
@@ -2793,7 +2823,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "proficiencies": {
             "weapons": {"apply": "add", "expr": [{"const": ["dagger", "rapier"]}]},
             "tools": {"apply": "add", "expr": [{"const": "masons tools"}]},
-            "skills": ["perception", "deception"]
+            "skills": {"apply": "add", "expr": [{"const": ["perception", "deception"]}]}
         },
         "magic": {
             "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
@@ -2808,7 +2838,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 ("thermal vision", 10, "ft"),
                 "dark sustenance (does not need to eat or drink normally)",
                 "mute (doesn't speak normally)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Lost Goblin": {
@@ -2824,7 +2855,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "skills": {"apply": "add", "expr": [{"const": ["insight","intimidation"]}]}
         },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "nimble escape (can take disengage or hide action as a bonus action on each of its turns)"]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "nimble escape (can take disengage or hide action as a bonus action on each of its turns)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Hobgoblin": {
@@ -2838,7 +2870,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "skills": {"apply": "add", "expr": [{"const": ["history","intimidation"]}]}
         },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "martial advantage (when it or an ally within 5ft attacks with a martial weapon, can roll with advantage)"]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "martial advantage (when it or an ally within 5ft attacks with a martial weapon, can roll with advantage)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
         }
     },
     "Lost Sea Goblin": {
@@ -2861,7 +2894,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "known_spells": {"apply": "add", "expr": [{"const": "minor illusion (free 4/day)"}]}
             },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), ("hold breath", 30, "minutes")]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), ("hold breath", 30, "minutes")]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Mushroomfolk": {
@@ -2885,7 +2919,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": "keen smell"}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "keen smell"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
         }
     },
     "Ogre": {
@@ -2904,7 +2939,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "powerful build (counts as one size larger for carrying capacity and push/drag/lift)",
-                                        "fists of steel (natural weapons, 1d8 bluedgeoning damage)"]}]}
+                                        "fists of steel (natural weapons, 1d8 bluedgeoning damage)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
         }
     },
     "Half-Ogre": {
@@ -2918,12 +2954,13 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "powerful build (counts as one size larger for carrying capacity and push/drag/lift)",
-                                        "heavy fists (natural weapons, 1d6 bluedgeoning damage)"]}]}
+                                        "heavy fists (natural weapons, 1d6 bluedgeoning damage)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.175}]}
         }
     },
     "Insectoid": {
         "core_combat": {
-            "ac": {"apply": "add", "expr": [{"const": 3}]}
+            "ac": {"apply": "add", "expr": [{"stat": "constitution_mod"}]},
         },
         "ability_scores": {
             "dexterity": {"apply": "add", "expr": [{"const": 2}]}
@@ -2935,9 +2972,9 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 ("darkvision", 60, "ft"),
                 ("electroreception (sense electrical fields)", 30, "ft"),
-                "compound eyes or mandibles",
-                "insectoid physiology"
-            ]}]}
+                "insectoid physiology (grants an odd appeareance and natural armor, already calculated"
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Grung": {
@@ -2959,7 +2996,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "amphibious (can breathe air and water)",
                 "poisonous skin (contact poison, DC 12 con save or be poisoned for 1 min)",
                 "standing leap (long jump 25ft, high jump 15ft without run-up)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Kling": {
@@ -2980,7 +3018,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 ("darkvision", 60, "ft"),
                 "amphibious (can breathe air and water)",
                 "scavenger culture (advantage on checks to find usable materials)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0325}]}
         }
     },
     "Halfling": {
@@ -2998,7 +3037,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "other_info": {
             "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": ["lucky (reroll a nat 1 on a d20)",
-                                                                            "nimbleness (you can move through a creature bigger than you)"]}]}
+                                                                            "nimbleness (you can move through a creature bigger than you)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0325}]}
         }
     },
     "Orc": {
@@ -3011,7 +3051,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"),
-                                                                            "powerful build (counts as one size larger for carrying capacity and push/drag/lift"]}]}
+                                                                            "powerful build (counts as one size larger for carrying capacity and push/drag/lift)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0325}]}
         }
     },
     "Plantfolk": {
@@ -3036,7 +3077,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
             "vulnerabilities": {"apply": "add", "expr": [{"rd_choice": plantfolk_vulnerability_list}]},
-            "add_advantage_on": {"apply": "add", "expr": [{"const": ["nature", "herbalism kit", "prone", "stealth (in foliage)"]}]}
+            "add_advantage_on": {"apply": "add", "expr": [{"const": ["nature", "herbalism kit", "prone", "stealth (in foliage)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
         }
     },
     "Tiefling": {
@@ -3051,7 +3093,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Demonoid": {
@@ -3071,7 +3114,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "magic": {
             "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
-            "known_spells": {"apply": "add", "expr": [{"const": "hellish rebuke (free 1/day)"}]},
+            "known_spells": {"apply": "add", "expr": [{"const": "hellish rebuke (free at will)"}]},
             "known_cantrips": {"apply": "add", "expr": [{"const": "thaumaturgy"}, {"rd_choice": wizard_cantrip_list}]}
         },
         "other_info": {
@@ -3079,7 +3122,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 "demonic heritage (can recall demonic powers, manifests as luminescent horns, wings or tail)",
                 ("darkvision", 60, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
         },
     },
     "Yuan-Ti": {
@@ -3094,12 +3138,13 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "immunities": {"apply": "add", "expr": [{"const": "poison"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "magic resistance (advantage vs spells that force a saving throw)"]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"), "magic resistance (advantage vs spells that force a saving throw)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
         }
     },
     "Demon": {
         "core_combat": {
-            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}, {"const": 2}]}]},
+            "hp": {"apply": "add", "expr": [{"multiply": [{"stat": "proficiency_bonus"}, {"stat": "level"}, {"const": 3}]}]},
             "initiative": {"apply": "add", "expr": [{"stat": "charisma_mod"}]},
             "speed_bonus": {"speed.flying": {"apply": "replace", "expr": [{"const": 30}]}}
         },
@@ -3113,8 +3158,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "magic": {
             "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
-            "known_spells": {"apply": "add", "expr": [{"const": ["darkness (free 1/day)", "teleport (free 1/day)", "hellish rebuke (free 1/day)"]}]},
-            "known_cantrips": {"apply": "add", "expr": [{"const": ["thaumaturgy", "wizard_cantrip_list", "message"]}]}
+            "known_spells": {"apply": "add", "expr": [{"const": ["darkness (free 1/day)", "teleport (free 1/day)", "hellish rebuke (free at will)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"const": ["thaumaturgy", "message"]}, {"rd_choice": wizard_cantrip_list}]}
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": ["fire", "cold", "lightning", "force"]}]},
@@ -3123,7 +3168,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 120, "ft"),
                                         "regeneration (regain 5 HP at the start of its turn if it has at least 1 HP)",
                                         "demonic taunt (once per turn, can deal extra 7 (2d6) necrotic damage to a creature it hits with a weapon attack)",
-                                        ("true sight", 45, "ft")]}]}
+                                        ("true sight", 45, "ft")]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 3.75}]}
         }
     },
     "Salamanderman": {
@@ -3149,7 +3195,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "regenerative skin (heals minor wounds faster for 1d4 HP at the start of its turn)",
                 "tail can be used for balance or minor attacks (1d4 bludgeoning)",
                 ("darkvision", 60, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
         }
     },
     "Oni": {
@@ -3175,7 +3222,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 ("darkvision", 60, "ft"),
                 "horns (natural weapons, 1d6 piercing damage)",
                 "innate flame affinity (fire generate by your spells is deep red or purple)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
         }
     },
     "Kijin": {
@@ -3194,16 +3242,17 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "magic": {
             "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
-            "known_spells": {"apply": "add", "expr": [{"const": ["mage armor (free at will)", "detect magic (free at will)"]}]},
-            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+            "known_spells": {"apply": "add", "expr": [{"const": ["mage armor (free at will)", "detect magic (free 1/day)"]}]},
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}, "fire bolt"]}
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 ("darkvision", 60, "ft"),
-                "magic vision (can see magic energy and auras)",
+                ("magic vision", 30, "ft"),
                 "innate fire affinity (fire created by your spells is a colour of your choice)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1}]}
         }
     },
     "Majin": {
@@ -3222,7 +3271,7 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "magic": {
             "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
             "known_spells": {"apply": "add", "expr": [{"const": ["mage armor (free at will)", "detect magic (free at will)"]}]},
-            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}]}
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}, {"rd_choice": wizard_cantrip_list}, "fire bolt"]}
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": ["fire", "necrotic"]}]},
@@ -3232,7 +3281,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 ("tremorsense", 10, "ft"),
                 "heightened senses (advantage on perception checks involving smell, sight, or hearing)",
                 "overwhelming presence (once per day, force all creatures within 30ft that can see you to make a DC 15 wisdom saving throw or be frightened for 1 minute)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 2.0}]}
         }
     },
     "Strix": {
@@ -3255,7 +3305,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "tentacle manifestation (can grow/absorb grown tentacles from the back)",
                 "grown tentacles can manipulate objects but cannot wield weapons",
                 "self-replication capable (rare, slow process)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.175}]}
         }
     },
     "Nightmare": {
@@ -3282,12 +3333,13 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "psychic"}]},
             "immunities": {"apply": "add", "expr": [{"const": "magical sleep"}]},
-            "add_advantage_on": {"apply": "add", "expr": [{"const": "feared"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 "shapeshifter (humanoid forms only, still a shadowy halo remains)",
                 "nightmare induction (creatures that sleep within 30ft may suffer disturbing dreams and not gain benefits of a long rest at your discrection)",
                 "dream-feeding (regain 2d6 hp after inducing a nightmare)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Celestial": {
@@ -3311,12 +3363,13 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "radiant"}]},
-            "add_advantage_on": {"apply": "add", "expr": [{"const": "feared"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 "celestial heritage (can manifest wings of light, halo and/or radiant tail)",
                 ("darkvision", 60, "ft"),
                 ("true sight", 30, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.0}]}
         }
     },
     "Angel": {
@@ -3352,7 +3405,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "angelic touch (heals a creature or mends an object for 2d4 + 3 hp as an action, on touch)",
                 ("darkvision", 120, "ft"),
                 ("true sight", 30, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 3.75}]}
         }
     },
     "Aarakocra": {
@@ -3364,7 +3418,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "wisdom": {"apply": "add", "expr": [{"const": 1}]}
         },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": ["keen sight (advantage on perception checks that rely on sight)", "talons (natural weapons, 1d4 slashing)"]}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ["keen sight (advantage on perception checks that rely on sight)", "talons (natural weapons, 1d4 slashing)"]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
         }
     },
     "Aasimar": {
@@ -3381,7 +3436,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 ("darkvision", 60, "ft"),
                 {"rd_choice": aasimar_transformation_list}
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Moonling": {
@@ -3399,13 +3455,14 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "skills": {"apply": "add", "expr": [{"const": ["survival", "perception"]}]}
         },
         "other_info": {
+            "add_advantage_on": {"apply": "add", "expr": [{"const": ["stealth (in moonlight)", "perception (in moonlight)", "survival (when tracking creatures)"]}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
-                "light-perception vision (cannot see shapes or colors, only light intensity; blinded by magical darkness)",
+                "light-perception vision (cannot see shapes or colors, only light intensity; still gets blinded by magical darkness)",
                 ("tremorsense", 30, "ft"),
                 ("magnetosense", 60, "ft"),
-                "keen hunter (advantage on survival checks to track creatures)",
-                "generational grudge (once a Moonling has been harmed by a creature, that creature has disadvantage on charisma checks against Moonlings of the same community)"
-            ]}]}
+                "generational grudge (once a Moonling has been harmed by a creature, that creature has disadvantage on charisma checks against Moonlings of the same community for 150 years)"
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Foxling": {
@@ -3426,10 +3483,11 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"),
-                "fox senses (recognizes individuals by scent and magical trace: has advantage on uncovering true identity)",
-                ("termic vision (can detect warm creatures)", 15, "ft"),
-                "natural agility (advantage on dexterity saving throws against effects you can see)"
-            ]}]}
+                "fox senses (recognizes individuals by scent and magical trace: has advantage on uncovering true identities)",
+                ("thermal vision", 15, "ft"),
+                "natural agility (advantage on dexterity saving throws against effects you can see the source of, such as traps and spells)"
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
         }
     },
     "Shadowkin": {
@@ -3455,8 +3513,9 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 ("darkvision", 60, "ft"),
-                "armor shell (can inhabit incomplete or abandoned armor that drops if defeated)"
-            ]}]}
+                "armor shell (can inhabit incomplete or abandoned armor that drops if defeated, gaining the armor's AC bonus and any other feature)"
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.0}]}
         }
     },
     "Wisp": {
@@ -3482,19 +3541,19 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "charisma"}]},
             "spell_slots": {"spell_slots.1": 2},
-            "known_spells": {"apply": "add", "expr": [{"const": ["light (free 1/day)", "mage hand (free 2/day)", "minor illusion (free 1/day)"]}]},
-            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": wizard_cantrip_list}]}
+            "known_cantrips": {"apply": "add", "expr": [{"rd_choice": [{"divide": [wizard_cantrip_list, ["light", "mage hand", "minor illusion"]]}]}, "light", "mage hand", "minor illusion"]}
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": ["lightning", "poison"]}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": ["bludgeoning (nonmagical)", "piercing (nonmagical)", "slashing (nonmagical)"]}]},
-            "add_advantage_on": {"apply": "add", "expr": [{"const": "stealth (in dim light or darkness)"}]},
+            "add_disadvantage_on": {"apply": "add", "expr": [{"const": "stealth (in dim light or darkness)"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 "incorporeal form (can pass through small openings, 1 inch wide, cannot wear armor or carry objects)",
-                "glowing body (light radius 10ft, can dim at will)",
+                "glowing body (light radius at wull up to 10ft, dim light 10 ft)",
                 "possessive ability (can attempt to possess a willing or incontious humanoid once per short rest, duration 1 minute)",
                 "hovering flight (hovers and flyes)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 2.0}]}
         }
     },
     "Voidling": {
@@ -3526,7 +3585,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "dark sustenance (does not need to eat or drink normally)",
                 "darknesssynthesis (inverted photosynthesis)",
                 "mute (doesn't speak normally)"
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0325}]}
         }
     },
     "Lycanthrope": {
@@ -3544,10 +3604,10 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "resistances": {"apply": "add", "expr": [{"const": ["bludgeoning (nonmagical)", "piercing (nonmagical)", "slashing (nonmagical)"]}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": ["silvered weapons"]}]},
             "add_advantage_on": {"apply": "add", "expr": [{"const": ["perception (smell)"]}]},
-            "other_physical_features": [
+            "other_physical_features": {"apply": "add", "expr": [
                 "hybrid nightime transformation (can transform into hybrid form only at night; transformation is more severe the more the moon is visible)",
-                {"rd_choice": lycantrope_natural_weapons_list}
-            ]
+                {"rd_choice": lycantrope_natural_weapons_list}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.25}]}
         }
     },
     "Sentient Undead": {
@@ -3563,9 +3623,10 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "resistances": {"apply": "add", "expr": [{"const": "necrotic"}]},
             "immunities": {"apply": "add", "expr": [{"const": ["poison", "disease"]}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": "radiant"}]},
-            "add_advantage_on": {"apply": "add", "expr": [{"const": "feared"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": "charisma checks (dealing with the living)"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": "does not need food or air" }]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "does not need food or air" }]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
         }
     },
     "Starborn": {
@@ -3613,15 +3674,16 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "stellar core (no need for air, food or sleep)",
                 "energy dependency (at 16 spell slots or less, cannot fly and all the resistances are lost; at 5 spell slots or less gains mortal needs and looses immunity to exaustion effects; at 0 suffer from 1d8 + 2 damage for every half hour without sleep)",
                 "slow recharge (regain spell slots only up to the 4th level after a long rest, plus 2 additional slot of the lowest level spent over 5th)",
-                "half-familiar (you can bond with an other humanoid with a ritual: Stellar Covenant, 9th-level transmutation (ritual), Casting Time: 24 hours, Range: Touch, Components: V, S, M (a focus attuned to stellar energy worth at least 10,000 gp, consumed), Duration: Until broken, Description: this ritual forges a one-way metaphysical bond between a Starborn and a single willing creature, designating that creature as the Starborn's Chosen. In exchange of a predefined thing, the Chosen can order the Starborn to act. The pact can be broken by both if one is not fullfilling the pact's terms. The pact is exclusive.)",
+                "half-familiar (you can bond with an other humanoid with a ritual: Stellar Covenant, 9th-level transmutation (ritual), Casting Time: Action, Range: Touch, Components: V, S, M (a focus attuned to stellar energy worth at least 10,000 gp, consumed), Duration: Until broken, Description: this ritual forges a one-way metaphysical bond between a Starborn and a single willing creature, designating that creature as the Starborn's Chosen. In exchange of a predefined thing, the Chosen can order the Starborn to act. The pact can be broken only by death of either one. The pact is exclusive.)",
                 "bond-relyant caster (can cast spells above the 4th level only for a chosen bonded creature)",
                 "restricted attunement (only one weapon (that act as focus) or focus of choice)",
                 "fatigue sensitivity (disadvantage on constitution saving throws against exhaustion effects)",
                 ("darkvision", 120, "ft"),
-                ("termic vision", 30, "ft"),
+                ("thermal vision", 30, "ft"),
                 ("tremorsense", 30, "ft"),
                 ("true sight", 15, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 13.5}]}
         }
     },
     "Crystalborn": {
@@ -3648,7 +3710,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "vulnerabilities": {"apply": "add", "expr": [{"const": "thunder"}]},
             "add_advantage_on": {"apply": "add", "expr": [{"const": "arcana"}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": "stealth"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": ("darkvision", 60, "ft")}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
         }
     },
     "Changeling": {
@@ -3661,7 +3724,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "other_info": {
             "add_advantage_on": {"apply": "add", "expr": [{"const": "deception (related to identity manouvers)"}]},
-            "other_physical_features": {"apply": "add", "expr": [{"const": "shapechanger (humanoid appearance only)"}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "shapechanger (humanoid appearance only)"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0325}]}
         }
     },
     "True Vampire": {
@@ -3699,8 +3763,10 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "phase step (can move through solid objects up to 10ft as difficult terrain)",
                 "flight (hover; cannot wear heavy armor)",
                 "mist form (once per short rest, transform into mist for 1 minute; cannot attack or cast spells, can pass through tiny openings, speed becomes flying 40ft)",
-                "no reflection (mirrors and reflective surfaces do not show the creature)"
-            ]}]}
+                "no reflection (mirrors and reflective surfaces do not show the creature)",
+                "draining weapons (the vampire's natural weapons, any weapon it is proficient with, and every spell that deals damage throught an attack roll, deal extra necrotic damage equal to proficiency bonus on a hit, and the vampire regains hit points equal to the necrotic damage dealt)"
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 5.0}]}
         }
     },
     "Spectre": {
@@ -3731,7 +3797,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "incorporeal movement (can move through solid objects as if they're difficult terrain)",
                 ("darkvision", 60, "ft"),
                 ("spectral sense (sense living creatures)", 60, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0325}]}
         }
     },
     "Triton": {
@@ -3756,7 +3823,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "amphibious (breathe air and water)",
                 "aquatic adaptation (water contact reveals scale skin, gills, webbed fingers/toes)",
                 ("darkvision", 120, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.0325}]}
         }
     },
     "Mermaid": {
@@ -3770,11 +3838,12 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "magic": {
             "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
-            "known_cantrips": {"apply": "add", "expr": [{"const": "shape water"}]},
-            "known_spells": {"apply": "add", "expr": [{"const": "water breathing (free at will)"}]}
+            "known_cantrips": {"apply": "add", "expr": [{"const": ["shape water", "minor illusion"]}]},
+            "known_spells": {"apply": "add", "expr": [{"const": ["water breathing (free at will)", "charm person (free at will)"]}]}
         },
         "other_info": {
-            "other_physical_features": {"apply": "add", "expr": [{"const": "amphibious (breath air and water)"}]}
+            "other_physical_features": {"apply": "add", "expr": [{"const": "amphibious (breath air and water)"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
         }
     },
     "Nymph": {
@@ -3787,10 +3856,11 @@ race = { # Common elf contains what a race can modify, being some sort of templa
         },
         "magic": {
             "magic_source": {"apply": "add", "expr": [{"max": [{"const": MagicSource.INNATE}, {"stat": "magic_source"}]}]},
-            "known_spells": {"apply": "add", "expr": [{"const": ["charm person (free 3/day)", "entangle (free at will)"]}]}
+            "known_spells": {"apply": "add", "expr": [{"const": ["charm person (free 3/day)", "entangle (free at will)", "speak with plants (free 3/day)"]}]}
         },
         "other_info": {
-            "add_advantage_on": {"apply": "add", "expr": [{"const": "charmed"}]}
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "charmed"}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
         }
     },
     "Turtoid": {
@@ -3814,9 +3884,10 @@ race = { # Common elf contains what a race can modify, being some sort of templa
             "add_advantage_on": {"apply": "add", "expr": [{"const": "strength (carrying or pushing)"}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": "dexterity saving throws"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
-                "tough shell (can retract as a bonus action to increase AC by 3)",
+                "tough shell (can retract as a bonus action to increase AC by 3; while retracted, cannot attack or cast spells (but doesn't loose concentration), and speed is reduced to 5ft)",
                 ("hold breath", 15, "minutes")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
         }
     },
     "Gooba": {
@@ -3842,7 +3913,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "chromatic shift (using an action it can change skin color briefly to hide; gains advantage on the stealth check)",
                 "ink burst (once per short rest, release ink in a 10ft radius underwater, heavily obscured for 1 minute)",
                 ("darkvision", 60, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
         }
     },
     "Banshee": {
@@ -3874,7 +3946,8 @@ race = { # Common elf contains what a race can modify, being some sort of templa
                 "wail resonance (once per long rest, emit a wail causing all creatures within 30ft to make a DC 15 constitution saving throw or take 4d6 psychic damage and be frightened for 1 minute; half damage and no fright on successful save)",
                 ("darkvision", 60, "ft"),
                 ("spectral sense (sense living creatures)", 60, "ft")
-            ]}]}
+            ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 1.25}]}
         }
     }
 }
@@ -3884,8 +3957,9 @@ subtype = {
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": "force"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
-                    "shell recall (1/day, grant temporary protection for the next minute: any creature within 10ft suffer the effect of the spell Armor of Agathys at lvl 1, yourself included)"
-                ]}]}
+                    "shell recall (free 1/day, grant temporary protection for the next minute: any creature within 10ft suffer the effect of the spell Armor of Agathys at lvl 4, yourself included)"
+                ]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
             }
         },
         "Lush": {
@@ -3895,7 +3969,8 @@ subtype = {
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "lush recall (1/day, restore vitality in area for the next minute: any object suffers from mending effect, and every creature heal for 1d6 hp if starts the turn within 10 ft from you, you included)"}]}
+                    "lush recall (free 1/day, restore vitality in area for the next minute: any object suffers from mending effect, and every creature heal for 1d6 hp if starts the turn within 10 ft from you, you included)"}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
             }
         },
         "Grace": {
@@ -3906,7 +3981,8 @@ subtype = {
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": "cold"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "frost aura (willingly standing still (it means: not using movement, actions (except for the dodge action), bonus actions or reactions), can freeze up surroundings, up to freezing water and brittle metal in a 5ft radius, every creature within range that starts the turn there, must make a constitution DC 12 or suffer 4d6 cold damage, half on a success; you also have to perform the saving throw, but taking half the damage on success and none on failure)"}]}
+                    "frost aura (willingly standing still (it means: not using movement, actions (except for the dodge action), bonus actions or reactions), can freeze up surroundings, up to freezing water and brittle metal in a 5ft radius, every creature within range that starts the turn there, must make a constitution DC 12 or suffer 4d6 cold damage, half on a success; you also have to perform the saving throw, but taking half the damage on success and none on failure)"}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
             }
         },
         "Ghost": {
@@ -3923,13 +3999,17 @@ subtype = {
                 "wisdom": {"apply": "add", "expr": [{"const": 1}]},
                 "charisma": {"apply": "add", "expr": [{"const": 1}]}
             },
+            "proficiencies": {
+                "armor": {"apply": "replace", "expr": [ArmorType.UNARMORED]}
+            },
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": ["necrotic", "slashing (nonmagical)", "piercing (nonmagical)", "bludgeoning (nonmagical)"]}]},
                 "vulnerabilities": {"apply": "add", "expr": [{"const": "radiant"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
                     "incorporeal movement (can move through objects as if they're difficult terrain)",
                     "cannot wear armor"
-                ]}]}
+                ]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
             }
         },
         "Skeleton": {
@@ -3942,7 +4022,8 @@ subtype = {
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": "piercing"}]},
                 "vulnerabilities": {"apply": "add", "expr": [{"const": "bludgeoning"}]},
-                "other_physical_features": {"apply": "add", "expr": [{"const": "does not bleed"}]}
+                "other_physical_features": {"apply": "add", "expr": [{"const": "does not bleed: critical hits deal 1d6 less damage, min 1"}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Zombie": {
@@ -3961,7 +4042,8 @@ subtype = {
             "other_info": {
                 "vulnerabilities": {"apply": "add", "expr": [{"const": "fire"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "relentless endurance (first time reduced to 0 hp, drop to 1 instead, once per long rest)"}]}
+                    "relentless endurance (first time reduced to 0 hp, drop to 1 instead, once per long rest)"}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Cerberian": {
@@ -3969,14 +4051,16 @@ subtype = {
                                "constitution": {"apply": "add", "expr": [{"const": 1}]}},
             "other_info": {
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "heat aura (willingly standing still (it means: not using movement, actions (except for the dodge action), bonus actions or reactions), can warm surroundings, up to melting metal in a 5ft radius, every creature within range that starts the turn there, must make a dexterity DC 14 or suffer 4d6 fire damage, half on a success; you also have to perform the saving throw, but taking half the damage on success and none on failure)"}]}
+                    "heat aura (willingly standing still (it means: not using movement, actions (except for the dodge action), bonus actions or reactions), can warm surroundings, up to melting metal in a 5ft radius, every creature within range that starts the turn there, must make a dexterity DC 14 or suffer 4d6 fire damage, half on a success; you also have to perform the saving throw, but taking half the damage on success and none on failure)"}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
             }
         },
         "Blood Beat": {
             "ability_scores": {"charisma": {"apply": "add", "expr": [{"const": 2}]}},
             "other_info": {
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "blood manipulation (can control blood in a small area, up to 15ft radius)"}]}
+                    "blood manipulation (can control blood in a small area and therefore sense its presence, up to 15ft radius: you collect 1 blood charge per successfull slashing or piercing hit up to 10 charges; as an action you can expend every charge to deal 1d4 + 1 force damage with a beam of blood, a number of beams equal to the charges spent; every beam can be directed to the same target or different ones in a 15ft radius)"}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
             }
         },
         "Wither": {
@@ -3984,7 +4068,8 @@ subtype = {
                                "constitution": {"apply": "add", "expr": [{"const": 1}]}},
             "other_info": {
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "life drain (1/day, can recall powers to drain life in a area of 10ft radius for one minute: any creature that starts its turn there takes 1d6 necrotic damage and you heal for that amount for each creature in the area)"}]}
+                    "life drain (free 1/day, can recall powers to drain life in a area of 10ft radius for one minute: any creature that starts its turn there takes 1d6 necrotic damage and you heal for that amount for each creature in the area)"}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.75}]}
             }
         },
         "Steam": {
@@ -3996,7 +4081,8 @@ subtype = {
                 "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
                 "add_advantage_on": {"apply": "add", "expr": [{"const": "concentration (for maintaining spells)"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "obscuring mist (can lightly obscure a 10ft radius sqare within 60ft once per short rest)"}]}
+                    "obscuring mist (can lightly obscure a 10ft radius sqare within 60ft once per short rest)"}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Dust": {
@@ -4006,7 +4092,8 @@ subtype = {
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "dust cloud body (can impose disadvantage on one ranged (nonmagical) attack against you per turn before after seeing the dice result)"}]}
+                    "dust cloud body (can impose disadvantage on one ranged (nonmagical) attack against you per turn after after seeing the dice result, as a reaction)"}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
             }
         },
         "Smoke": {
@@ -4017,8 +4104,9 @@ subtype = {
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
-                    "smoky form (can obscure a 5ft radius around self, once per long rest)",
-                    "choking presence (creatures adjacent have disadvantage on perception checks relying on sight)"]}]}
+                    "smoky form (can obscure a 5ft radius around self, once per short rest, for 1 minute)",
+                    "choking presence (creatures adjacent have disadvantage on perception checks relying on sight)"]}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Lava": {
@@ -4033,7 +4121,8 @@ subtype = {
                 "skills": {"apply": "add", "expr": [{"const": "intimidation"}]}
             },
             "other_info": {
-                "resistances": {"apply": "add", "expr": [{"const": "fire"}]}
+                "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
             }
         },
         "Ice": {
@@ -4044,7 +4133,8 @@ subtype = {
                 "immunities": {"apply": "add", "expr": [{"const": "cold"}]},
                 "vulnerabilities": {"apply": "add", "expr": [{"const": "fire"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "frozen skin (you can choose that creature that touch you take 2d6 cold damage as a reaction)"}]}
+                    "frozen skin (you can spend a reaction when a creature touches you to make them take 2d6 cold damage)"}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
             }
         },
         "Mud": {
@@ -4056,10 +4146,11 @@ subtype = {
                 "speed_bonus": {"speed.walking": {"apply": "subtract", "expr": [{"const": 10}]}}
             },
             "other_info": {
-                "resistances": {"apply": "add", "expr": [{"const": ["poison", "bluedgeoning (nonmagical)"]}]},
+                "resistances": {"apply": "add", "expr": [{"const": ["poison", "bludgeoning (nonmagical)"]}]},
                 "add_advantage_on": {"apply": "add", "expr": [{"const": ["poisoned", "prone"]}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "difficult terrain affinity (ignores non-magical difficult terrain)"}]}
+                    "difficult terrain affinity (ignores non-magical difficult terrain)"}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Earth": {
@@ -4074,7 +4165,8 @@ subtype = {
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
                     ("tremorsense", 15, "ft"),
                     ("magnetosense", 60, "ft"),
-                    ("electroreception (sense electrical fields)", 30, "ft")]}]}
+                    ("electroreception (sense electrical fields)", 30, "ft")]}]},
+                    "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
             }
         },
         "Wind": {
@@ -4087,10 +4179,10 @@ subtype = {
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": "force"}]},
                 "vulnerabilities": {"apply": "add", "expr": [{"const": "slashing"}]},
-                "other_physical_features": [
-                    "flickering form (disadvantage on opportunity attacks against you)",
-                    "lightweight body (can hover 10ft off the ground)"
-                ]
+                "other_physical_features": {"apply": "add", "expr": [{"const":
+                    ["flickering form (disadvantage on opportunity attacks against you)",
+                    "lightweight body (can hover 10ft off the ground)"]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
             }
         },
         "Fire": {
@@ -4104,14 +4196,14 @@ subtype = {
             "other_info": {
                 "immunities": {"apply": "add", "expr": [{"const": "fire"}]},
                 "vulnerabilities": {"apply": "add", "expr": [{"const": "cold"}]},
-                "other_physical_features": [
-                    "heated body (you illuminate a 5ft radius with bright light and an additional 5ft with dim light)"
-                ]
+                "other_physical_features": {"apply": "add", "expr": [{"const":
+                ["heated body (you illuminate a 5ft radius with bright light and an additional 5ft with dim light)"]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
             }
         },
         "Water": {
             "ability_scores": {
-                "wisdom": {"apply": "add", "expr": [{"const": 1}]}
+                "wisdom": {"apply": "add", "expr": [{"const": 2}]}
             },
             "core_combat": {
                 "speed_bonus": {"speed.swimming": {"apply": "replace", "expr": [{"const": 30}]}}
@@ -4121,7 +4213,8 @@ subtype = {
                 "add_advantage_on": {"apply": "add", "expr": [{"const": "stealth (if underwater)"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
                     "amphibious (air and water breathing)",
-                    ("darkvision", 60, "ft")]}]}
+                    ("darkvision", 60, "ft")]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
             }
         },
         "Flying Mantis": {
@@ -4134,7 +4227,8 @@ subtype = {
             "other_info": {
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
                     "acid factory (natural acid secretion, 1d6 acid damage if someone touches it, cannot be spitted)",
-                    "natural weapons (sharp forelimbs, 1d6 slashing damage)"]}]}
+                    "natural weapons (sharp forelimbs, 1d6 slashing damage)"]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
             }
         },
         "Hornet": {
@@ -4148,7 +4242,8 @@ subtype = {
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
                     "honey production (can produce 2 silver worth of honey per day; more of it makes you suffer 1 exhaustion level for each silver of honey you produce)",
                     "natural stinger (1d4 piercing + poisoned effect (con saving throw DC 14))",
-                    ("electroreception (sense electrical fields)", 15, "ft")]}]}
+                    ("electroreception (sense electrical fields)", 15, "ft")]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
             }
         },
         "Bumblebee": {
@@ -4164,7 +4259,8 @@ subtype = {
                     "honey production (can produce 2 silver worth of honey per day; more of it makes you suffer 1 exhaustion level for each silver of honey you produce)", 
                     "natural stinger (1d4 piercing + poisoned effect (con saving throw DC 14); after using it you immediately drop to 0 HP on a failed con saving throw DC 14)",
                     ("electroreception (sense electrical fields)", 15, "ft")
-                ]}]}
+                ]}]},
+            "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Fly": {
@@ -4177,7 +4273,8 @@ subtype = {
             },
             "other_info": {
                 "add_advantage_on": {"apply": "add", "expr": [{"const": 
-                    "dexterity saving throws)"}]}
+                    "dexterity saving throws"}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
             }
         },
         "Cockroacher": {
@@ -4189,7 +4286,8 @@ subtype = {
                 "add_advantage_on": {"apply": "add", "expr": [{"const": "death effects"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
                     "glider master (can glide up to 20ft)",
-                    "extreme survivability (once per long rest, when drops to 0 hp he can drop to 1 hp instead)"]}]}
+                    "extreme survivability (once per long rest, when drops to 0 hp he can drop to 1 hp instead)"]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
             }
         },
         "Antsyote": {
@@ -4201,7 +4299,8 @@ subtype = {
             },
             "other_info": {
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "used to pact tacktics (advantage on ability checks when allies are in sight or in 10ft of distance)"}]}
+                    "used to pact tacktics (advantage on ability checks when allies are in sight or in 10ft of distance)"}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.5}]}
             }
         },
         "Ladybudger": {
@@ -4218,7 +4317,8 @@ subtype = {
                     "aposematic coloration (bright warning colors)",
                     "defensive secretions (creatures that grapple you have disadvantage on ability checks)",
                     "fortune symbol (once per day, you can reroll a failed saving throw for yourself or an ally within 10ft)",
-                    ("electrosense (can sense electric fields)", 30, "ft")]}]}
+                    ("electrosense (can sense electric fields)", 30, "ft")]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.375}]}
             }
         },
         "Mothyel": {
@@ -4234,7 +4334,8 @@ subtype = {
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
                     "nocturnal affinity (advantage on perception checks in dim light or darkness relying on sight)",
                     "powdered wings (can use an action and shed scales to automatically escape grapples once per short rest)",
-                    ("termic vision", 30, "ft")]}]}
+                    ("thermal vision", 30, "ft")]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.325}]}
             }
         },
         "Bebeesner": {
@@ -4244,6 +4345,9 @@ subtype = {
             "core_combat": {
                 "speed_bonus": {"speed.walking": {"apply": "add", "expr": [{"const": 5}]}, "speed.climbing": {"apply": "replace", "expr": [{"const": 25}]}},
                 "size": {"apply": "replace", "expr": [{"const": Size.SMALL}]}
+            },
+            "other_info": {
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
             }
         },
         "Dawg": {
@@ -4259,7 +4363,8 @@ subtype = {
                     "canine loyalty (advantage on saving throws against being frightened when an ally is within 10ft)",
                     "playful demeanor (advantage on charisma checks when interacting with children and animals)",
                     "keen smell (advantage on perception checks that rely on smell)"
-                ]}]}
+                ]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
             }
         },
         "Crimson Devil": {
@@ -4274,7 +4379,8 @@ subtype = {
                 "add_advantage_on": {"apply": "add", "expr": [{"const": "death effects"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
                     "natural weapons (small horns, 1d4 piercing damage, light, versatile)"
-                }]}
+                }]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
             }
         },
         "Light Blue Devil": {
@@ -4288,7 +4394,8 @@ subtype = {
             "other_info": {
                 "add_advantage_on": {"apply": "add", "expr": [{"const": "death effects"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "natural weapons (small horns, 1d4 piercing damage, light, versatile)"}]}
+                    "natural weapons (small horns, 1d4 piercing damage, light, versatile)"}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
             }
         },
         "Jaguarfolk": {
@@ -4306,7 +4413,8 @@ subtype = {
                     "powerful build (carries/pushes as one size larger)",
                     "predatory instincts (advantage on perception and survival checks related to hunting/tracking)",
                     "silent movement (footsteps don't produce noise)"
-                ]}]}
+                ]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Onicronimb": {
@@ -4319,7 +4427,8 @@ subtype = {
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
                     "jumping spider heritage (can jump up to 30ft horizontally and 15ft vertically)",
                     "wall-climbing (can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check)"
-                ]}]}
+                ]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Octolen": {
@@ -4329,10 +4438,11 @@ subtype = {
             },
             "other_info": {
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
-                    "tentacled lower body (can use tentacles for manipulation and movement, for 8 limbs total)",
+                    "tentacled lower body (can use tentacles for manipulation and movement (not attack action), for 8 limbs total)",
                     "amphibious (breaths air and water)",
                     "ink secretion (can release ink to obscure vision in a 10ft radius once per short rest)"
-                ]}]}
+                ]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.125}]}
             }
         },
         "Browish": {
@@ -4345,7 +4455,8 @@ subtype = {
                 "constitution": {"apply": "add", "expr": [{"const": 1}]}
             },
             "other_info": {
-                "resistances": {"apply": "add", "expr": [{"const": "cold"}]}
+                "resistances": {"apply": "add", "expr": [{"const": "cold"}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Skullywag": {
@@ -4357,6 +4468,11 @@ subtype = {
                 "skills": {"apply": "add", "expr": [{"const": ["performance", "sleight of hand"]}]},
                 "tools": {"apply": "add", "expr": [{"const": "disguise kit"}]},
                 "armors": {"apply": "replace", "expr": [{"max": [{"const": ArmorType.LIGHT}, {"stat": "armors"}]}]}
+            },
+            "other_info": {
+                "other_physical_features": {"apply": "add", "expr": [{"const": [
+                    "nimble escape (can take the disengage or hide action as a bonus action on each of its turns)"]}]},
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.25}]}
             }
         },
         "Other": {
@@ -4366,6 +4482,9 @@ subtype = {
             "proficiencies": {
                 "weapons": {"apply": "add", "expr": [{"rd_choice": random_weapon_list}]},
                 "skills": {"apply": "add", "expr": [{"rd_choice": random_skill_list}]}
+            },
+            "other_info": {
+                "overall_cr": {"apply": "add", "expr": [{"const": 0.0625}]}
             }
         }
     }
@@ -5605,7 +5724,7 @@ jobs = { #Monarch contains the max possible template for occupations
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["intelligence", "wisdom"]}]},
-            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["find familiar (at will)"]}]},
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["find familiar (free at will)"]}]},
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": ["mage hand", "minor illusion", "prestidigitation"]}]}
         },
         "other_info": {
@@ -5758,7 +5877,7 @@ jobs = { #Monarch contains the max possible template for occupations
                 "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0]}]},
             },
             "known_spells": {"apply": "add", "expr": [
-                {"rd_choice": ["hellish rebuke (3/day)", "command(1/day)"]},
+                {"rd_choice": ["hellish rebuke (free 3/day)", "command(free 1/day)"]},
                 {"rd_choice": ["summon fiend", "counterspell", "dispel magic"]}
             ]},
         },
@@ -5867,8 +5986,8 @@ jobs = { #Monarch contains the max possible template for occupations
             },
             "known_spells": {"apply": "add", "expr": [
                 {"rd_choice": ["slow", "hold person", "silvery barbs"]},
-                {"rd_choice": ["haste", "misty step", "blink (1/day)"]},
-                {"const": "time stop (1/day)"}
+                {"rd_choice": ["haste", "misty step", "blink (free 1/day)"]},
+                {"const": "time stop (free 1/day)"}
             ]},
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": ["mage hand", "minor illusion", "prestidigitation"]}]}
         },
@@ -5924,8 +6043,8 @@ jobs = { #Monarch contains the max possible template for occupations
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
-            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["cure wounds (3/day)", "calm emotions (at will)", "speak with animals (at will)"]},
-                                                      {"const": "animal friendship (at will)"}]},
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["cure wounds (free 3/day)", "calm emotions (free at will)", "speak with animals (free at will)"]},
+                                                      {"const": "animal friendship (free at will)"}]},
         },
         "other_info": {
             "equipment": {"apply": "add", "expr": [
@@ -7090,7 +7209,7 @@ backstory_seed = {
             "other_physical_features": {
                 "apply": "add",
                 "expr": [{
-                    "const": "prophetic intuition (1/day, after observing a creature for at least 1 minute, the prophet can discern whether that creature intends to harm them in the near future)"
+                    "const": "prophetic intuition (free 1/day, after observing a creature for at least 1 minute, the prophet can discern whether that creature intends to harm them in the near future)"
                 }]
             },
             "add_advantage_on": {
@@ -7193,7 +7312,7 @@ backstory_seed = {
             "other_physical_features": {
                 "apply": "add",
                 "expr": [{
-                    "const": "premonition (1/day, when the seer or a creature they can see within 30 feet makes an attack roll, ability check, or saving throw, the seer can change the immediate outcome and add or subtract 1d4 from the roll)"
+                    "const": "premonition (free 1/day, when the seer or a creature they can see within 30 feet makes an attack roll, ability check, or saving throw, the seer can change the immediate outcome and add or subtract 1d4 from the roll)"
                 }]
             },
             "add_advantage_on": {
@@ -7265,9 +7384,9 @@ backstory_seed = {
             },
             "known_spells": {
                 "apply": "add",
-                "expr": ["witch bolt (3/day)", "hex (1/day)", "witch's mark (at will)", "charm person (3/day)",
-                         "hold person (1/day)", "summon familiar (at will)", "detect magic (at will)",
-                         "invisibility (1/day)", "true seeing (1/day)", "polymorph (1/day)", "fireball (1/day)"]
+                "expr": ["witch bolt (free 3/day)", "hex (free 1/day)", "witch's mark (free at will)", "charm person (free 3/day)",
+                         "hold person (free 1/day)", "summon familiar (free at will)", "detect magic (free at will)",
+                         "invisibility (free 1/day)", "true seeing (free 1/day)", "polymorph (free 1/day)", "fireball (free 1/day)"]
                 }
         },
 
@@ -7521,7 +7640,7 @@ backstory_seed = {
                          {"rd_choice": [("darkvision", 60, "ft"), ("darkvision", 120, "ft"),
                                         ("darkvision (underground only)", 180, "ft"), ("tremorsense", 30, "ft"),
                                         ("blindsight", 10, "ft"), ("blindsight", 30, "ft"), ("true sight", 10, "ft"),
-                                        ("echolocation", 30, "ft"), ("magic sense", 30, "ft"), ("magnetosense", 30, "ft")]}]
+                                        ("echolocation", 30, "ft"), ("magic vision", 30, "ft"), ("magnetosense", 30, "ft")]}]
             },
             "resistances": {
                 "apply": "add",

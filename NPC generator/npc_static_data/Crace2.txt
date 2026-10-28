@@ -239,7 +239,7 @@ race = {
             "resistances": {"apply": "add", "expr": [{"const": "fire"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 ("darkvision", 60, "ft"),
-                "magic vision (can see magic energy and auras)",
+                ("magic vision", 30, "ft"),
                 "innate fire affinity (fire created by your spells is a colour of your choice)"
             ]}]}
         }
@@ -320,7 +320,7 @@ race = {
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "psychic"}]},
             "immunities": {"apply": "add", "expr": [{"const": "magical sleep"}]},
-            "add_advantage_on": {"apply": "add", "expr": [{"const": "feared"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 "shapeshifter (humanoid forms only, still a shadowy halo remains)",
                 "nightmare induction (creatures that sleep within 30ft may suffer disturbing dreams and not gain benefits of a long rest at your discrection)",
@@ -349,7 +349,7 @@ race = {
         },
         "other_info": {
             "resistances": {"apply": "add", "expr": [{"const": "radiant"}]},
-            "add_advantage_on": {"apply": "add", "expr": [{"const": "feared"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": [
                 "celestial heritage (can manifest wings of light, halo and/or radiant tail)",
                 ("darkvision", 60, "ft"),
@@ -465,7 +465,7 @@ race = {
         "other_info": {
             "other_physical_features": {"apply": "add", "expr": [{"const": [("darkvision", 60, "ft"),
                 "fox senses (recognizes individuals by scent and magical trace: has advantage on uncovering true identity)",
-                ("termic vision (can detect warm creatures)", 15, "ft"),
+                ("thermal vision", 15, "ft"),
                 "natural agility (advantage on dexterity saving throws against effects you can see)"
             ]}]}
         }
@@ -601,7 +601,7 @@ race = {
             "resistances": {"apply": "add", "expr": [{"const": "necrotic"}]},
             "immunities": {"apply": "add", "expr": [{"const": ["poison", "disease"]}]},
             "vulnerabilities": {"apply": "add", "expr": [{"const": "radiant"}]},
-            "add_advantage_on": {"apply": "add", "expr": [{"const": "feared"}]},
+            "add_advantage_on": {"apply": "add", "expr": [{"const": "frightened"}]},
             "add_disadvantage_on": {"apply": "add", "expr": [{"const": "charisma checks (dealing with the living)"}]},
             "other_physical_features": {"apply": "add", "expr": [{"const": "does not need food or air" }]}
         }
@@ -656,7 +656,7 @@ race = {
                 "restricted attunement (only one weapon (that act as focus) or focus of choice)",
                 "fatigue sensitivity (disadvantage on constitution saving throws against exhaustion effects)",
                 ("darkvision", 120, "ft"),
-                ("termic vision", 30, "ft"),
+                ("thermal vision", 30, "ft"),
                 ("tremorsense", 30, "ft"),
                 ("true sight", 15, "ft")
             ]}]}

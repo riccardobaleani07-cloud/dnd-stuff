@@ -1067,7 +1067,7 @@ jobs = { #Monarch contains the max possible template for occupations
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"rd_choice": ["intelligence", "wisdom"]}]},
-            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["find familiar (at will)"]}]},
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["find familiar (free at will)"]}]},
             "known_cantrips": {"apply": "add", "expr": [{"rd_choice": ["mage hand", "minor illusion", "prestidigitation"]}]}
         },
         "other_info": {
@@ -1213,7 +1213,7 @@ jobs = { #Monarch contains the max possible template for occupations
                 "spell_slots.6": {"apply": "add", "expr": [{"rd_choice": [1, 0, 0]}]},
             },
             "known_spells": {"apply": "add", "expr": [
-                {"rd_choice": ["hellish rebuke (3/day)", "command(1/day)"]},
+                {"rd_choice": ["hellish rebuke (free 3/day)", "command(free 1/day)"]},
                 {"rd_choice": ["summon fiend", "counterspell", "dispel magic"]}
             ]},
         },
@@ -1340,8 +1340,8 @@ jobs = { #Monarch contains the max possible template for occupations
         "magic": {
             "magic_source": {"apply": "replace", "expr": [{"const": MagicSource.LEARNED}]},
             "spellcasting_ability": {"apply": "replace", "expr": [{"const": "wisdom"}]},
-            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["cure wounds (3/day)", "calm emotions (at will)", "speak with animals (at will)"]},
-                                                      {"const": "animal friendship (at will)"}]},
+            "known_spells": {"apply": "add", "expr": [{"rd_choice": ["cure wounds (free 3/day)", "calm emotions (free at will)", "speak with animals (free at will)"]},
+                                                      {"const": "animal friendship (free at will)"}]},
         },
         "other_info": {
             "equipment": {"apply": "add", "expr": [

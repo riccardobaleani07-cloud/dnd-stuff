@@ -4,7 +4,7 @@ subtype = {
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": "force"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
-                    "shell recall (1/day, grant temporary protection for the next minute: any creature within 10ft suffer the effect of the spell Armor of Agathys at lvl 1, yourself included)"
+                    "shell recall (free 1/day, grant temporary protection for the next minute: any creature within 10ft suffer the effect of the spell Armor of Agathys at lvl 1, yourself included)"
                 ]}]}
             }
         },
@@ -15,7 +15,7 @@ subtype = {
             "other_info": {
                 "resistances": {"apply": "add", "expr": [{"const": "poison"}]},
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "lush recall (1/day, restore vitality in area for the next minute: any object suffers from mending effect, and every creature heal for 1d6 hp if starts the turn within 10 ft from you, you included)"}]}
+                    "lush recall (free 1/day, restore vitality in area for the next minute: any object suffers from mending effect, and every creature heal for 1d6 hp if starts the turn within 10 ft from you, you included)"}]}
             }
         },
         "Grace": {
@@ -104,7 +104,7 @@ subtype = {
                                "constitution": {"apply": "add", "expr": [{"const": 1}]}},
             "other_info": {
                 "other_physical_features": {"apply": "add", "expr": [{"const": 
-                    "life drain (1/day, can recall powers to drain life in a area of 10ft radius for one minute: any creature that starts its turn there takes 1d6 necrotic damage and you heal for that amount for each creature in the area)"}]}
+                    "life drain (free 1/day, can recall powers to drain life in a area of 10ft radius for one minute: any creature that starts its turn there takes 1d6 necrotic damage and you heal for that amount for each creature in the area)"}]}
             }
         },
         "Steam": {
@@ -354,7 +354,7 @@ subtype = {
                 "other_physical_features": {"apply": "add", "expr": [{"const": [
                     "nocturnal affinity (advantage on perception checks in dim light or darkness relying on sight)",
                     "powdered wings (can use an action and shed scales to automatically escape grapples once per short rest)",
-                    ("termic vision", 30, "ft")]}]}
+                    ("thermal vision", 30, "ft")]}]}
             }
         },
         "Bebeesner": {

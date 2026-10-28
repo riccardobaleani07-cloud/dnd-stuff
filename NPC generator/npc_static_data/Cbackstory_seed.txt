@@ -966,7 +966,7 @@ backstory_seed = {
             "other_physical_features": {
                 "apply": "add",
                 "expr": [{
-                    "const": "prophetic intuition (1/day, after observing a creature for at least 1 minute, the prophet can discern whether that creature intends to harm them in the near future)"
+                    "const": "prophetic intuition (free 1/day, after observing a creature for at least 1 minute, the prophet can discern whether that creature intends to harm them in the near future)"
                 }]
             },
             "add_advantage_on": {
@@ -1067,7 +1067,7 @@ backstory_seed = {
             "other_physical_features": {
                 "apply": "add",
                 "expr": [{
-                    "const": "premonition (1/day, when the seer or a creature they can see within 30 feet makes an attack roll, ability check, or saving throw, the seer can change the immediate outcome and add or subtract 1d4 from the roll)"
+                    "const": "premonition (free 1/day, when the seer or a creature they can see within 30 feet makes an attack roll, ability check, or saving throw, the seer can change the immediate outcome and add or subtract 1d4 from the roll)"
                 }]
             },
             "add_advantage_on": {
@@ -1138,9 +1138,9 @@ backstory_seed = {
             },
             "known_spells": {
                 "apply": "add",
-                "expr": ["witch bolt (3/day)", "hex (1/day)", "witch's mark (at will)", "charm person (3/day)",
-                         "hold person (1/day)", "summon familiar (at will)", "detect magic (at will)",
-                         "invisibility (1/day)", "true seeing (1/day)", "polymorph (1/day)", "fireball (1/day)"]
+                "expr": ["witch bolt (free 3/day)", "hex (free 1/day)", "witch's mark (free at will)", "charm person (free 3/day)",
+                         "hold person (free 1/day)", "summon familiar (free at will)", "detect magic (free at will)",
+                         "invisibility (free 1/day)", "true seeing (free 1/day)", "polymorph (free 1/day)", "fireball (free 1/day)"]
                 }
         },
 
@@ -1391,7 +1391,7 @@ backstory_seed = {
                          {"rd_choice": [("darkvision", 60, "ft"), ("darkvision", 120, "ft"),
                                         ("darkvision (underground only)", 180, "ft"), ("tremorsense", 30, "ft"),
                                         ("blindsight", 10, "ft"), ("blindsight", 30, "ft"), ("true sight", 10, "ft"),
-                                        ("echolocation", 30, "ft"), ("magic sense", 30, "ft"), ("magnetosense", 30, "ft")]}]
+                                        ("echolocation", 30, "ft"), ("magic vision", 30, "ft"), ("magnetosense", 30, "ft")]}]
             },
             "resistances": {
                 "apply": "add",
